@@ -4,3 +4,6 @@
 
 **Spring Boot:** Spring Boot is a module of Spring Framework. It allows us to build a stand-alone application with minimal or zero configurations. It is better to use if we want to develop a simple Spring-based application or RESTful services.
 
+|Spring|Spring Boot|
+|------|-----------|
+|Spring Framework is a widely used Java EE framework for building applications.|Spring Boot Framework is widely used to develop REST APIs.|
