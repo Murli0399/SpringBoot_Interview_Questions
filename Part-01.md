@@ -7,3 +7,10 @@
 |Spring|Spring Boot|
 |------|-----------|
 |Spring Framework is a widely used Java EE framework for building applications.|Spring Boot Framework is widely used to develop REST APIs.|
+|It aims to simplify Java EE development that makes developers more productive.|It aims to shorten the code length and provide the easiest way to develop Web Applications.|
+|The primary feature of the Spring Framework is dependency injection.|The primary feature of Spring Boot is Autoconfiguration. It automatically configures the classes based on the requirement.|
+|It helps to make things simpler by allowing us to develop loosely coupled applications.|It helps to create a stand-alone application with less configuration.|
+|The developer writes a lot of code (boilerplate code) to do the minimal task.|It reduces boilerplate code.|
+|To test the Spring project, we need to set up the sever explicitly.|Spring Boot offers embedded server such as Jetty and Tomcat, etc.|
+|It does not provide support for an in-memory database.|It offers several plugins for working with an embedded and in-memory database such as H2.|
+|Developers manually define dependencies for the Spring project in pom.xml.|Spring Boot comes with the concept of starter in pom.xml file that internally takes care of downloading the dependencies JARs based on Spring Boot Requirement.|
