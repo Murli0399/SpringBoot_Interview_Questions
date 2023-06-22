@@ -1,13 +1,6 @@
 
-## what is the core principle behind inversion of control in the spring framwork ?
-The core principle behind Inversion of Control (IoC) in the Spring framework is to promote loose coupling and increase the modularity of software components. In traditional programming, objects are responsible for creating and managing the dependencies they require. This creates tight coupling and makes it difficult to modify or replace dependencies without impacting the object itself.
+## Diff between spring and spring boot?
+**Spring:** Spring Framework is the most popular application development framework of Java. The main feature of the Spring Framework is dependency Injection or Inversion of Control (IoC). With the help of Spring Framework, we can develop a loosely coupled application. It is better to use if application type or characteristics are purely defined.
 
-IoC, also known as Dependency Injection (DI), flips this control by delegating the responsibility of managing dependencies to an external entity (container) rather than individual objects. In the context of the Spring framework, the IoC container takes charge of creating objects, wiring them together, and supplying the required dependencies.
+**Spring Boot:** Spring Boot is a module of Spring Framework. It allows us to build a stand-alone application with minimal or zero configurations. It is better to use if we want to develop a simple Spring-based application or RESTful services.
 
-The key idea is that objects no longer depend on other objects directly but rather rely on the container to provide their dependencies. This allows for greater flexibility, reusability, and testability of components. It becomes easier to introduce new implementations, swap dependencies, and mock objects during testing.
-
-The Spring framework achieves IoC through its container called the "ApplicationContext." The container creates and manages beans (objects) based on the configuration provided. The configuration can be specified using XML files, Java annotations, or Java-based configuration classes.
-
-When the container is initialized, it reads the configuration and instantiates the beans, wiring them together by resolving their dependencies. The dependencies can be defined through constructor injection, setter injection, or field injection.
-
-By using IoC in the Spring framework, you can focus on writing the business logic of your application while leaving the management of dependencies to the container. This promotes separation of concerns, modular design, and facilitates easier maintenance and extensibility of your codebase.
