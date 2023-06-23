@@ -62,31 +62,51 @@ However, it's worth noting that autowiring by constructor requires the dependenc
 </details>
 <details><summary>
 
+## What are the limitations of autowiring?
+</summary>
+While autowiring in Spring offers convenience and flexibility, there are some limitations to consider:
+
+**1. Ambiguity:** Autowiring can become ambiguous when multiple beans of the same type are present in the container. In such cases, Spring may not be able to determine which bean to inject, leading to an exception. Additional qualifiers or annotations can be used to resolve the ambiguity.
+
+**2. Limited Control:** Autowiring reduces explicit configuration, but it also reduces control over the wiring process. If fine-grained control is required, explicit configuration using XML or annotations may be more suitable.
+
+**3. Complexity and Readability:** Autowiring can make the codebase less readable and harder to understand, especially when multiple dependencies are being resolved automatically. Explicitly configuring dependencies can make the code more self-explanatory.
+
+**4. Tight Coupling:** Autowiring can introduce tight coupling between classes, as dependencies are resolved automatically based on types. This can make the codebase more difficult to maintain and test.
+
+**5. Runtime Errors:** Since autowiring is resolved at runtime, errors related to missing or incompatible dependencies may only be discovered during runtime. This can lead to potential runtime errors and make it harder to catch them during development.
+
+**6. Limited Support for Non-Bean Dependencies:** Autowiring is primarily designed for resolving and injecting Spring-managed beans. It may not be suitable for resolving non-bean dependencies or dependencies that are managed outside of the Spring container.
+
+It's important to consider these limitations and evaluate the trade-offs before deciding to use autowiring in Spring. Depending on the complexity and specific requirements of the application, explicit configuration or a combination of autowiring and explicit wiring may be more appropriate.
+</details>
+<details><summary>
+
 ## 
 </summary>
+
 </details>
 <details><summary>
 
-##  
+## 
 </summary>
+
 </details>
 <details><summary>
 
-##  
+## 
 </summary>
+
 </details>
 <details><summary>
 
-##  
+## 
 </summary>
+
 </details>
 <details><summary>
 
-##  
+## 
 </summary>
-</details>
-<details><summary>
 
-##  
-</summary>
 </details>
