@@ -51,10 +51,10 @@ To enable annotation-based configuration in Spring, you need to follow these ste
 ### 1. Add the necessary dependencies:
 Ensure that you have the required Spring dependencies in your project's build configuration. This typically includes the core Spring framework and the necessary modules for annotation support, such as spring-context and spring-context-support.
 
-### Enable component scanning:
+### 2. Enable component scanning:
 In your Spring configuration, you need to enable component scanning to let Spring automatically detect and register beans based on annotations. This can be done by using the @ComponentScan annotation at the configuration class level or by configuring component scanning through XML configuration.
 
-### Use relevant annotations:
+### 3. Use relevant annotations:
 Annotate your classes and methods with Spring annotations to configure them as beans and specify their relationships. Some commonly used annotations include:
 
 - **@Component:** Marks a class as a Spring-managed component.
@@ -63,15 +63,16 @@ Annotate your classes and methods with Spring annotations to configure them as b
 - **@Configuration:** Indicates a class as a Spring configuration class.
 - **@Bean:** Configures a method to create and configure a bean.
 
-Initialize the Spring container: Finally, you need to initialize the Spring container, which will process the annotations and create the necessary beans. This can be done by creating an instance of the AnnotationConfigApplicationContext class or by using other context initialization mechanisms provided by Spring, such as XML-based or Java-based configuration.
+### 4. Initialize the Spring container:
+Finally, you need to initialize the Spring container, which will process the annotations and create the necessary beans. This can be done by creating an instance of the AnnotationConfigApplicationContext class or by using other context initialization mechanisms provided by Spring, such as XML-based or Java-based configuration.
 
 By following these steps, you can enable and leverage annotation-based configuration in Spring. The container will scan the specified packages for annotated classes, create the beans, handle their dependencies, and allow them to be injected into other beans as required. Annotation-based configuration provides a more concise and expressive way to configure beans compared to XML configuration, and it is widely used in modern Spring applications.
 </details>
 <details><summary>
   
-### 
+### Can there be multiple configuration files in a project?
 </summary>
-
+Yes, it is possible to have multiple configuration files in a project in Spring. Having multiple configuration files can help modularize and organize the configuration of different components or subsystems within the project.
 </details>
 <details><summary>
   
