@@ -461,27 +461,124 @@ In summary, while the Singleton scope in Spring shares the concept of having a s
 </details>
 <details><summary>
   
-### 
+### Are Singleton beans thread safe?
 </summary>
+Singleton beans in Spring are not inherently thread-safe by default. The thread safety of a singleton bean depends on how it is implemented and the synchronization mechanisms applied within the bean's methods and fields.
 
+When multiple threads access and modify shared data within a singleton bean concurrently, there can be potential thread safety issues, such as race conditions, data corruption, or inconsistent state.
+
+Here are some considerations to ensure thread safety for singleton beans in Spring:
+
+**1. Immutable State:** If a singleton bean's state is immutable and doesn't change once initialized, it can be considered thread-safe. Immutable objects are inherently safe for concurrent access.
+
+**2. Synchronization:** Proper synchronization mechanisms should be applied within the singleton bean to ensure that shared mutable state is accessed and modified safely by multiple threads. Synchronization can be achieved using techniques like synchronized blocks, locks, or concurrent data structures.
+
+**3. Thread-Safe Dependencies:** Ensure that any dependencies used by the singleton bean are themselves thread-safe. If a singleton bean depends on other non-thread-safe beans, additional synchronization or proper handling of those dependencies may be required.
+
+**4. Avoid Shared Mutable State:** Design the singleton bean in a way that minimizes shared mutable state. Prefer immutability and immutability patterns to reduce the need for synchronization.
+
+It's important to note that Spring manages the lifecycle and instantiation of singleton beans, but it does not provide built-in mechanisms for thread safety. It is the responsibility of the developer to design and implement singleton beans in a thread-safe manner.
+
+By following good programming practices, understanding the threading requirements of your application, and applying appropriate synchronization techniques, you can ensure thread safety for singleton beans in Spring.
 </details>
 <details><summary>
   
-### 
+### Explain prototype bean scope.
 </summary>
+In Spring, the prototype bean scope is one of the available bean scopes and it defines that a new instance of the bean should be created every time it is requested from the container. In other words, a prototype bean is not shared across the application and each request for the bean results in a new instance being created.
 
+Here are some key characteristics of the prototype bean scope:
+
+**1. Instance Creation:** When a bean with prototype scope is requested, the Spring container will create a new instance of the bean and return it to the requesting component.
+
+**2. Lifecycle Management:** Unlike singleton beans, prototype beans are not managed by the container after they are created. The container does not keep a reference to the instances and does not destroy them automatically. It is the responsibility of the caller to manage the lifecycle of the prototype beans.
+
+**3. Stateful Nature:** Prototype beans can hold mutable state, and each instance can have its own separate state. This allows you to have different instances of a bean with different values or configurations.
+
+**4. Dependency Injection:** Dependencies of a prototype bean are injected when the bean is requested. If a prototype bean has dependencies, those dependencies will also be created as separate instances. Each instance of the prototype bean will have its own independent set of dependencies.
+
+**5. No Sharing:** Prototype beans are not shared among other beans or components. Each time a prototype bean is injected or requested, a new instance will be created.
+
+**6. Scoped Dependencies:** If a prototype bean has dependencies with narrower scopes (e.g., singleton, request), those dependencies will be managed according to their respective scopes. For example, a prototype bean with a singleton-scoped dependency will receive the same singleton instance throughout its lifecycle.
+
+Prototype beans are useful when you need a new instance of a bean each time it is required, especially in scenarios where you want to maintain independent state or when the bean's creation is expensive or time-consuming.
+
+It's important to note that due to the lack of managed lifecycle, excessive usage of prototype beans can lead to increased memory consumption and potential memory leaks if not properly managed and disposed of when no longer needed.
 </details>
 <details><summary>
   
-### 
+### Does Spring manage the complete lifecycle of beans?
 </summary>
-
+Yes, Spring manages the complete lifecycle of beans within its container. The Spring container, also known as the Spring IoC (Inversion of Control) container, takes responsibility for the creation, initialization, dependency injection, and destruction of beans.
 </details>
 <details><summary>
   
-### 
+### What is an inner bean?
 </summary>
+In Spring, an inner bean is a bean that is defined within the scope of another bean's definition. It is used when a bean is only required by the enclosing bean and does not need to be accessed or referenced by other parts of the application.
 
+Here are some key points about inner beans:
+
+**1. Scoped within Enclosing Bean:** An inner bean's scope is limited to the enclosing bean that contains its definition. It cannot be referenced or accessed from outside the enclosing bean.
+
+**2. No Explicit Bean ID:** Inner beans do not require an explicit bean ID since they are only used within the context of the enclosing bean. They are identified by their association with the enclosing bean.
+
+**3. Definition Inside Enclosing Bean:** The definition of an inner bean is declared directly inside the XML-based or Java-based configuration of the enclosing bean. It is typically defined as a nested <bean> element within the enclosing bean's configuration.
+
+Example of inner bean declaration in XML-based configuration:
+```
+<bean id="enclosingBean" class="com.example.EnclosingBean">
+    <property name="innerBean">
+        <bean class="com.example.InnerBean">
+            <!-- Inner bean properties and configuration -->
+        </bean>
+    </property>
+</bean>
+```
+Example of inner bean declaration in Java-based configuration:
+```
+@Configuration
+public class EnclosingBeanConfig {
+    @Bean
+    public EnclosingBean enclosingBean() {
+        return new EnclosingBean() {
+            @Bean
+            public InnerBean innerBean() {
+                // Inner bean configuration
+                return new InnerBean();
+            }
+        };
+    }
+}
+```
+**4. Dependency Injection:** Inner beans are primarily used to fulfill the dependencies of the enclosing bean. They can be referenced and injected into the properties or constructor parameters of the enclosing bean.
+
+Example of inner bean injection in XML-based configuration:
+```
+<bean id="enclosingBean" class="com.example.EnclosingBean">
+    <property name="innerBean" ref="innerBean" />
+</bean>
+
+<bean id="innerBean" class="com.example.InnerBean" />
+```
+Example of inner bean injection in Java-based configuration:
+```
+@Configuration
+public class EnclosingBeanConfig {
+    @Bean
+    public EnclosingBean enclosingBean(InnerBean innerBean) {
+        EnclosingBean bean = new EnclosingBean();
+        bean.setInnerBean(innerBean);
+        return bean;
+    }
+
+    @Bean
+    public InnerBean innerBean() {
+        return new InnerBean();
+    }
+}
+```
+Inner beans provide a way to encapsulate bean definitions and limit their scope to the context of the enclosing bean. They are useful in cases where a bean is only needed internally and does not need to be accessed or managed independently by other components.
 </details>
 <details><summary>
   
