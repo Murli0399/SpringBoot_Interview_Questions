@@ -125,9 +125,29 @@ By using these approaches, you can exclude a specific bean from being autowired 
 </details>
 <details><summary>
 
-## 
+## What does the @Autowired annotation do?
 </summary>
 
+The **@Autowired** annotation in Spring is used to mark a dependency for automatic dependency injection. It allows Spring to automatically wire (or inject) the appropriate bean into the annotated field, method, or constructor.
+
+Here's what the @Autowired annotation does:
+
+### 1. Dependency Injection:
+When **@Autowired** is used, Spring looks for a matching bean of the required type in the container and injects it into the annotated element. The dependency is resolved at runtime, and the appropriate bean instance is provided.
+
+### 2. Type-Based Injection:
+By default, **@Autowired** performs type-based injection, meaning Spring looks for a bean of the same type as the dependency. If multiple beans of the same type exist, an exception is raised, unless additional qualifiers or annotations are used to disambiguate the injection.
+
+### 3. Flexible Placement:
+The **@Autowired** annotation can be placed on different elements, including fields, setter methods, constructors, and even method parameters. It allows flexibility in choosing where the dependency should be injected.
+
+### 4. Optional Dependency:
+By default, **@Autowired** assumes that the dependency is required and expects a matching bean to be available. However, you can make the dependency optional by setting the required attribute to false, allowing the injection to be skipped if a suitable bean is not found.
+
+### 5. Integration with Qualifiers:
+**@Autowired** can be used in conjunction with the **@Qualifier** annotation to specify the desired bean when multiple beans of the same type exist in the container. The **@Qualifier** annotation helps to disambiguate the injection by providing the bean's qualifier value.
+
+Overall, the **@Autowired** annotation simplifies the process of dependency injection in Spring by allowing automatic wiring of dependencies. It reduces the need for explicit configuration and enables a more concise and readable codebase.
 </details>
 <details><summary>
 
