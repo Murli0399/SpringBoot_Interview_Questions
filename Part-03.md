@@ -377,13 +377,67 @@ Consider the following examples to better understand when to use each scope:
 **2. Prototype Scope Example:**
 - When creating a shopping cart for an e-commerce application, you may want each user session to have its own instance of the shopping cart. In this case, you would define the shopping cart bean with the prototype scope to ensure a new instance is created for each user session.
 - If you have a stateful object that stores user-specific information, such as user preferences or user-specific caches, using prototype scope can help ensure that each user has a separate instance with its own state.
-- Remember, these are just general guidelines, and the appropriate scope for a bean depends on the specific requirements of your application. You can also define custom scopes if none of the built-in scopes meet your needs.
+
+Remember, these are just general guidelines, and the appropriate scope for a bean depends on the specific requirements of your application. You can also define custom scopes if none of the built-in scopes meet your needs.
 </details>
 <details><summary>
   
-### 
+### How is bean scope defined?
 </summary>
+In Spring, the scope of a bean is defined using the @Scope annotation or by configuring it in XML-based configuration or Java-based configuration classes. Here's how you can define the scope of a bean:
 
+**1. Using @Scope annotation:**
+You can annotate the bean class or the bean creation method with the @Scope annotation and specify the desired scope as its value.
+```
+@Component
+@Scope("singleton")
+public class MySingletonBean {
+    // Singleton bean implementation
+}
+```
+```
+@Component
+@Scope("prototype")
+public class MyPrototypeBean {
+    // Prototype bean implementation
+}
+```
+In these examples, the MySingletonBean is explicitly defined as a singleton bean, while MyPrototypeBean is defined as a prototype bean.
+
+**2. Using XML-based configuration:**
+In XML-based configuration, you can define the scope using the scope attribute within the <bean> element.
+
+```
+<bean id="mySingletonBean" class="com.example.MySingletonBean" scope="singleton" />
+```
+```
+<bean id="myPrototypeBean" class="com.example.MyPrototypeBean" scope="prototype" />
+```
+Here, the scope attribute is set to either "singleton" or "prototype" to define the corresponding bean scope.
+
+**3. Using Java-based configuration:**
+In Java-based configuration, you can use the scope() method of the Bean annotation to define the scope.
+```
+@Configuration
+public class AppConfig {
+    @Bean
+    @Scope("singleton")
+    public MySingletonBean mySingletonBean() {
+        return new MySingletonBean();
+    }
+
+    @Bean
+    @Scope("prototype")
+    public MyPrototypeBean myPrototypeBean() {
+        return new MyPrototypeBean();
+    }
+}
+```
+Here, the scope attribute of the @Scope annotation is set to either "singleton" or "prototype" within the @Bean annotated methods.
+
+It's important to note that the available scopes in Spring are: "singleton", "prototype", "request", "session", "application", and "websocket". Additionally, you can define custom scopes by implementing the org.springframework.beans.factory.config.Scope interface and registering the custom scope with the container.
+
+By specifying the scope of a bean, you define its lifecycle and visibility within the application context, allowing Spring to manage the bean instance accordingly based on the specified scope.
 </details>
 <details><summary>
   
