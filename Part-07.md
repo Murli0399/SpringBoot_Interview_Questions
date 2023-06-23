@@ -92,9 +92,20 @@ These components work together to simplify the development process, promote best
 </details>
 <details><summary>
 
-## 
+## What is the purpose of @SpringBootApplication annotation?
 </summary>
 
+The **@SpringBootApplication** annotation is a combination of three annotations: **@Configuration**, **@EnableAutoConfiguration**, and **@ComponentScan**. It is a convenience annotation provided by Spring Boot to simplify the configuration of a Spring application.
+
+The purpose of the **@SpringBootApplication** annotation is to mark the main class of a Spring Boot application. By applying this annotation to a class, it performs the following tasks:
+
+**1. @Configuration:** The **@Configuration** annotation indicates that the class is a source of bean definitions. It allows the class to define and configure beans in the application context. In the case of **@SpringBootApplication**, it implicitly declares the class as a configuration class, providing bean definition capabilities.
+
+**2. @EnableAutoConfiguration:** The **@EnableAutoConfiguration** annotation enables Spring Boot's auto-configuration feature. It automatically configures the Spring application based on the classpath dependencies and sensible defaults. It analyzes the project's dependencies, detects the available configurations, and applies the necessary configurations for the application to function correctly.
+
+**3. @ComponentScan:** The **@ComponentScan** annotation enables component scanning in the application. It instructs Spring to scan and detect components such as controllers, services, repositories, and other Spring-managed beans within specific packages. By default, it scans the package where the **@SpringBootApplication** class is located and its sub-packages.
+
+In summary, the **@SpringBootApplication** annotation serves as the entry point and configuration class for a Spring Boot application. It combines the functionality of **@Configuration**, **@EnableAutoConfiguration**, and **@ComponentScan** to simplify the setup and configuration of a Spring application. By applying this single annotation, developers can start building a Spring Boot application with sensible defaults and auto-configuration, reducing the need for manual configuration.
 </details>
 <details><summary>
 
