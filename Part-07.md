@@ -109,9 +109,24 @@ In summary, the **@SpringBootApplication** annotation serves as the entry point 
 </details>
 <details><summary>
 
-## 
+## What is the purpose of @RestController annotation in Spring Boot?
 </summary>
 
+The **@RestController** annotation is a specialized version of the **@Controller** annotation in Spring Boot. It is used to mark a class as a RESTful controller, specifically designed for building RESTful web services or APIs.
+
+The purpose of the **@RestController** annotation is to combine the functionality of **@Controller** and **@ResponseBody**. By applying the **@RestController** annotation to a class, it indicates that the class is responsible for handling incoming HTTP requests and returning the response in a format suitable for RESTful APIs (usually JSON or XML).
+
+Key features and purposes of the **@RestController** annotation include:
+
+**1. Request handling:** The **@RestController** annotation enables the class to handle HTTP requests and map them to specific methods. Methods within the class are typically annotated with **@RequestMapping**, **@GetMapping**, **@PostMapping**, etc., to specify the URL mapping and HTTP methods they handle.
+
+**2. Response formatting:** The **@RestController** annotation combines the functionality of **@Controller** and **@ResponseBody**. It eliminates the need to annotate individual methods with **@ResponseBody** as it indicates that the return value of the methods should be serialized and returned directly in the response body. By default, the response is serialized as JSON, but it can be customized to support other formats like XML.
+
+**3. RESTful API development:** The primary purpose of the **@RestController** annotation is to facilitate the development of RESTful APIs. It provides a convenient and streamlined way to create endpoints that respond to HTTP requests, handle data input and output, and communicate using the HTTP protocol.
+
+**4. Simplified configuration:** Using **@RestController** in Spring Boot eliminates the need for additional configuration, such as specifying a view resolver, as it automatically configures the class to handle RESTful requests and format the responses accordingly.
+
+In summary, the **@RestController** annotation in Spring Boot simplifies the development of RESTful APIs by combining the **@Controller** and **@ResponseBody** annotations. It enables the class to handle HTTP requests, automatically serializes the return values to the appropriate format (e.g., JSON), and eliminates the need for additional configuration.
 </details>
 
 <details><summary>
