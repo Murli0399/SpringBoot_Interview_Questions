@@ -112,61 +112,15 @@ By default, Spring Boot's component scanning feature automatically detects and r
 </details>
 <details><summary>
   
-### 
+### What is the difference between context: annotation-config and context:component-scan tags?
 </summary>
+The <context:annotation-config> and <context:component-scan> tags are both used in XML-based configuration in Spring, but they serve different purposes:
 
-</details>
-<details><summary>
-  
-### 
-</summary>
+### 1. <<context:annotation-config>>:
+This tag is used to enable support for annotations in Spring. When <context:annotation-config> is included in the XML configuration file, Spring will process certain annotations, such as @Autowired, @Required, @PostConstruct, @PreDestroy, etc., and provide the corresponding functionality. It essentially activates the basic support for annotations in the Spring container. However, <context:annotation-config> does not enable component scanning.
 
-</details>
-<details><summary>
-  
-### 
-</summary>
+### 2. <context:component-scan>:
+This tag is used to enable component scanning in Spring. When <context:component-scan> is included in the XML configuration file, Spring will automatically scan the specified packages and their sub-packages to discover and register beans based on annotations such as @Component, @Controller, @Service, @Repository, etc. Component scanning eliminates the need for explicit bean configuration, as Spring dynamically detects and manages the beans based on the specified packages.
 
-</details>
-<details><summary>
-  
-### 
-</summary>
-
-</details>
-<details><summary>
-  
-### 
-</summary>
-
-</details>
-<details><summary>
-  
-### 
-</summary>
-
-</details>
-<details><summary>
-  
-### 
-</summary>
-
-</details>
-<details><summary>
-  
-### 
-</summary>
-
-</details>
-<details><summary>
-  
-### 
-</summary>
-
-</details>
-<details><summary>
-  
-### 
-</summary>
-
+In summary, the main difference between <context:annotation-config> and <context:component-scan> is that <context:annotation-config> enables support for annotations in Spring, while <context:component-scan> enables component scanning to automatically detect and register beans based on annotations. <context:annotation-config> is more focused on processing annotation-based functionality, while <context:component-scan> goes beyond that by allowing automatic bean detection and registration based on annotations.
 </details>
