@@ -165,9 +165,24 @@ The @Qualifier annotation is useful when @Primary is not sufficient to determine
 </details>
 <details><summary>
   
-### 
+### Which annotations takes precedence: @Primary or @Qualifier?
 </summary>
+When resolving bean dependencies in the Spring Framework, the @Qualifier annotation takes precedence over @Primary.
 
+Here's how the precedence works:
+
+### 1. When @Qualifier is used without @Primary:
+
+- If the @Qualifier annotation is used on a dependency, Spring looks for a bean with a matching qualifier value specified in the @Qualifier.
+- If a bean with the matching qualifier value is found, it is injected, regardless of whether it is marked as @Primary or not.
+- If no bean with the matching qualifier value is found, Spring tries to inject the primary bean (if one is defined using @Primary).
+
+### 2. When both @Qualifier and @Primary are used together:
+
+- If the @Qualifier annotation is used with a specific qualifier value and the primary bean is also defined with @Primary, the bean matching the qualifier value will be injected, regardless of whether it is the primary bean or not.
+- If the @Qualifier annotation is used without a specific qualifier value and the primary bean is defined, the primary bean will be injected.
+- If the @Qualifier annotation is used without a specific qualifier value and no primary bean is defined, an exception will be thrown because Spring cannot determine which bean to inject.
+- In summary, the @Qualifier annotation takes precedence over @Primary when both are used together. The @Qualifier annotation allows for more fine-grained control over bean resolution by specifying a qualifier value, whereas @Primary is a broader mechanism to indicate a default or primary bean when no specific qualifier is provided.
 </details>
 <details><summary>
   
