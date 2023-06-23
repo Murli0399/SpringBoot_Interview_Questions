@@ -223,15 +223,73 @@ By using @Bean, you can define beans and their associated configuration in a fle
 </details>
 <details><summary>
   
-### 
+### Both @Bean and @Component annotations create beans. What is the difference between the two?
 </summary>
+The @Bean and @Component annotations in Spring serve different purposes and have distinct usage scenarios:
 
+**1. @Bean Annotation:** The @Bean annotation is used at the method level within a @Configuration or @Component class to explicitly declare a bean creation method. It allows you to define custom configuration logic and explicitly specify how a bean should be created and configured. The annotated method acts as a factory method for creating and providing instances of beans.
+```
+@Configuration
+public class AppConfig {
+    @Bean
+    public MyBean myBean() {
+        return new MyBean();
+    }
+}
+```
+With @Bean, you have fine-grained control over the bean creation process, and you can customize various aspects such as name, initialization, destruction, and dependencies.
+
+**2. @Component Annotation:** The @Component annotation is used at the class level to indicate that a class is a candidate for Spring's component scanning. It allows Spring to automatically detect and create instances of beans based on classpath scanning. By default, @Component acts as a generic stereotype for any Spring-managed component.
+```
+@Component
+public class MyComponent {
+    // Component implementation
+}
+```
+When using @Component, Spring automatically creates an instance of the annotated class and registers it as a bean within the application context. The bean's name is derived from the class name (with the first letter in lowercase) unless explicitly specified using additional stereotypes like @Service, @Repository, or @Controller.
+
+In summary, the key difference between @Bean and @Component is the level at which they are used and the control they provide:
+
+**@Bean** is used at the method level within a configuration class to explicitly define and customize the creation and configuration of individual beans.
+**@Component** is used at the class level to mark a class as a Spring-managed component and allows for automatic detection and registration of beans based on component scanning.
+While @Bean provides more control and flexibility, @Component is suitable for cases where you want Spring to automatically manage the instantiation and configuration of beans based on component scanning and conventions.
 </details>
 <details><summary>
   
-### 
+### How can dependencies be injected using the @Bean annotation?
 </summary>
+Dependencies can be injected using the @Bean annotation by specifying the dependencies as method parameters in the @Bean annotated method. The Spring container will automatically resolve and inject the dependencies when invoking the method to create the bean instance.
 
+Here's an example that demonstrates injecting dependencies using the @Bean annotation:
+```
+@Configuration
+public class AppConfig {
+    @Bean
+    public MyBean myBean(AnotherBean anotherBean) {
+        return new MyBean(anotherBean);
+    }
+}
+```
+In this example, the myBean() method accepts a parameter of type AnotherBean, which represents the dependency. When the myBean() method is invoked by the container to create the bean, it will automatically look for a bean of type AnotherBean within the application context and pass it as an argument to the method. The method implementation can then use the provided AnotherBean instance to initialize the MyBean instance or perform any other required operations.
+
+It's important to note that for the dependency injection to work correctly, the required dependency (AnotherBean in this case) must be defined as a bean within the same or a parent application context. This can be done either by annotating the dependent class with @Component or any of its specialized annotations (@Service, @Repository, @Controller) or by defining the dependency using its own @Bean method within the configuration class.
+```
+@Configuration
+public class AppConfig {
+    @Bean
+    public AnotherBean anotherBean() {
+        return new AnotherBean();
+    }
+
+    @Bean
+    public MyBean myBean(AnotherBean anotherBean) {
+        return new MyBean(anotherBean);
+    }
+}
+```
+In this updated example, both AnotherBean and MyBean are defined as beans within the AppConfig configuration class. The myBean() method now receives the AnotherBean instance as a parameter, and Spring resolves the dependency by invoking the anotherBean() method to create the required instance.
+
+By specifying the dependencies as method parameters in the @Bean annotated method, you can achieve dependency injection within the @Bean configuration method itself, allowing for more flexibility and control over the bean creation process.
 </details>
 <details><summary>
   
