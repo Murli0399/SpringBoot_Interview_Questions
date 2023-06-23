@@ -128,12 +128,14 @@ Key features and purposes of the **@RestController** annotation include:
 
 In summary, the **@RestController** annotation in Spring Boot simplifies the development of RESTful APIs by combining the **@Controller** and **@ResponseBody** annotations. It enables the class to handle HTTP requests, automatically serializes the return values to the appropriate format (e.g., JSON), and eliminates the need for additional configuration.
 </details>
-
 <details><summary>
 
-## 
+## What is the purpose of @ConditionalOnMissingBean annotation?
 </summary>
 
+The purpose of the **@ConditionalOnMissingBean** annotation is to conditionally enable a bean definition based on the absence of a specific bean in the Spring application context. If the specified bean does not exist, the annotated bean definition will be created and added to the context. However, if the specified bean already exists, the annotated bean definition will not be created.
+
+In short, **@ConditionalOnMissingBean** allows conditional bean creation based on the absence of a specific bean.
 </details>
 <details><summary>
 
