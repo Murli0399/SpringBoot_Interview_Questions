@@ -76,9 +76,17 @@ Yes, it is possible to have multiple configuration files in a project in Spring.
 </details>
 <details><summary>
   
-### 
+### What is component scan?
 </summary>
+Component scanning is a feature in Spring that automatically detects and registers beans based on certain conventions and annotations in your codebase. It eliminates the need to explicitly define each bean in a configuration file by scanning the specified packages for classes that should be managed as Spring beans.
 
+In simpler terms, component scanning is a way for Spring to automatically discover and create beans for you without the need for manual configuration. By enabling component scanning, Spring scans the specified packages and identifies classes that are annotated with certain annotations, such as @Component, @Controller, @Service, or @Repository. It then registers these classes as beans in the Spring container, making them available for dependency injection or other bean-related operations.
+
+Component scanning simplifies the configuration process, especially in larger projects, as you don't have to explicitly list and configure every bean. Instead, you can annotate your classes appropriately, and Spring will take care of instantiating and managing them as beans.
+
+To enable component scanning, you typically use the @ComponentScan annotation at the configuration class level. This annotation specifies the base package or packages to scan for annotated classes. Spring will scan those packages and their sub-packages, identifying classes annotated with relevant annotations and registering them as beans.
+
+Component scanning is a powerful feature that promotes convention-over-configuration and can significantly reduce the amount of boilerplate configuration code needed in a Spring application.
 </details>
 <details><summary>
   
