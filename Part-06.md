@@ -151,19 +151,63 @@ Overall, the **@Autowired** annotation simplifies the process of dependency inje
 </details>
 <details><summary>
 
-## 
+## What happens if we specify an interface instead of a class in getBean() method?
 </summary>
 
+In the context of Java programming, the **getBean()** method is typically associated with dependency injection frameworks like Spring. It is commonly used to retrieve an instance of a class from the framework's container based on the specified class or interface.
+
+When you specify an interface instead of a class in the **getBean()** method, the framework will attempt to find a bean that implements that interface and return an instance of that bean. This allows for greater flexibility and loose coupling in your code.
+
+Here's what happens when you specify an interface in the **getBean()** method:
+
+- **Bean Lookup:** The framework scans its container for a bean that implements the specified interface.
+
+- **Bean Resolution:** If a single bean implementing the interface is found, the framework returns an instance of that bean.
+
+- **Ambiguity Handling:** If multiple beans implement the specified interface, the framework may throw an exception or provide additional mechanisms to resolve the ambiguity. This could involve using qualifiers, annotations, or other configuration options to specify the desired bean.
+
+- **No Bean Found:** If no bean implementing the specified interface is found, the framework may throw an exception or return a null reference, depending on its configuration.
+
+By using interfaces, you promote the use of abstraction and allow for the interchangeability of different implementations. This facilitates easier testing, modular design, and promotes the principles of object-oriented programming, such as encapsulation and polymorphism.
 </details>
 <details><summary>
 
-## 
+## Why do we need a no-arg constructor?
 </summary>
+A no-arg constructor (a constructor without any arguments) is often needed for various reasons, including:
 
+**1. Object Initialization:** A no-arg constructor allows for the initialization of an object with default values. It ensures that an object can be created and properly initialized even when no specific arguments are provided.
+
+**2. Serialization and Deserialization:** Many serialization frameworks and libraries require a no-arg constructor in order to create objects during the deserialization process. The absence of a no-arg constructor can result in errors or data loss when serializing or deserializing objects.
+
+**3. Reflection and Instantiation:** Some frameworks and libraries use reflection to dynamically create instances of classes. In such cases, a no-arg constructor is necessary because the reflection mechanism typically relies on being able to create an instance of a class without passing any arguments.
+
+**4. Framework and Dependency Injection:** Certain frameworks and dependency injection containers rely on the no-arg constructor to create and manage instances of classes. They instantiate objects through reflection and populate them with dependencies, often through setter or field injection. A no-arg constructor is essential for these frameworks to create instances of classes and inject the required dependencies.
+
+Overall, a no-arg constructor provides a default way to create an object, supports serialization and deserialization, enables reflection-based instantiation, and facilitates integration with various frameworks and libraries that rely on constructor invocation without arguments.
 </details>
 <details><summary>
 
-## 
+## What is Spring Security?
 </summary>
+Spring Security is a powerful framework that provides authentication, authorization, and other security features for Java applications. It is built on top of the Spring Framework and offers comprehensive security services to ensure the protection of web and enterprise applications.
 
+In short, Spring Security:
+
+### 1. Authentication:
+It handles user authentication by providing mechanisms for login, logout, and user session management. It supports various authentication methods such as username/password authentication, token-based authentication, and integration with external identity providers.
+
+### 2. Authorization:
+Spring Security enables fine-grained access control by defining access rules and permissions. It allows you to secure different parts of your application based on roles, authorities, or custom expressions, ensuring that only authorized users can access specific resources or perform certain actions.
+
+### 3. Security Filters:
+It integrates with the Servlet API to intercept and filter requests and responses, enabling the enforcement of security measures at various levels. Spring Security intercepts requests and applies security checks based on the configuration you define.
+
+### 4. Integration with Other Technologies:
+Spring Security seamlessly integrates with other components of the Spring ecosystem, such as Spring MVC, Spring Boot, and Spring Data. It provides easy configuration options and simplifies the integration of security features into Spring-based applications.
+
+### 5. Extensibility:
+Spring Security is highly customizable and extensible. It allows you to plug in custom authentication providers, implement custom authorization logic, and integrate with external authentication systems. You can also leverage its extensive set of built-in features and extensions to meet your specific security requirements.
+
+By using Spring Security, developers can focus on application logic while delegating the complex security aspects to the framework. It provides a robust foundation for securing applications against common security threats and offers flexibility to adapt to various security requirements.
 </details>
