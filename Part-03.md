@@ -250,8 +250,10 @@ When using @Component, Spring automatically creates an instance of the annotated
 
 In summary, the key difference between @Bean and @Component is the level at which they are used and the control they provide:
 
-**@Bean** is used at the method level within a configuration class to explicitly define and customize the creation and configuration of individual beans.
-**@Component** is used at the class level to mark a class as a Spring-managed component and allows for automatic detection and registration of beans based on component scanning.
+- **@Bean** is used at the method level within a configuration class to explicitly define and customize the creation and configuration of individual beans.
+
+- **@Component** is used at the class level to mark a class as a Spring-managed component and allows for automatic detection and registration of beans based on component scanning.
+
 While @Bean provides more control and flexibility, @Component is suitable for cases where you want Spring to automatically manage the instantiation and configuration of beans based on component scanning and conventions.
 </details>
 <details><summary>
