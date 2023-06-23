@@ -580,10 +580,3 @@ public class EnclosingBeanConfig {
 ```
 Inner beans provide a way to encapsulate bean definitions and limit their scope to the context of the enclosing bean. They are useful in cases where a bean is only needed internally and does not need to be accessed or managed independently by other components.
 </details>
-<details><summary>
-  
-### 
-</summary>
-
-</details>
-
