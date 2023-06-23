@@ -1,9 +1,7 @@
-<details>
+<details><summary>
   
-  <summary>
-    ### What are beans in Spring?
-  </summary>
-
+### What are beans in Spring?
+</summary>
 In the Spring framework, beans refer to the objects that are managed by the Spring IoC (Inversion of Control) container. A bean is an instance of a class that is initialized, assembled, and managed by the Spring container. Beans are the fundamental building blocks of a Spring application.
 
 The Spring framework provides several mechanisms to configure beans, including XML-based configuration, Java-based configuration, and annotation-based configuration. By defining beans in the configuration files or through annotations, you can instruct the Spring container to create and manage instances of these beans.
