@@ -441,9 +441,23 @@ By specifying the scope of a bean, you define its lifecycle and visibility withi
 </details>
 <details><summary>
   
-### 
+### Is Singleton scope in Spring same as the Singleton design pattern?
 </summary>
+The Singleton scope in Spring is similar to the Singleton design pattern in terms of creating a single instance of a class. However, there are some differences to consider:
 
+**1. Implementation:** In the Singleton design pattern, the class itself is responsible for ensuring that only one instance is created and providing global access to that instance. This typically involves using static methods or a static instance variable.
+In Spring, the Singleton scope is managed by the Spring IoC container. When a bean is defined with the Singleton scope, the container is responsible for creating a single instance of the bean and managing its lifecycle.
+
+**2. Scoping:** In the Singleton design pattern, the singleton instance is typically available throughout the entire application. It is a global object that can be accessed from anywhere.
+In Spring, the Singleton scope is limited to the scope of the Spring IoC container in which the bean is defined. The singleton instance is shared within that container and can be accessed by other beans within the same container.
+
+**3. Configuration and Management:** In the Singleton design pattern, you need to implement the logic for ensuring a single instance and handle any synchronization concerns or lazy initialization.
+In Spring, the Singleton scope is managed by the container, and you only need to define the bean with the Singleton scope. The container takes care of creating and providing the singleton instance when needed.
+
+**4. Dependency Injection:** In the Singleton design pattern, the singleton instance is often accessed statically, and dependencies are typically obtained using static methods or passed explicitly.
+In Spring, dependencies can be injected into singleton beans using various mechanisms, such as constructor injection, setter injection, or field injection. The Spring container handles the injection of dependencies into singleton beans based on their configurations.
+
+In summary, while the Singleton scope in Spring shares the concept of having a single instance with the Singleton design pattern, the implementation and management are handled by the Spring IoC container. Spring's Singleton scope provides a managed and configurable way to define singleton beans within the context of the container, with dependency injection capabilities and scoping limited to the container in which the bean is defined.
 </details>
 <details><summary>
   
