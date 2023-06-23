@@ -295,21 +295,58 @@ By specifying the dependencies as method parameters in the @Bean annotated metho
 </details>
 <details><summary>
   
-### 
+### What are the different scopes of a bean?
 </summary>
+In Spring, beans can have different scopes, which define the lifecycle and visibility of bean instances within the application context. The following are the commonly used bean scopes in Spring:
 
+- **Singleton:** The default scope in Spring. A singleton bean has a single instance per Spring IoC container. The container creates the bean instance when it is first requested and subsequently returns the same instance for subsequent requests.
+
+- **Prototype:** A new instance of a prototype bean is created every time it is requested from the container. Each request for the bean results in a new instance being created. Prototype beans are not shared across the application and have no guarantees about their lifecycle.
+
+- **Request:** A bean with the request scope is created once per HTTP request. It is specific to web applications and allows each HTTP request to have its own instance of the bean. The bean is destroyed at the end of the request.
+
+- **Session:** A bean with the session scope is created once per user session in a web application. It allows maintaining stateful data specific to each user session. The bean is destroyed when the session expires or is invalidated.
+
+- **Application:** A bean with the application scope is created once per ServletContext in a web application. It allows sharing a single instance of the bean across the entire application. The bean is created when the application starts and is destroyed when the application shuts down.
+
+- **WebSocket:** A bean with the WebSocket scope is created once per WebSocket connection. It allows maintaining stateful data specific to each WebSocket connection. The bean is destroyed when the WebSocket connection is closed.
+
+Additionally, custom bean scopes can be defined by implementing the org.springframework.beans.factory.config.Scope interface and registering the custom scope with the container.
+
+The choice of bean scope depends on the specific requirements of your application. Singleton scope is suitable for sharing stateless objects, prototype scope is useful when you need a new instance every time, and request/session/application scopes are relevant for web applications to manage data at different levels of granularity.
+
+You can specify the scope of a bean using the @Scope annotation or by configuring it in XML-based configuration or Java-based configuration classes.
 </details>
 <details><summary>
   
-### 
+### What is the default bean scope in Spring?
 </summary>
+The default bean scope in Spring is singleton. When you create a bean without explicitly specifying a scope, it will be treated as a singleton bean by default.
 
+A singleton bean is created once per Spring IoC container and shared across the application context. Whenever the bean is requested, the same instance is returned. Subsequent requests for the bean within the same application context will always receive a reference to the same singleton instance.
+
+To illustrate the default singleton scope, consider the following example:
+```
+@Component
+public class MyBean {
+    // Bean implementation
+}
+```
+In this example, the MyBean class is annotated with @Component, indicating that it should be managed as a Spring bean. Since no explicit scope is specified, the bean will be treated as a singleton by default.
+
+When the Spring container initializes, it will create a single instance of MyBean and register it as a singleton bean within the application context. Any other beans or components that require MyBean will receive the same instance.
+
+If you require a different scope for your beans, such as prototype or request scope, you can explicitly specify it using the @Scope annotation or other means of configuration.
 </details>
 <details><summary>
   
-### 
+### What is the default scope in the web context?
 </summary>
+In a web context, the default scope for a bean in Spring is singleton. This means that if you create a bean without explicitly specifying a scope, it will be treated as a singleton bean by default, even in a web application.
 
+The default singleton scope implies that a single instance of the bean is created and shared across the entire web application. The bean is created when the application starts and remains in memory until the application shuts down.
+
+To summarize, the default scope for a bean in a web context is the same as the default scope in a non-web context, which is singleton. This means that unless you specify a different scope explicitly, Spring will assume that your bean should be a singleton and manage it accordingly within the web application context.
 </details>
 <details><summary>
   
