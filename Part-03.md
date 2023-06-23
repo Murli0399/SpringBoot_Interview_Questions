@@ -101,9 +101,31 @@ Overall, custom init and destroy methods offer a powerful mechanism to control t
 </details>
 <details><summary>
   
-### 
+### What information does the bean definition contain?
 </summary>
+A bean definition in Spring contains various information that defines how the bean should be created, configured, and managed by the Spring container. The bean definition typically includes the following information:
 
+**1. Bean Class:** The class or interface that represents the bean. It specifies the type of object that will be created and managed by the container.
+
+**2. Bean Name:** A unique identifier for the bean within the container. The name is used to reference and retrieve the bean from the container.
+
+**3. Scope:** The scope of the bean, which defines the lifecycle and visibility of the bean instance. Common scope options include singleton (one instance per container), prototype (new instance per request), request, session, etc.
+
+**4. Constructor Arguments:** The values or references to be passed to the bean's constructor during instantiation. This information allows the container to create the bean with the required dependencies.
+
+**5. Properties:** The properties or dependencies of the bean that need to be set after instantiation. These properties can be configured with values or references to other beans.
+
+**6. Initialization and Destruction Methods:** Custom initialization and destruction methods to be invoked during the bean's lifecycle. These methods are used to perform additional setup or cleanup tasks.
+
+**7. Bean Dependencies:** Information about other beans or components that the current bean depends on. This information enables the container to resolve and inject the dependencies.
+
+**8. Autowiring Mode:** Specifies how the bean's dependencies should be automatically resolved and injected. Autowiring eliminates the need for explicit wiring by automatically discovering and connecting the dependencies based on specific rules.
+
+**9. Bean Post-Processors:** Configuration for any BeanPostProcessors to be applied to the bean. BeanPostProcessors allow you to modify or enhance the bean instance before and after initialization.
+
+**10. Additional Metadata:** Other optional metadata or configuration settings specific to the bean, such as custom annotations, bean aliases, lazy initialization, etc.
+
+Bean definitions can be declared in various ways, including XML-based configuration files, Java-based configuration classes, or through annotations. The information within the bean definition provides the necessary instructions to the Spring container for creating, configuring, and managing the beans within the application context.
 </details>
 <details><summary>
   
