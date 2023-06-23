@@ -153,9 +153,44 @@ The use of an embedded server in Spring Boot provides benefits such as simplicit
 </details>
 <details><summary>
 
-## 
+## Can we change the default embedded server to Jetty?
 </summary>
+Yes, we can change the default embedded server to Jetty in Spring Boot applications.
 
+To change the default embedded server to Jetty, you need to follow these steps:
+
+### 1. Add the Jetty dependency:
+In your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle), add the Jetty dependency as a runtime dependency. For Maven, you can add the following dependency:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+```
+### 2. Exclude the default embedded server:
+To avoid conflicts with the default embedded server (e.g., Tomcat), you need to exclude it from the dependencies. In your build configuration file, exclude the default embedded server dependency. For Maven, you can add the exclusion as follows:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+### 3. Customize application properties (optional):
+If you want to customize Jetty-specific configurations, you can add them to your application.properties or application.yml file. For example, you can specify Jetty-specific properties like server port, thread pool settings, or SSL configurations.
+```
+server.port=8080
+# Add additional Jetty-specific configurations here
+```
+### 4. Build and run the application:
+After making the necessary changes, build and run your Spring Boot application. The embedded server will now be Jetty instead of the default embedded server.
+With these steps, you can change the default embedded server to Jetty in your Spring Boot application.
 </details>
 <details><summary>
 
