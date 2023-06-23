@@ -386,7 +386,7 @@ Remember, these are just general guidelines, and the appropriate scope for a bea
 </summary>
 In Spring, the scope of a bean is defined using the @Scope annotation or by configuring it in XML-based configuration or Java-based configuration classes. Here's how you can define the scope of a bean:
 
-**1. Using @Scope annotation:**
+### 1. Using @Scope annotation:
 You can annotate the bean class or the bean creation method with the @Scope annotation and specify the desired scope as its value.
 ```
 @Component
@@ -404,7 +404,7 @@ public class MyPrototypeBean {
 ```
 In these examples, the MySingletonBean is explicitly defined as a singleton bean, while MyPrototypeBean is defined as a prototype bean.
 
-**2. Using XML-based configuration:**
+### 2. Using XML-based configuration:
 In XML-based configuration, you can define the scope using the scope attribute within the <bean> element.
 
 ```
@@ -415,7 +415,7 @@ In XML-based configuration, you can define the scope using the scope attribute w
 ```
 Here, the scope attribute is set to either "singleton" or "prototype" to define the corresponding bean scope.
 
-**3. Using Java-based configuration:**
+### 3. Using Java-based configuration:
 In Java-based configuration, you can use the scope() method of the Bean annotation to define the scope.
 ```
 @Configuration
