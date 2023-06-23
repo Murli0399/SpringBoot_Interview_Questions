@@ -106,9 +106,62 @@ The @Primary annotation simplifies the resolution of bean dependencies in situat
 </details>
 <details><summary>
   
-### 
+### Why is @Qualifier annotation used?
 </summary>
+The @Qualifier annotation is used in the Spring Framework to resolve ambiguity when multiple beans of the same type are present and the @Primary annotation is not sufficient to determine the desired bean to inject. It allows for more fine-grained control over the selection of beans by specifying a qualifier value.
 
+When you have multiple beans of the same type, Spring may encounter a situation where it cannot determine which bean to inject into a particular dependency. In such cases, you can use the @Qualifier annotation to provide additional information to Spring for bean resolution.
+
+Here's how it works:
+
+### 1. Multiple Beans of the Same Type:
+Let's say you have multiple beans implementing the same interface or extending the same class. For example, you may have two implementations of an interface ExampleInterface: BeanA and BeanB.
+```
+public interface ExampleInterface {
+    // ...
+}
+
+@Component
+public class BeanA implements ExampleInterface {
+    // ...
+}
+
+@Component
+public class BeanB implements ExampleInterface {
+    // ...
+}
+```
+### 2. Autowiring with @Autowired and @Qualifier:
+If you have a dependent class that requires an instance of ExampleInterface, you can use the @Autowired annotation along with the @Qualifier annotation to specify the desired bean.
+```
+@Component
+public class DependentClass {
+
+    @Autowired
+    @Qualifier("beanA")
+    private ExampleInterface exampleInterface;
+    
+    // ...
+}
+```
+### 3. Specifying Qualifier Values with @Qualifier:
+In this scenario, you can use the @Qualifier annotation and provide a qualifier value that matches the desired bean's qualifier value. You can assign a qualifier value to each bean using the @Qualifier annotation.
+```
+@Component
+@Qualifier("beanA")
+public class BeanA implements ExampleInterface {
+    // ...
+}
+
+@Component
+@Qualifier("beanB")
+public class BeanB implements ExampleInterface {
+    // ...
+}
+```
+Now, when Spring encounters the @Autowired annotation for ExampleInterface in the DependentClass, it will inject BeanA because the @Qualifier annotation specifies the qualifier value as "beanA". If you change the @Qualifier value to "beanB", Spring will inject BeanB instead.
+
+The @Qualifier annotation is useful when @Primary is not sufficient to determine the desired bean for injection. It allows you to provide additional information to Spring for resolving bean dependencies. By assigning qualifier values to beans and using the @Qualifier annotation in the dependent class, you can precisely control which bean gets injected.
 </details>
 <details><summary>
   
