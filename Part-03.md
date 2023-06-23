@@ -129,9 +129,29 @@ Bean definitions can be declared in various ways, including XML-based configurat
 </details>
 <details><summary>
   
-### 
+### How can you provide a bean id when using annotations?
 </summary>
+When using annotations in Spring, you can provide a bean ID by using the @Component annotation or its specialized counterparts such as @Service, @Repository, or @Controller. By default, if you don't specify a bean ID, Spring will generate a bean name based on the class name with the first letter in lowercase. However, if you want to explicitly specify the bean ID, you can do so by passing a value to the annotation.
 
+Here's an example of providing a bean ID using annotations:
+```
+@Component("myBean")
+public class MyBean {
+    // Bean implementation
+}
+```
+In this example, the @Component annotation is used to mark the class MyBean as a Spring bean. The value "myBean" is passed as an argument to the annotation, explicitly specifying the bean ID. You can choose any desired name as the bean ID, as long as it follows the naming conventions.
+
+Alternatively, you can also use the @Named annotation from the javax.inject package to provide a bean ID:
+```
+@Named("myBean")
+public class MyBean {
+    // Bean implementation
+}
+```
+Both @Component and @Named annotations serve the same purpose of marking the class as a Spring bean and providing a bean ID. The choice between them depends on your preference or any existing dependencies on the annotations.
+
+By explicitly providing a bean ID, you have more control over the name of the bean and can refer to it by that specific ID when referencing or injecting the bean in other parts of your application.
 </details>
 <details><summary>
   
