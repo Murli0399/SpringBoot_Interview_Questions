@@ -191,9 +191,35 @@ By leveraging the Spring container's bean creation mechanism, developers can foc
 </details>
 <details><summary>
   
-### 
+### What does the @Bean annotation do?
 </summary>
+In Spring, the @Bean annotation is used to indicate that a method in a configuration class should be used to create and configure a bean. When you annotate a method with @Bean, it serves as a factory method for creating a bean instance. The @Bean annotation works in conjunction with @Configuration or @Component annotations.
 
+Here's an example of using @Bean annotation:
+```
+@Configuration
+public class AppConfig {
+    @Bean
+    public MyBean myBean() {
+        return new MyBean();
+    }
+}
+```
+In this example, the @Configuration annotation marks the class AppConfig as a configuration class. The @Bean annotation is used on the myBean() method to indicate that it should be treated as a factory method for creating a bean of type MyBean. The method implementation returns a new instance of MyBean which will be managed by the Spring container.
+
+The @Bean annotation can also be used with additional attributes to customize the bean creation process. For example, you can specify the bean name, dependencies, initialization, and destruction methods, and more.
+```
+@Configuration
+public class AppConfig {
+    @Bean(name = "myBean", initMethod = "init", destroyMethod = "cleanup")
+    public MyBean myBean() {
+        return new MyBean();
+    }
+}
+```
+In this modified example, the name attribute is used to specify the bean name as "myBean". The initMethod attribute specifies the name of the custom initialization method to be called during bean initialization, and the destroyMethod attribute specifies the name of the custom cleanup method to be called during bean destruction.
+
+By using @Bean, you can define beans and their associated configuration in a flexible and programmatic manner. The Spring container will recognize the @Bean annotated methods and create bean instances based on the method's return type and configuration.
 </details>
 <details><summary>
   
