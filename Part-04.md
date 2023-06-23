@@ -53,9 +53,56 @@ While these annotations serve different purposes and have different names, they 
 </details>
 <details><summary>
   
-### 
+### Why is @Primary annotation used?
 </summary>
+The @Primary annotation is used in the Spring Framework to indicate a primary bean when multiple beans of the same type are present in the application context. It is used to resolve ambiguity when autowiring or injecting dependencies.
 
+When you have more than one bean of the same type, Spring may encounter a situation where it cannot determine which bean to inject into a particular dependency. In such cases, you can use the @Primary annotation to specify a primary bean.
+
+Here's how it works:
+
+### Multiple Beans of the Same Type:
+Let's say you have multiple beans implementing the same interface or extending the same class. For example, you may have two implementations of an interface ExampleInterface: BeanA and BeanB.
+```
+public interface ExampleInterface {
+    // ...
+}
+
+@Component
+@Primary
+public class BeanA implements ExampleInterface {
+    // ...
+}
+
+@Component
+public class BeanB implements ExampleInterface {
+    // ...
+}
+```
+### Autowiring with @Autowired:
+If you have a dependent class that requires an instance of ExampleInterface, you can use the @Autowired annotation to inject it.
+```
+@Component
+public class DependentClass {
+
+    @Autowired
+    private ExampleInterface exampleInterface;
+    
+    // ...
+}
+```
+### Resolving Ambiguity with @Primary:
+In this scenario, since you have multiple beans of the same type, Spring may not know which one to inject. To specify the primary bean, you can use the @Primary annotation on BeanA.
+```
+@Component
+@Primary
+public class BeanA implements ExampleInterface {
+    // ...
+}
+```
+Now, when Spring encounters the @Autowired annotation for ExampleInterface in the DependentClass, it will inject BeanA because it is marked as the primary bean. If you remove the @Primary annotation from BeanA, Spring will throw an exception indicating that it cannot determine which bean to inject.
+
+The @Primary annotation simplifies the resolution of bean dependencies in situations where there are multiple beans of the same type. It provides a clear indication to Spring about the primary bean to be used for injection.
 </details>
 <details><summary>
   
