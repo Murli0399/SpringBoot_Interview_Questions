@@ -214,7 +214,7 @@ The @Autowired annotation can be used in the following ways:
 @Autowired
 private DependencyType dependency;
 ```
-### Constructor Injection:
+### 2. Constructor Injection:
 ```
 private DependencyType dependency;
 
@@ -223,7 +223,7 @@ public MyClass(DependencyType dependency) {
     this.dependency = dependency;
 }
 ```
-### Setter Method Injection:
+### 3. Setter Method Injection:
 ```
 private DependencyType dependency;
 
