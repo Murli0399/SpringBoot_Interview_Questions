@@ -46,9 +46,19 @@ Overall, autowiring simplifies the configuration and wiring process by reducing 
 </details>
 <details><summary>
 
-## 
+## What is autowiring by constructor?
 </summary>
+Autowiring by constructor is a mode of autowiring in Spring where dependencies are resolved and injected through the constructor of a class. It allows Spring to automatically identify the appropriate constructor for dependency injection based on the types of the constructor arguments.
 
+In this mode, you annotate the constructor of a class with **@Autowired** or specify **autowire="constructor"** in XML configuration. When the bean is created, Spring analyzes the constructor arguments and tries to find matching beans in the container based on their types. If a suitable bean is found, it is automatically injected into the constructor parameter.
+
+Autowiring by constructor offers a few advantages:
+
+- It promotes the principle of constructor injection, which is considered a best practice for dependency injection.
+- It ensures that the required dependencies are explicitly declared as constructor arguments, making them more visible and reducing ambiguity.
+- It helps in creating immutable and thread-safe objects, as dependencies can be set once during construction and not modified afterwards.
+
+However, it's worth noting that autowiring by constructor requires the dependencies to be available as beans in the container. If multiple beans of the same type are present, Spring will raise an exception unless additional qualifiers or annotations are used to disambiguate the injection.
 </details>
 <details><summary>
 
