@@ -182,23 +182,93 @@ Here's how the precedence works:
 - If the @Qualifier annotation is used with a specific qualifier value and the primary bean is also defined with @Primary, the bean matching the qualifier value will be injected, regardless of whether it is the primary bean or not.
 - If the @Qualifier annotation is used without a specific qualifier value and the primary bean is defined, the primary bean will be injected.
 - If the @Qualifier annotation is used without a specific qualifier value and no primary bean is defined, an exception will be thrown because Spring cannot determine which bean to inject.
-- In summary, the @Qualifier annotation takes precedence over @Primary when both are used together. The @Qualifier annotation allows for more fine-grained control over bean resolution by specifying a qualifier value, whereas @Primary is a broader mechanism to indicate a default or primary bean when no specific qualifier is provided.
+
+In summary, the @Qualifier annotation takes precedence over @Primary when both are used together. The @Qualifier annotation allows for more fine-grained control over bean resolution by specifying a qualifier value, whereas @Primary is a broader mechanism to indicate a default or primary bean when no specific qualifier is provided.
 </details>
 <details><summary>
   
-### 
+### Why is the @Required annotation used?
 </summary>
+I apologize for the confusion, but the @Required annotation is not part of the Spring Framework starting from version 3.0. It was used in older versions of Spring to indicate that a bean property must be configured with a value.
 
+In earlier versions of Spring, the @Required annotation was used to enforce that a particular bean property must be set, either through XML configuration or through Java-based configuration. If a property marked with @Required was not set, Spring would throw an exception during initialization.
+
+However, starting from Spring 3.0, the @Required annotation was deprecated and is no longer necessary. Instead, Spring introduced support for constructor injection and the @Autowired annotation, which automatically handles dependency injection without the need for an additional annotation like @Required.
+
+In modern versions of Spring, you can use the @Autowired annotation on constructor parameters or directly on properties and methods to indicate that dependency injection should be performed. If a dependency is not satisfied or cannot be resolved, Spring will throw an exception indicating the issue during the application context initialization process.
+
+To summarize, the @Required annotation was used in older versions of Spring to enforce that a bean property must be set, but it has been deprecated and is no longer needed in current versions of the framework. The preferred approach is to use @Autowired for dependency injection and let Spring handle the configuration and resolution of dependencies.
 </details>
 <details><summary>
   
-### 
+### What is the purpose of @Autowired annotation?
 </summary>
+The @Autowired annotation is an important annotation in the Spring Framework that is used for automatic dependency injection. Its purpose is to automatically wire or inject dependencies into a Spring-managed bean.
 
+When a class is annotated with @Autowired, Spring will try to find a matching dependency of the required type from the application context and inject it into the annotated field, constructor, or method parameter.
+
+The @Autowired annotation can be used in the following ways:
+
+### 1. Field Injection:
+```
+@Autowired
+private DependencyType dependency;
+```
+### Constructor Injection:
+```
+private DependencyType dependency;
+
+@Autowired
+public MyClass(DependencyType dependency) {
+    this.dependency = dependency;
+}
+```
+### Setter Method Injection:
+```
+private DependencyType dependency;
+
+@Autowired
+public void setDependency(DependencyType dependency) {
+    this.dependency = dependency;
+}
+```
+When the @Autowired annotation is used, Spring will search for a bean of the required type in the application context. If exactly one matching bean is found, it will be injected into the annotated field, constructor parameter, or setter method parameter. If multiple beans of the same type are available, additional mechanisms such as @Qualifier can be used to specify the desired bean.
+
+The @Autowired annotation greatly simplifies the process of dependency injection in Spring applications. Instead of manually wiring dependencies, Spring automatically resolves and injects the required dependencies, allowing for loosely coupled and modular code. It promotes the principles of inversion of control (IoC) and reduces the need for explicit configuration.
 </details>
 <details><summary>
   
-### 
+### What is the difference between @Inject and @Autowired in Spring? Which one to use under which condition?
 </summary>
+Both @Inject and @Autowired annotations serve a similar purpose of dependency injection in the Spring Framework. However, they originate from different frameworks and have some subtle differences.
 
+Here are the key differences between @Inject and @Autowired:
+
+### 1. Origin and Dependency:
+
+- **@Inject** is a standard annotation defined by the Java Dependency Injection (JSR-330) specification.
+- **@Autowired** is a specific annotation provided by the Spring Framework.
+
+### 2. Package and Dependency:
+
+- **@Inject** is part of the javax.inject package and requires an additional dependency to be included in the project, such as the Java Dependency Injection API (e.g., javax.inject:javax.inject).
+- **@Autowired** is provided by the Spring Framework itself and does not require any additional dependencies.
+
+### 3. Configuration Flexibility:
+
+- **@Inject** provides a more standard and portable approach to dependency injection. It can be used in Java SE and Java EE environments, and it is not tied specifically to Spring.
+- **@Autowired** is a Spring-specific annotation that offers additional features and capabilities tailored specifically for the Spring Framework. It provides more advanced dependency resolution and supports features like autowiring by name, by type, and by qualifier.
+
+### 4. Qualifier Support:
+
+- **@Inject** does not have built-in support for qualifiers. To specify a qualifier value for a dependency, you would typically use @Named annotation from the javax.inject package.
+- **@Autowired** supports the use of qualifiers via the @Qualifier annotation to specify the desired bean when multiple beans of the same type are available.
+
+Considering these differences, here are some general guidelines for choosing between @Inject and @Autowired:
+
+- If you are working exclusively with the Spring Framework and want to take advantage of Spring-specific features and configurations, it is recommended to use @Autowired.
+- If you prefer a more standard and portable approach to dependency injection, or if you are working in a Java SE or Java EE environment without Spring, @Inject can be used.
+- When using @Inject, if you need to specify qualifiers for dependencies, you can use @Named from javax.inject or choose to use the @Qualifier annotation provided by Spring along with @Inject.
+
+It's worth noting that in modern versions of the Spring Framework, both @Inject and @Autowired can be used interchangeably, as Spring has added support for the @Inject annotation and aligned it with the behavior of @Autowired. This allows you to use @Inject or @Autowired based on your preference and project requirements.
 </details>
