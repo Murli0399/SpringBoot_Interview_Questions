@@ -139,9 +139,17 @@ In short, **@ConditionalOnMissingBean** allows conditional bean creation based o
 </details>
 <details><summary>
 
-## 
+## What is an embedded server in Spring Boot?
 </summary>
+An embedded server in Spring Boot refers to the capability of running a web server directly within the Spring Boot application itself. Instead of deploying the application to an external server like Apache Tomcat or Jetty, Spring Boot provides the option to include an embedded server within the application, making it self-contained and independent of any external server installation.
 
+The embedded server acts as a lightweight servlet container that can handle HTTP requests and serve web content. It eliminates the need for manual server setup, deployment, and configuration, simplifying the deployment process and making it easier to develop and deploy Spring Boot applications.
+
+Spring Boot supports various embedded servers, including Tomcat, Jetty, and Undertow, among others. These servers are packaged as dependencies in the application, and the necessary configurations are automatically handled by Spring Boot's auto-configuration mechanism.
+
+When a Spring Boot application is started, the embedded server starts along with it, listening for incoming HTTP requests. The application's controllers and request mappings are processed by the embedded server, allowing it to handle and respond to web requests without the need for an external server.
+
+The use of an embedded server in Spring Boot provides benefits such as simplicity, portability, and ease of deployment. It allows developers to create self-contained, standalone applications that can be run with a simple command or by executing the main class. The embedded server capability is one of the key features that make Spring Boot an attractive framework for developing web applications and microservices.
 </details>
 <details><summary>
 
