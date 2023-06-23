@@ -373,8 +373,8 @@ Consider the following examples to better understand when to use each scope:
 
 - Configuring a database connection pool as a singleton bean makes sense because you want to reuse the same connection pool instance throughout the application.
 - A logging service or a utility class that doesn't have any mutable state can also be defined as a singleton bean.
-**2. Prototype Scope Example:**
 
+**2. Prototype Scope Example:**
 - When creating a shopping cart for an e-commerce application, you may want each user session to have its own instance of the shopping cart. In this case, you would define the shopping cart bean with the prototype scope to ensure a new instance is created for each user session.
 - If you have a stateful object that stores user-specific information, such as user preferences or user-specific caches, using prototype scope can help ensure that each user has a separate instance with its own state.
 - Remember, these are just general guidelines, and the appropriate scope for a bean depends on the specific requirements of your application. You can also define custom scopes if none of the built-in scopes meet your needs.
