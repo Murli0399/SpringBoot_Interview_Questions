@@ -350,9 +350,33 @@ To summarize, the default scope for a bean in a web context is the same as the d
 </details>
 <details><summary>
   
-### 
+### When are singleton and prototype scopes used?
 </summary>
+Singleton and prototype scopes in Spring are used in different scenarios based on the requirements of your application. Here's a breakdown of when each scope is typically used:
 
+### Singleton Scope:
+
+Use the singleton scope when you want to share a single instance of a bean throughout the application.
+Singleton beans are suitable for stateless objects or objects that can be shared safely across multiple components.
+Singleton scope is the default scope in Spring and is appropriate for most scenarios where a shared instance is sufficient.
+However, be cautious when using mutable state within singleton beans to avoid concurrency issues.
+### Prototype Scope:
+
+Use the prototype scope when you want a new instance of a bean each time it is requested.
+Prototype beans are suitable when you need a stateful object or when you want to isolate instances and avoid shared state.
+Prototype scope is useful for situations where you explicitly want to control the lifecycle of each bean instance.
+Be aware that the Spring container does not manage the destruction of prototype beans automatically. You are responsible for cleaning up and destroying prototype bean instances when no longer needed.
+Consider the following examples to better understand when to use each scope:
+
+- **Singleton Scope Example:**
+
+Configuring a database connection pool as a singleton bean makes sense because you want to reuse the same connection pool instance throughout the application.
+A logging service or a utility class that doesn't have any mutable state can also be defined as a singleton bean.
+- **Prototype Scope Example:**
+
+When creating a shopping cart for an e-commerce application, you may want each user session to have its own instance of the shopping cart. In this case, you would define the shopping cart bean with the prototype scope to ensure a new instance is created for each user session.
+If you have a stateful object that stores user-specific information, such as user preferences or user-specific caches, using prototype scope can help ensure that each user has a separate instance with its own state.
+Remember, these are just general guidelines, and the appropriate scope for a bean depends on the specific requirements of your application. You can also define custom scopes if none of the built-in scopes meet your needs.
 </details>
 <details><summary>
   
