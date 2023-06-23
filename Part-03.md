@@ -155,9 +155,17 @@ By explicitly providing a bean ID, you have more control over the name of the be
 </details>
 <details><summary>
   
-### 
+### Are Spring beans same as JavaBeans?
 </summary>
+No, Spring beans are not the same as JavaBeans, although there is some overlap in their concepts and usage.
 
+JavaBeans is a specification and convention for creating reusable components in Java. JavaBeans are Java classes that follow specific naming and design patterns, such as having private fields, public getters and setters (accessor methods), and a no-argument constructor. JavaBeans are typically used for encapsulating data and providing access to that data through getter and setter methods.
+
+On the other hand, Spring beans refer to the objects managed by the Spring IoC (Inversion of Control) container. While Spring beans can be Java classes that follow JavaBeans conventions, they can also be other types of objects, such as instances of non-public classes or even instances created through factory methods. Spring beans are managed by the Spring framework, which provides various mechanisms for their creation, configuration, and lifecycle management.
+
+Spring beans have additional features and capabilities beyond the basic JavaBeans specification. They can benefit from dependency injection, aspect-oriented programming, declarative transaction management, and other advanced Spring features. Spring beans are typically configured using XML-based configuration, Java-based configuration, or annotations, allowing for flexible and modular application development.
+
+In summary, JavaBeans and Spring beans share some similarities in terms of using Java classes to encapsulate data and functionality. However, Spring beans have a broader scope and additional capabilities provided by the Spring framework for managing dependencies, configuration, and advanced features, making them more powerful and flexible in the context of Spring applications.
 </details>
 <details><summary>
   
