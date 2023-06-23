@@ -90,9 +90,25 @@ Component scanning is a powerful feature that promotes convention-over-configura
 </details>
 <details><summary>
   
-### 
+### How is component scan done in Spring Boot?
 </summary>
+In Spring Boot, component scanning is enabled by default, allowing for automatic detection and registration of beans without explicit configuration. Spring Boot simplifies component scanning by providing a sensible default configuration based on the project's structure.
 
+Here's how component scanning is done in Spring Boot:
+
+### 1. Default Package Scanning:
+Spring Boot automatically performs component scanning starting from the package where the main application class is located. By convention, this main class resides in the root package of the application. Spring Boot scans its sub-packages to discover and register beans.
+
+### 2. Component Scan Annotations:
+Spring Boot recognizes and applies component scan annotations to further customize the scanning behavior. The @SpringBootApplication annotation, which is typically added to the main application class, includes the @ComponentScan annotation implicitly. This combination enables component scanning for the main application package and its sub-packages.
+
+### 3. Additional Configuration:
+If you have components or configurations located outside the default package or its sub-packages, you can explicitly specify the packages to be scanned using the @ComponentScan annotation. By providing the package names as arguments to @ComponentScan, you can extend the scanning to include additional packages.
+
+### 4. Customization:
+Spring Boot allows further customization of component scanning through various annotations. For example, the @ComponentScan annotation supports attributes like basePackages, basePackageClasses, includeFilters, and excludeFilters, allowing fine-grained control over the scanning process.
+
+By default, Spring Boot's component scanning feature automatically detects and registers beans based on the project's structure and conventions, reducing the need for explicit configuration. However, you can still customize and extend the scanning behavior as required for your specific application by using annotations and additional configuration options provided by Spring Boot.
 </details>
 <details><summary>
   
