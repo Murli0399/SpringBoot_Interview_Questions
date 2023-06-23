@@ -44,9 +44,28 @@ In summary, XML configuration relies on a separate XML file for defining the con
 </details>
 <details><summary>
   
-### 
+### How is annotation based configuration enabled in Spring?
 </summary>
+To enable annotation-based configuration in Spring, you need to follow these steps:
 
+### 1. Add the necessary dependencies:
+Ensure that you have the required Spring dependencies in your project's build configuration. This typically includes the core Spring framework and the necessary modules for annotation support, such as spring-context and spring-context-support.
+
+### Enable component scanning:
+In your Spring configuration, you need to enable component scanning to let Spring automatically detect and register beans based on annotations. This can be done by using the @ComponentScan annotation at the configuration class level or by configuring component scanning through XML configuration.
+
+### Use relevant annotations:
+Annotate your classes and methods with Spring annotations to configure them as beans and specify their relationships. Some commonly used annotations include:
+
+- **@Component:** Marks a class as a Spring-managed component.
+- **@Controller, @Service, @Repository:** Specialized versions of @Component for specific layers of an application (MVC, service, and data access).
+- **@Autowired:** Injects dependencies into a bean automatically.
+- **@Configuration:** Indicates a class as a Spring configuration class.
+- **@Bean:** Configures a method to create and configure a bean.
+
+Initialize the Spring container: Finally, you need to initialize the Spring container, which will process the annotations and create the necessary beans. This can be done by creating an instance of the AnnotationConfigApplicationContext class or by using other context initialization mechanisms provided by Spring, such as XML-based or Java-based configuration.
+
+By following these steps, you can enable and leverage annotation-based configuration in Spring. The container will scan the specified packages for annotated classes, create the beans, handle their dependencies, and allow them to be injected into other beans as required. Annotation-based configuration provides a more concise and expressive way to configure beans compared to XML configuration, and it is widely used in modern Spring applications.
 </details>
 <details><summary>
   
