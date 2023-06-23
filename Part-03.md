@@ -30,3 +30,167 @@ The lifecycle of a Spring Bean consists of several phases:
 
 It's important to note that not all beans go through every phase. Some beans may not have any custom initialization or destruction methods, while others may have complex initialization or cleanup requirements. The Spring framework provides hooks and interfaces that allow developers to customize the bean lifecycle as needed.
 </details>
+</details>
+<details><summary>
+  
+### What are custom bean lifecycle methods?
+</summary>
+Custom bean lifecycle methods are methods defined within a Spring bean that allow developers to perform additional logic during the initialization and destruction phases of the bean's lifecycle. These methods are invoked by the Spring container at specific points in the bean's lifecycle.
+
+There are two types of custom bean lifecycle methods in Spring:
+
+**Initialization methods:** These methods are invoked after the bean is instantiated and dependencies are injected, but before the bean is considered ready for use. To define an initialization method, you can use either the @PostConstruct annotation or implement the InitializingBean interface. The method annotated with @PostConstruct or the afterPropertiesSet() method in InitializingBean will be called by the container to perform any necessary setup or initialization tasks.
+Example using @PostConstruct:
+```
+public class MyBean {
+    @PostConstruct
+    public void init() {
+        // Initialization logic here
+    }
+}
+```
+Example using InitializingBean interface:
+```
+public class MyBean implements InitializingBean {
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        // Initialization logic here
+    }
+}
+```
+**Destruction methods:** These methods are invoked when the bean is being destroyed, either during application context shutdown or when the bean is being removed from the container. To define a destruction method, you can use either the @PreDestroy annotation or implement the DisposableBean interface. The method annotated with @PreDestroy or the destroy() method in DisposableBean will be called by the container to perform any necessary cleanup or resource releasing tasks.
+Example using @PreDestroy:
+```
+public class MyBean {
+    @PreDestroy
+    public void cleanup() {
+        // Cleanup logic here
+    }
+}
+```
+Example using DisposableBean interface:
+```
+public class MyBean implements DisposableBean {
+    @Override
+    public void destroy() throws Exception {
+        // Cleanup logic here
+    }
+}
+```
+By implementing these custom lifecycle methods, developers have fine-grained control over the initialization and destruction phases of Spring beans, allowing them to perform any necessary setup, initialization, or cleanup tasks as required by their application.
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+<details><summary>
+  
+### 
+</summary>
+
+</details>
+
