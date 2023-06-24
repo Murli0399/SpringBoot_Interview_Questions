@@ -231,9 +231,31 @@ In summary, Spring Boot Dependency Management simplifies the management of depen
 </details>
 <details><summary>
 
-## 
+## What happens when a web application is run using Spring Boot?
 </summary>
+When a web application is run using Spring Boot, several key steps are executed to initialize and start the application. Here's an overview of what happens:
 
+**1. Application Startup:** The Spring Boot application starts by executing the main method in the designated main class, typically annotated with **@SpringBootApplication**. This class serves as the entry point for the application.
+
+**2. Auto-configuration:** Spring Boot's auto-configuration feature analyzes the classpath and dependencies to automatically configure the application. It detects the presence of various libraries and frameworks and applies sensible defaults and configurations based on conventions.
+
+**3. Embedded Server Initialization:** If the application includes an embedded server (such as Tomcat, Jetty, or Undertow), it is initialized and started. The embedded server provides the runtime environment for the application to handle incoming HTTP requests and serve responses.
+
+**4. Component Scanning:** Spring Boot scans the application's packages and sub-packages to identify components such as controllers, services, repositories, and other Spring-managed beans. It uses component scanning annotations like **@Component**, **@RestController**, **@Service**, etc., to detect and register these components in the application context.
+
+**5. Bean Creation and Dependency Injection:** Spring Boot creates instances of the detected beans and manages their lifecycle. It performs dependency injection, injecting dependencies into beans based on their configurations and annotations (e.g., @Autowired).
+
+**6. Request Mapping and Handling:** Spring Boot maps incoming HTTP requests to the appropriate controllers and methods based on annotations like **@RequestMapping**, **@GetMapping**, **@PostMapping**, etc. The controllers process the requests, execute business logic, interact with services and repositories, and prepare the response.
+
+**7. View Resolution (if applicable):** If the application involves rendering views, Spring Boot resolves the views based on the configured view resolver. It processes templates, combines data from the model, and generates the final HTML, JSON, or other view formats.
+
+**8. Error Handling and Exception Resolution:** Spring Boot handles exceptions and errors that occur during request processing. It maps exceptions to appropriate error codes and formats error responses to provide meaningful feedback to clients.
+
+**9. Application Lifecycle Management:** Spring Boot manages the lifecycle of the application, including initialization, configuration updates, graceful shutdown, and other management operations. It provides features like actuator endpoints for health checks, metrics, and monitoring.
+
+**10. Application Execution:** With all the components initialized and the server running, the Spring Boot application is ready to handle incoming requests. It listens for HTTP requests on the configured port and executes the appropriate controllers to process and respond to the requests.
+
+In summary, when a web application is run using Spring Boot, the framework initializes and configures the application, starts an embedded server, detects and registers components, handles incoming requests, processes business logic, and manages the application's lifecycle. Spring Boot provides a streamlined and opinionated approach to web application development, allowing developers to focus on writing business logic rather than managing low-level configurations.
 </details>
 <details><summary>
 
