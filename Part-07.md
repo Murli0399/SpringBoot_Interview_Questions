@@ -194,15 +194,40 @@ With these steps, you can change the default embedded server to Jetty in your Sp
 </details>
 <details><summary>
 
-## 
+## How are Spring Boot web applications deployed?
 </summary>
+Spring Boot web applications can be deployed in various ways, depending on the specific deployment requirements and preferences. Here are some common deployment options for Spring Boot web applications:
 
+### 1. Standalone JAR:
+One of the key features of Spring Boot is the ability to create executable JAR files. You can build a standalone JAR file that includes all the application dependencies and an embedded server (such as Tomcat, Jetty, or Undertow). This JAR file can be executed directly using the java -jar command, and the application will start the embedded server and serve the web content.
+
+### 2. Traditional WAR file deployment:
+If you prefer to deploy the Spring Boot application as a traditional WAR (Web Application Archive) file, you can configure the application to create a deployable WAR file instead of an executable JAR. This allows you to deploy the WAR file to a standalone servlet container like Apache Tomcat, Jetty, or others.
+
+### 3. Cloud platforms and PaaS providers:
+Spring Boot applications are well-suited for deployment on various cloud platforms and Platform-as-a-Service (PaaS) providers. Cloud providers like AWS, Azure, Google Cloud, and Heroku offer specific deployment options and integrations for Spring Boot applications. These platforms provide streamlined deployment processes, scalability, and management capabilities for your applications.
+
+### 4. Containerization with Docker:
+Spring Boot applications can be packaged as Docker containers, providing a consistent and portable deployment environment. By creating a Docker image of your application, you can run it in any environment that supports Docker containers, including local development environments, on-premises servers, or cloud-based container orchestration platforms like Kubernetes.
+
+### 5. Serverless deployment:
+With the rise of serverless computing, it is also possible to deploy Spring Boot applications as serverless functions. Platforms like AWS Lambda, Azure Functions, and Google Cloud Functions allow you to package and deploy Spring Boot applications as individual functions that can be triggered by specific events.
+
+These deployment options offer flexibility and cater to different deployment scenarios. Spring Boot's ease of configuration and self-contained nature make it adaptable to a wide range of deployment environments, whether it's a standalone server, cloud platform, container, or serverless architecture.
 </details>
 <details><summary>
 
-## 
+## What is Spring Boot Dependency Management?
 </summary>
+Spring Boot Dependency Management is a feature that simplifies the management of dependencies in a Spring Boot application. It provides a curated list of dependencies, known as starters, which encapsulate common sets of dependencies required for specific functionalities, such as web development, data access, security, testing, and more.
 
+With Spring Boot Dependency Management, you no longer need to manually specify and manage individual dependency versions in your project. Instead, you declare the starters as dependencies in your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle), and Spring Boot takes care of managing the versions and transitive dependencies.
+
+By leveraging the starters provided by Spring Boot, you ensure that all dependencies are compatible and work seamlessly together. Spring Boot Dependency Management ensures that the selected starters are consistent and tested as a whole, reducing the risk of version conflicts and compatibility issues.
+
+Additionally, Spring Boot Dependency Management allows you to override specific dependency versions if needed. This gives you the flexibility to use a different version of a dependency while still benefiting from the managed versions of other dependencies.
+
+In summary, Spring Boot Dependency Management simplifies the management of dependencies by providing curated starters and handling version management automatically. It ensures compatibility, reduces conflicts, and simplifies the configuration process, allowing developers to focus more on application development rather than managing dependencies.
 </details>
 <details><summary>
 
