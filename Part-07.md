@@ -448,15 +448,54 @@ By including the Actuator dependency and configuring the desired endpoints, you 
 </details>
 <details><summary>
 
-## 
+## How can the Actuator be accessed in Spring Boot?
 </summary>
 
+In a Spring Boot application, the Actuator endpoints can be accessed via HTTP requests. The endpoints provide various information and management capabilities for your application. Here's how you can access the Actuator endpoints:
+
+1. Start your Spring Boot application.
+
+2. Open a web browser or use a tool like cURL or Postman to make HTTP requests to the Actuator endpoints. The base URL for Actuator endpoints is typically http://localhost:8080/actuator, assuming your application is running on the default port 8080.
+
+For example, you can access the health endpoint by navigating to http://localhost:8080/actuator/health. This endpoint provides information about the health of your application.
+
+Similarly, you can access other Actuator endpoints like /info, /metrics, /env, /loggers, and more by appending the desired endpoint path to the base Actuator URL.
+
+3. Depending on the configuration of your Actuator endpoints, you may need to provide authentication credentials or have the necessary permissions to access certain endpoints. This can be configured in your application's security settings.
+
+4. Actuator endpoints can also be customized and exposed selectively based on your needs. You can configure which endpoints are enabled, secured, or exposed with specific roles. This is typically done through configuration properties in your application's application.properties or application.yml file.
+
+For example, to enable all Actuator endpoints, you can add the following property to your configuration file:
+```
+management.endpoints.web.exposure.include=*
+```
+This configuration will expose all Actuator endpoints when accessed via HTTP.
+
+By accessing the Actuator endpoints, you can retrieve information about your application's health, metrics, configuration, environment, and more. Additionally, depending on the Actuator configuration, you may be able to perform certain management operations like shutting down the application, restarting, or changing log levels.
+
+Note that while Actuator provides valuable insights and management capabilities, it's important to secure and restrict access to these endpoints in production environments to prevent unauthorized access or sensitive information exposure.
 </details>
 <details><summary>
 
-## 
+## How can you create custom endpoints in Spring Boot Actuator?
 </summary>
+To create custom endpoints in Spring Boot Actuator, you can define your own @RestController or @Controller classes with specific mappings. Here's a summary of the steps involved:
 
+1. Create a new class and annotate it with @RestController or @Controller to make it a Spring MVC controller.
+
+2. Define a method in the controller class and annotate it with @RequestMapping or other appropriate annotations to specify the endpoint URL and HTTP method.
+
+3. Implement the logic inside the method to handle the request and return the desired response. You have the flexibility to provide any information or perform any operations based on your application's requirements.
+
+4. Optionally, you can leverage Spring's dependency injection and include other Spring components in your custom endpoint class if needed.
+
+5. If necessary, apply additional annotations like @ResponseBody to indicate that the method's return value should be serialized and sent as the response body.
+
+6. Restart your Spring Boot application for the new custom endpoint to be registered and available.
+
+Once the application restarts, you can access your custom endpoint using the defined URL and HTTP method. For example, if you have a custom endpoint with a mapping of /custom, you can access it by making an HTTP request to http://localhost:8080/custom.
+
+By creating custom endpoints in Spring Boot Actuator, you can extend the monitoring and management capabilities of your application beyond the default Actuator endpoints. This allows you to expose additional information, perform custom operations, or integrate with other systems as needed.
 </details>
 <details><summary>
 
