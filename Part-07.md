@@ -314,33 +314,103 @@ By excluding the embedded server dependency, you effectively disable the default
 </details>
 <details><summary>
 
-## 
+## What are Spring Boot starter projects?
 </summary>
 
+Spring Boot starter projects are a set of curated dependencies bundled together to provide a convenient way to include commonly used functionality in Spring Boot applications. They simplify dependency management and configuration by offering a cohesive set of dependencies for specific use cases or technologies.
+
+Each starter project focuses on a particular area or feature of application development, such as web development, data access, security, messaging, testing, etc. They provide a consistent and opinionated configuration, reducing the need for manual configuration and ensuring that the dependencies work well together.
+
+Using a starter project involves adding a single dependency to your project, which automatically brings in all the required dependencies for the chosen functionality. This simplifies the setup process, as you don't need to manually identify and add individual dependencies. Spring Boot starters also handle the version management of the dependencies, ensuring compatibility and reducing the chances of version conflicts.
+
+For example, if you are building a web application, you can include the spring-boot-starter-web starter project. It includes dependencies for web-related functionality like embedded server (Tomcat, Jetty, or Undertow), Spring MVC, and other related libraries. By adding this starter dependency to your project, you get all the necessary dependencies for web development without having to specify each one individually.
+
+Starter projects are an essential aspect of Spring Boot's convention-over-configuration approach, enabling developers to quickly get started with specific functionalities and focus more on application development rather than managing dependencies and configurations.
 </details>
 <details><summary>
 
-## 
+## What is spring-boot-starter-parent?
 </summary>
 
+**spring-boot-starter-parent** is a special starter project in Spring Boot that provides a parent POM (Project Object Model) for Maven-based projects. It defines a consistent set of configurations and dependencies that are inherited by the child projects.
+
+By specifying spring-boot-starter-parent as the parent POM in your project, you benefit from various features:
+
+**1. Dependency Management:** The parent POM defines the versions of commonly used dependencies, including Spring Boot itself. This ensures that the project dependencies are compatible and tested together.
+
+**2. Plugin Management:** The parent POM manages the versions of Maven plugins, ensuring consistent and recommended plugin configurations for Spring Boot projects.
+
+**3. Default Configuration:** The parent POM sets sensible default configurations, such as resource filtering, build profiles, and packaging options. It provides a solid foundation for building Spring Boot applications.
+
+**4. Additional Functionality:** The parent POM brings in additional features like the Spring Boot Maven Plugin, which simplifies the packaging and running of Spring Boot applications.
+
+Using spring-boot-starter-parent as the parent POM allows you to inherit these benefits and reduces the need for explicit configuration and dependency management in your Maven-based Spring Boot projects. It promotes best practices and helps maintain consistency across multiple projects within an organization.
+
+In summary, spring-boot-starter-parent is a special starter project that provides a parent POM with predefined configurations, dependency management, and additional functionality for Maven-based Spring Boot projects. It simplifies project setup, promotes consistency, and enhances development efficiency.
 </details>
 <details><summary>
 
-## 
+## Can Spring Boot be used for applications not built using the Spring framework?
 </summary>
+Yes, Spring Boot can be used for applications not built using the Spring framework. While Spring Boot is designed to simplify the development of Spring-based applications, it is not limited to only Spring projects.
 
+Spring Boot provides a standalone runtime environment and various features that can be beneficial for any Java-based application, regardless of whether it uses the Spring framework or not. Some of the features provided by Spring Boot, such as auto-configuration, embedded servers, dependency management, externalized configuration, and production-ready monitoring, can be valuable for non-Spring applications as well.
+
+You can leverage Spring Boot's features and capabilities by including it as a dependency in your project and using its various libraries and utilities. For example, you can use Spring Boot's embedded server (Tomcat, Jetty, or Undertow) to simplify the deployment of your application, or you can utilize Spring Boot's externalized configuration support for managing your application's settings.
+
+However, it's important to note that some Spring Boot features may be more relevant and useful in the context of Spring-based applications. Spring Boot is tightly integrated with the Spring framework, and many of its features are specifically designed to enhance Spring-based development.
+
+In summary, while Spring Boot is primarily targeted towards Spring-based applications, it can still be used for non-Spring applications to leverage its standalone runtime, embedded servers, dependency management, and other useful features.
 </details>
 <details><summary>
 
-## 
+## How can we connect Spring Boot with databases?
 </summary>
+To connect Spring Boot with databases, you can utilize Spring Data, a subproject of the Spring Framework that provides a unified and simplified way to interact with different databases. Here's a brief overview of the steps involved:
 
+**1. Include Database Driver Dependency:** In your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle), include the appropriate database driver dependency for the database you want to connect to. For example, if you're using MySQL, include the MySQL Connector/J dependency.
+
+**2. Configure Database Connection:** In the application.properties or application.yml file, specify the database connection details such as the URL, username, and password. Spring Boot uses these properties to establish a connection with the database. The configuration properties vary depending on the chosen database.
+
+**3. Define Entity Classes:** Create Java entity classes that represent the tables or collections in your database. Annotate these classes with appropriate annotations like @Entity, @Table, and @Column to define the mapping between the entities and the database schema.
+
+**4. Create Repositories:** Define Spring Data repositories, which provide a high-level abstraction for performing database operations. Spring Data repositories can be created by extending interfaces like CrudRepository or JpaRepository. These interfaces offer common CRUD (Create, Read, Update, Delete) operations and additional query methods.
+
+**5. Use Spring Data JPA or MongoDB:** If you're using a relational database, you can use Spring Data JPA, which is a subproject of Spring Data tailored for relational databases. Spring Data JPA provides a powerful way to work with relational databases using Java Persistence API (JPA). If you're using a NoSQL database like MongoDB, you can use Spring Data MongoDB, which provides similar functionality for MongoDB.
+
+**6. Inject and Use Repositories:** Inject the Spring Data repositories into your application's components, such as controllers or services, and use them to perform database operations. Spring Boot automatically generates implementations for the repository interfaces based on the defined methods, allowing you to interact with the database without writing boilerplate code.
+
+By following these steps and utilizing Spring Data, you can easily connect Spring Boot with different databases and perform database operations in a standardized and efficient manner. Spring Data abstracts away many of the complexities associated with database interaction, allowing you to focus more on your application's business logic.
 </details>
 <details><summary>
 
-## 
+## What does the exclude attribute of the @SpringBootApplication do?
 </summary>
+The exclude attribute of the @SpringBootApplication annotation in Spring Boot is used to exclude specific configurations from being applied during the application's startup and auto-configuration process.
 
+By default, @SpringBootApplication performs component scanning and applies auto-configuration based on the classpath and dependencies. However, there might be scenarios where you want to exclude certain configurations from being processed.
+
+The exclude attribute allows you to specify one or more configuration classes that should be excluded. These classes will not be considered for auto-configuration and will not contribute to the application context.
+
+Here's an example of how to use the exclude attribute:
+```
+@SpringBootApplication(exclude = SomeConfiguration.class)
+public class YourApplication {
+    // Application code
+}
+```
+In this example, SomeConfiguration is a class annotated with @Configuration or related annotations that you want to exclude. By specifying SomeConfiguration.class in the exclude attribute, you instruct Spring Boot to skip the auto-configuration and component scanning related to that specific configuration class.
+
+You can also specify multiple classes by providing an array of class references to the exclude attribute:
+```
+@SpringBootApplication(exclude = {SomeConfiguration.class, AnotherConfiguration.class})
+public class YourApplication {
+    // Application code
+}
+```
+In this case, both SomeConfiguration and AnotherConfiguration will be excluded from the auto-configuration process.
+
+Using the exclude attribute gives you fine-grained control over which configurations are applied during the startup of your Spring Boot application. It allows you to override or exclude specific configurations that might conflict with each other or are not needed for your application's requirements.
 </details>
 <details><summary>
 
