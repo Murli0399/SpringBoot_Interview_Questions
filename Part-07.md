@@ -414,6 +414,44 @@ Using the exclude attribute gives you fine-grained control over which configurat
 </details>
 <details><summary>
 
+## How can external configuration be done in Spring Boot?
+</summary>
+In Spring Boot, external configuration can be done by utilizing properties files, YAML files, environment variables, command-line arguments, and other externalized configuration sources. Here's a brief overview of how you can perform external configuration:
+
+**1. Properties File:** Create a file named application.properties or application.yml in your project's src/main/resources directory. Define key-value pairs in the file, where the keys represent the configuration properties and the values specify their corresponding values.
+
+**2. YAML File:** Alternatively, you can use a YAML file (application.yml) instead of a properties file. YAML provides a more readable and structured format for configuration. Define the properties and their values in a hierarchical structure using indentation.
+
+**3. Override Configuration:** Spring Boot automatically reads the properties from the application.properties or application.yml file and applies them during application startup. You can override these properties by providing your own values through different externalized configuration sources.
+
+**4. Environment Variables:** You can set environment variables with the same names as your configuration properties. When the application starts, Spring Boot checks for corresponding environment variables and uses them to override the properties defined in the properties file.
+
+**5. Command-line Arguments:** You can pass command-line arguments to your Spring Boot application using the syntax --property=value. These arguments are also considered when resolving configuration properties, allowing you to override them during runtime.
+
+**6. Profile-specific Configuration:** Spring Boot allows you to define profile-specific configuration properties. For example, you can have separate properties for development, testing, and production environments. By using the application-{profile}.properties or application-{profile}.yml naming convention, you can provide different configuration values based on the active profile.
+
+By leveraging these externalized configuration options, you can modify the behavior of your Spring Boot application without changing the underlying code. This makes your application more flexible and allows for easy configuration management across different environments and deployment scenarios.
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
 ## 
 </summary>
 
