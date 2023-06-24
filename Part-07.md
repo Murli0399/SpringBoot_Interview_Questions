@@ -259,6 +259,64 @@ In summary, when a web application is run using Spring Boot, the framework initi
 </details>
 <details><summary>
 
+## How can the default port of the embedded tomcat server be changed?
+</summary>
+To change the default port of the embedded Tomcat server in a Spring Boot application, you can modify the application's configuration. Here are the steps to do so:
+
+- Open the application.properties file or create one if it doesn't exist in your project's src/main/resources directory.
+
+- Add the following line to specify the desired port number:
+```
+server.port=your_desired_port_number
+```
+Replace your_desired_port_number with the port number you want to use for the embedded Tomcat server. For example, if you want to use port 8081, the line would be server.port=8081.
+
+- Save the application.properties file.
+
+- Restart your Spring Boot application.
+
+Upon restart, the embedded Tomcat server will start and listen on the specified port instead of the default port (which is 8080 if not modified). Make sure to update any client applications or URLs to reflect the new port number.
+
+You can also specify the port number through other means such as command-line arguments, system properties, or environment variables. However, using the server.port property in application.properties is the most common and straightforward approach.
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+</details>
+<details><summary>
+
 ## 
 </summary>
 
