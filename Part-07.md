@@ -281,9 +281,36 @@ You can also specify the port number through other means such as command-line ar
 </details>
 <details><summary>
 
-## 
+## How can the default web server in a Spring Boot application be disabled?
 </summary>
+To disable the default web server in a Spring Boot application, you can exclude the embedded server dependency from your project's dependencies. Here's how you can do it:
 
+- 1. Open your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle).
+
+- 2. Locate the dependency related to the embedded server you want to disable. For example, if you want to disable the embedded Tomcat server, the dependency might look like this in Maven:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-tomcat</artifactId>
+</dependency>
+```
+
+- 3. Exclude the embedded server dependency by adding the exclude configuration. Modify the dependency declaration to exclude the embedded server artifact. For example, in Maven:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-tomcat</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+- 4. Save the build configuration file.
+
+By excluding the embedded server dependency, you effectively disable the default web server in your Spring Boot application. You can then use alternative deployment options, such as deploying your application to an external server or using a different embedded server implementation if needed. Keep in mind that if you disable the default web server, you should handle the HTTP request handling and routing through an alternative mechanism or framework.
 </details>
 <details><summary>
 
