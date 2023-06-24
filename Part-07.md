@@ -499,7 +499,7 @@ By creating custom endpoints in Spring Boot Actuator, you can extend the monitor
 </details>
 <details><summary>
 
-## 
+## Explain Spring Boot DevTools.
 </summary>
-
+Spring Boot DevTools is a module that provides developer-centric tools and features to enhance the development experience with Spring Boot applications. It includes automatic application restart, live reload of static resources, and improved development-time error reporting. DevTools monitors the classpath for changes and triggers an automatic restart of the application, reducing the need for manual restarts during development. It also enables live reloading of static resources like HTML, CSS, and JavaScript, allowing developers to see changes without refreshing the browser. Additionally, DevTools provides detailed error information and stack traces, making it easier to debug and diagnose issues during development.
 </details>
