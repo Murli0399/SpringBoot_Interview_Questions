@@ -301,7 +301,48 @@ Overall, Spring's exception handling support with DataAccessException simplifies
 </details>
 <details><summary>
 
-## 
+## What is SQLExceptionTranslator?
 </summary>
+The SQLExceptionTranslator is an interface in Spring JDBC that provides a mechanism for translating SQLExceptions into more meaningful exceptions defined by Spring's DataAccessException hierarchy. It acts as a bridge between the low-level database exceptions and the higher-level exception handling in Spring.
 
+Here's a brief explanation of the SQLExceptionTranslator:
+
+### 1. Exception Translation:
+The SQLExceptionTranslator interface allows for translating SQLExceptions thrown by the underlying database driver into Spring's DataAccessException hierarchy. It provides a consistent and unified approach to handling database exceptions across different database vendors.
+
+### 2. Consistent Exception Handling:
+By implementing the SQLExceptionTranslator interface, developers can define their own translation logic for specific SQLExceptions. This ensures that the application can handle database exceptions in a consistent and meaningful way, regardless of the underlying database technology.
+
+### 3. Customized Exception Handling:
+The SQLExceptionTranslator interface allows for customization of the exception translation process. Developers can provide their own implementation to map specific SQLExceptions to appropriate subclasses of DataAccessException, thereby enabling more fine-grained control over exception handling.
+
+### 4. Integration with Spring JDBC:
+SQLExceptionTranslator is used in conjunction with Spring's JDBC operations, such as JdbcTemplate or NamedParameterJdbcTemplate. It is automatically invoked when a SQLException is encountered during database operations, allowing for the translation and throwing of the appropriate Spring exception.
+
+In summary, the SQLExceptionTranslator interface in Spring JDBC provides a way to translate low-level SQLExceptions into more meaningful exceptions defined by Spring's DataAccessException hierarchy. It ensures consistent and unified exception handling for database-related errors in a Spring application.
+</details>
+<details><summary>
+
+## What are JdbcTemplate callback interfaces?
+</summary>
+JdbcTemplate callback interfaces are a set of interfaces provided by the Spring JDBC framework that allow developers to customize and control the behavior of database operations executed with the JdbcTemplate class. These callback interfaces enable developers to define specific logic for different stages of the database operation process.
+
+Here are some important JdbcTemplate callback interfaces:
+
+### 1. PreparedStatementSetter:
+- This interface allows developers to set parameter values on a PreparedStatement before executing a query or update operation. It provides a setValues() method that is responsible for binding parameter values to the prepared statement.
+
+### 2. ResultSetExtractor:
+- This interface enables developers to extract data from a ResultSet after executing a query. It provides the extractData() method, which takes the ResultSet as input and returns the extracted data in a customized format.
+
+### 3. RowMapper:
+- The RowMapper interface is used to map individual rows from a ResultSet to Java objects. It defines the mapRow() method, which is called for each row in the result set and returns a mapped object for that row.
+
+### 4. CallableStatementCallback:
+- This interface is used for executing stored procedures or functions that return values. It provides the doInCallableStatement() method, which is responsible for handling the CallableStatement and returning the result.
+
+### 5. BatchPreparedStatementSetter:
+- The BatchPreparedStatementSetter interface is used when executing batch updates with the JdbcTemplate. It allows developers to set parameter values for each statement in the batch and provides methods like setValues() and getBatchSize().
+
+These callback interfaces provide flexibility and customization options when working with the JdbcTemplate class. By implementing these interfaces and providing custom logic, developers can control the behavior of parameter binding, result extraction, row mapping, stored procedure execution, and batch updates during database operations with Spring JDBC.
 </details>
