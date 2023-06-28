@@ -2,7 +2,7 @@
 
 ## What is Inversion of Control (IoC)?
 </summary>
-Inversion of Control (IoC) is a design principle in software development where the control of object creation and dependency injection is shifted from the application itself to an external framework or container. In IoC, the flow of control is inverted, meaning that instead of the application being responsible for creating and managing its dependencies, the responsibility is delegated to an IoC container.
+Inversion of Control (IoC) is a design principle in software development where the control of object creation and dependency injection is shifted from the application itself to an external framework or container. In IoC, the flow of control is inverted, meaning that instead of the application is responsible for creating and managing its dependencies, the responsibility is delegated to an IoC container. 
 
 IoC promotes loose coupling between components and allows for better modularity and testability. By delegating the creation and management of dependencies to the IoC container, the application becomes more flexible and modular, as components can be easily replaced or modified without affecting the overall structure.
 
