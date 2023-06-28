@@ -36,17 +36,17 @@ The responsibility of an Inversion of Control (IoC) container is to manage the c
 
 The main responsibilities of an IoC container are as follows:
 
-Object Creation: The IoC container is responsible for creating instances of objects or components based on their definitions or configurations. It instantiates objects and manages their lifecycle, including initializing, configuring, and destroying them when necessary.
+**1. Object Creation:** The IoC container is responsible for creating instances of objects or components based on their definitions or configurations. It instantiates objects and manages their lifecycle, including initializing, configuring, and destroying them when necessary.
 
-Dependency Injection: The IoC container handles the injection of dependencies into objects or components. It automatically resolves dependencies and injects them into the appropriate places, based on the configuration or annotations provided. This eliminates the need for manual dependency management within the application code.
+**2. Dependency Injection:** The IoC container handles the injection of dependencies into objects or components. It automatically resolves dependencies and injects them into the appropriate places, based on the configuration or annotations provided. This eliminates the need for manual dependency management within the application code.
 
-Configuration Management: The IoC container manages the configuration of objects or components. It provides mechanisms for defining the dependencies, properties, and behavior of objects through configuration files, annotations, or programmatically. This allows for flexible and customizable application behavior without modifying the code.
+**3. Configuration Management:** The IoC container manages the configuration of objects or components. It provides mechanisms for defining the dependencies, properties, and behavior of objects through configuration files, annotations, or programmatically. This allows for flexible and customizable application behavior without modifying the code.
 
-Lifecycle Management: The IoC container manages the lifecycle of objects or components. It handles tasks such as initializing objects, managing their state, and performing cleanup or destruction when they are no longer needed. This ensures proper resource management and reduces memory leaks or other lifecycle-related issues.
+**4. Lifecycle Management:** The IoC container manages the lifecycle of objects or components. It handles tasks such as initializing objects, managing their state, and performing cleanup or destruction when they are no longer needed. This ensures proper resource management and reduces memory leaks or other lifecycle-related issues.
 
-AOP (Aspect-Oriented Programming) Integration: Some advanced IoC containers also support integration with AOP frameworks. They allow for cross-cutting concerns, such as logging, security, or transaction management, to be easily applied to components through declarative or programmatic means.
+**5. AOP (Aspect-Oriented Programming) Integration:** Some advanced IoC containers also support integration with AOP frameworks. They allow for cross-cutting concerns, such as logging, security, or transaction management, to be easily applied to components through declarative or programmatic means.
 
-Integration with Application Frameworks: IoC containers often provide integration with application frameworks and libraries. They may offer hooks or extensions to seamlessly integrate with other components or provide additional functionality, such as database connection pooling, caching, or messaging.
+**6. Integration with Application Frameworks:** IoC containers often provide integration with application frameworks and libraries. They may offer hooks or extensions to seamlessly integrate with other components or provide additional functionality, such as database connection pooling, caching, or messaging.
 
 By assuming these responsibilities, the IoC container simplifies the development process, promotes loose coupling, and provides a centralized mechanism for managing the dependencies and lifecycle of objects within an application.
 </details>
