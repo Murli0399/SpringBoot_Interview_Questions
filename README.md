@@ -2,18 +2,18 @@
 This repository is created for interview purpose, If anyone need to learn spring and spring boot-related questions and answers, So follow this repo and crack interviews. 
 
 
-What are the major features of Spring 5?
-Is Spring 5 compatible with older versions of Java?
-What are the advantages of using Spring framework?
-List the modules of Spring framework.
-What is tight coupling?
-What is loose coupling?
-What is the purpose of application.properties file?
-What is pom.xml file?
-What design patterns are used in Spring framework?
-What are some of the best practices for Spring Framework?
-Describe some standard Spring events.
-How does Spring 5 make use of JDK 9 modularity?
+- What are the major features of Spring 5?
+- Is Spring 5 compatible with older versions of Java?
+- What are the advantages of using Spring framework?
+- List the modules of Spring framework.
+- What is tight coupling?
+- What is loose coupling?
+- What is the purpose of application.properties file?
+- What is pom.xml file?
+- What design patterns are used in Spring framework?
+- What are some of the best practices for Spring Framework?
+- Describe some standard Spring events.
+- How does Spring 5 make use of JDK 9 modularity?
 
 
 
