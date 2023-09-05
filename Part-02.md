@@ -115,7 +115,7 @@ The main differences between BeanFactory and ApplicationContext in the Spring Fr
 
 - **BeanFactory:** The BeanFactory has basic support for event publishing and handling. It allows components to publish events, but the event handling needs to be manually implemented.
 
-- **ApplicationContext:** The ApplicationContext provides advanced event handling capabilities. It allows components to publish events and provides mechanisms for event listeners to respond to these events.
+- **ApplicationContext:** The ApplicationContext provides advanced event-handling capabilities. It allows components to publish events and provides mechanisms for event listeners to respond to these events.
 
 ### Performance:
 
@@ -127,43 +127,20 @@ In summary, BeanFactory is a basic IoC container with lazy initialization and li
 </details>
 <details><summary>
 
-## 
+## How is ApplicationContext configured in Spring?
 </summary>
 
 </details>
 <details><summary>
 
-## 
+## What is WebApplicationContext?
 </summary>
 
 </details>
 <details><summary>
 
-## 
+## What happens if the context is not closed?
 </summary>
 
 </details>
-<details><summary>
 
-## 
-</summary>
-
-</details>
-<details><summary>
-
-## 
-</summary>
-
-</details>
-<details><summary>
-
-## 
-</summary>
-
-</details>
-<details><summary>
-
-## 
-</summary>
-
-</details>
