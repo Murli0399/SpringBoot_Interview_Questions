@@ -71,6 +71,36 @@ The Spring framework has layered architecture, so you can use what you need and 
 ## List the modules of the Spring framework.
 </summary>
 
+The Spring Framework has many modules, which can be grouped into the following categories:
+- Core Container
+  - Beans
+  - Context
+  - Expression Language
+
+- Data Access/Integration
+  - JDBC
+  - ORM
+  - OXM
+  - JMS
+  - Transaction
+
+- Web
+  - Web
+  - Web-Servlet
+  - Web-Portlet
+
+- AOP and Instrumentation
+  - AOP
+  - Aspects
+  - Instrumentation
+
+- Test
+
+These modules provide a wide range of features for developing enterprise applications, including:
+
+Dependency injection, Aspect-oriented programming, Data access, Web development, and Testing.
+
+The Spring Framework is a powerful and versatile framework that can be used to develop a wide variety of applications.
 </details>
 <details><summary>
 
