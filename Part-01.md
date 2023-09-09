@@ -3,6 +3,30 @@
 ## What are the major features of Spring 5?
 </summary>
 
+### The major features of Spring 5 are:
+
+## Reactive programming support:
+Spring 5 provides support for reactive programming, which is a programming paradigm that is well-suited for building highly scalable and responsive applications.
+
+### Core features upgrades:
+Spring 5 has upgraded its core features, such as the Spring MVC framework, to make them more powerful and easier to use.
+
+### Spring WebFlux:
+Spring 5 introduces a new functional web framework, Spring WebFlux, which is based on reactive programming.
+
+### Modularity support:
+Spring 5 has been redesigned to be more modular, which makes it easier to use and maintain.
+
+### Kotlin language support:
+Spring 5 provides full support for the Kotlin programming language, which makes it a more attractive option for developing Spring applications.
+
+### Improved testing support:
+Spring 5 has improved its testing support, which makes it easier to write and run unit tests for Spring applications.
+
+### Deprecated support and removed packages:
+Spring 5 has deprecated some of its older features and removed some of its older packages. This makes the framework more focused and easier to use.
+
+Overall, Spring 5 is a major release that brings a number of new features and improvements to the Spring framework. These features make Spring 5 a more powerful, scalable, and easier-to-use framework for developing Java applications.
 </details>
 <details><summary>
 
