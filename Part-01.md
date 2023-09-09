@@ -3,9 +3,9 @@
 ## What are the major features of Spring 5?
 </summary>
 
-### The major features of Spring 5 are:
+## The major features of Spring 5 are:
 
-## Reactive programming support:
+### Reactive programming support:
 Spring 5 provides support for reactive programming, which is a programming paradigm that is well-suited for building highly scalable and responsive applications.
 
 ### Core features upgrades:
@@ -32,7 +32,8 @@ Overall, Spring 5 is a major release that brings a number of new features and im
 
 ## Is Spring 5 compatible with older versions of Java?
 </summary>
-
+Spring 5 is not compatible with older versions of Java. It requires Java 8 as a minimum JDK version. Spring 5 is fully compatible with Java 9 on the classpath, as well as the module path, and it passes the JDK 9 test suite.
+If you are using an older version of Java, you can use Spring 4.x. Spring 4.x is compatible with Java 6, 7, and 8.
 </details>
 <details><summary>
 
