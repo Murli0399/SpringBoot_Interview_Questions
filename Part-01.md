@@ -40,6 +40,31 @@ If you are using an older version of Java, you can use Spring 4.x. Spring 4.x is
 ## What are the advantages of using the Spring framework?
 </summary>
 
+## The Spring framework has several advantages, including:
+
+### Transaction management
+The Spring framework combines with the Transaction Management Framework to help developers build transactional systems that span across applications.
+
+### Lightweight
+The Spring framework is a lightweight application development framework for Enterprise Java (JEE).
+
+### Loose coupling
+The Spring framework uses interface-based programming and dependency injection to achieve loose coupling.
+
+### Modularity
+The Spring framework provides modularity, allowing developers to choose which packages or classes to use or ignore.
+
+### Decreased boilerplate code
+The Spring framework avoids writing lots of boilerplate code, annotations, and XML configuration.
+
+### Dependency management
+The Spring framework uses dependency injection to help with object management and make code more testable.
+
+### Easy integration with other frameworks
+The Spring framework is designed to be used with all other Java frameworks.
+
+### Layered architecture
+The Spring framework has layered architecture, so you can use what you need and leave what you don't need.
 </details>
 <details><summary>
 
