@@ -152,34 +152,138 @@ Overall, loose coupling is a key design principle in Spring that can provide a n
 ## What is the purpose of the application.properties file?
 </summary>
 
+The application.properties file is a configuration file in Spring Boot applications. It stores key-value pairs of properties that are used to configure various aspects of the application. These properties include the server port, database connection, and logging configuration. The application.properties file is located in the main/resources directory of the project.
+
+The application.properties file is used to write application-related properties into the file. Each environment will have a different property defined by the application.properties file. The application.properties file can be bundled in the application jar or put in the filesystem of the runtime environment. It is loaded on Spring Boot startup.
+
+Application properties are configurable application parameters that change an application's behavior. Only system administrators and/or application administrators can read and write application properties.
 </details>
 <details><summary>
 
 ## What is a pom.xml file?
 </summary>
 
+A pom.xml file is an XML file that contains information about a project and the configuration details that Maven uses to build the project. The POM stands for Project Object Model. The pom.xml file contains information such as:
+
+Build directory, Source directory, Dependencies, Test source directory, Plugin, Goals.
+
+The pom.xml file is located in the base directory of the project. Maven reads the pom.xml file and then executes the goal. The pom.xml file contains default values for most projects.
+
+To create a pom.xml file for a Java project with Eclipse, you can:
+
+1. Right-click on the current project.
+2. Select Configure.
+3. Select Convert to Maven Project.
+4. Complete all fields in the Create new POM window.
+5. Check "Delete original references from the project".
+6. Click on the Finish button.
 </details>
 <details><summary>
 
 ## What design patterns are used in the Spring framework?
 </summary>
 
+The Spring framework uses several design patterns, including:
+- Singleton pattern: Maintains a single instance of an object throughout the application.
+- Factory design pattern: Creates objects of beans.
+- Prototype pattern: Creates objects based on a template of an existing object.
+- Decorator pattern: Builds important functionalities such as transactions, cache synchronization, and security-related tasks.
+- Inversion of Control and Dependency Injection: A core design pattern of Spring framework.
+- Model-View-Controller (MVC) pattern: Structures web applications. In MVC, controllers handle incoming requests, models manage data and business logic, and view display information to users.
+
+Other design patterns used in Spring include:
+- Proxy design pattern
+- Template design pattern
+- Front Controller pattern
+- View Helper pattern
 </details>
 <details><summary>
 
 ## What are some of the best practices for Spring Framework?
 </summary>
 
+Some best practices for Spring Framework include:
+- **Dependency management**
+
+Use Maven or Gradle to manage dependencies. It's recommended to use the latest stable GA versions.
+
+- **Exception handling**
+
+Use the HandlerExceptionResolver to define a global exception-handling strategy. You can also add the @ExceptionHandler annotation to the controller.
+
+- **Dependency injection**
+
+Use constructor injection to keep code clean and avoid circular dependencies. It also makes it easier to instantiate and test classes.
+
+- **Business logic**
+
+Use services for business logic, including validations and caching. Services communicate with the persistence layer and receive results.
+
+- **Microservices**
+
+Design services around business capabilities, ensure service independence and use lightweight communication protocols. Also, implement fault tolerance and resilience, and secure microservices using Spring Security.
+
+- **Performance**
+
+Use pagination to improve application performance. The PagingAndSortingRepository makes using pagination easy.
+
+- **Auto-configuration**
+
+Use Spring Boot Starters to take advantage of Spring Boot's auto-configuration.
 </details>
 <details><summary>
 
 ## Describe some standard Spring events.
 </summary>
 
+Spring Framework has several standard events, including:
+- ContextRefreshedEvent: This event is published when the ApplicationContext is initialized or refreshed.
+- ContextStartedEvent
+- ContextStoppedEvent
+- ContextClosedEvent
+- RequestHandledEvent
+
+Events in Spring are objects that contain information about a specific occurrence or state change within the application. They are usually triggered by user actions, such as logging in or out of the system, or by changes to the application configuration.
+
+For versions before Spring Framework 4.2, the event class should extend ApplicationEvent. The publisher should inject an ApplicationEventPublisher object, and the listener should implement the ApplicationListener interface.
 </details>
 <details><summary>
 
 ## How does Spring 5 make use of JDK 9 modularity?
 </summary>
 
+Spring 5 makes use of JDK 9 modularity in the following ways:
+- **Modularizes the Spring framework.**
+
+Spring 5 is organized into a set of modules, each with its own set of dependencies. This makes it easier to manage dependencies and to create smaller, more focused applications.
+
+- **Uses the Java Platform Module System (JPMS).**
+
+JPMS is the modularity system introduced in JDK 9. It provides a number of benefits, such as improved performance, improved security, and more reliable dependency management.
+
+- **Supports automatic modules.**
+
+Automatic modules are modules that are created automatically when you build your application. This makes it easier to get started with modularity without having to manually configure your modules.
+
+- **Provides support for legacy code.**
+
+If you have legacy code that is not modular, you can still use Spring 5 to run it. Spring 5 provides a number of features to help you migrate your legacy code to modularity.
+
+Overall, Spring 5 provides a number of benefits when used with JDK 9 modularity. These benefits include improved performance, improved security, more reliable dependency management, and easier migration from legacy code.
+
+In addition to the above, Spring 5 also takes advantage of the following JDK 9 features:
+
+- **JEP 264: Foreign Memory Access (FMA)**
+
+FMA provides a safe and efficient way to access memory outside of the Java Virtual Machine (JVM). This can be used to improve the performance of applications that use native code.
+
+- **JEP 269: Shenandoah GC**
+
+Shenandoah is a new garbage collector that is designed to improve the performance of Java applications. It does this by using a concurrent garbage collection algorithm that does not block the main thread.
+
+- **JEP 271: ZGC**
+
+ZGC is a new garbage collector that is designed to improve the scalability of Java applications. It does this by using a generational garbage collection algorithm that can handle large heaps.
+
+These JDK 9 features provide a number of benefits that can be used to improve the performance, scalability, and security of Spring applications.
 </details>
