@@ -72,18 +72,50 @@ Overall, Spring Data JPA is a more powerful and user-friendly alternative to JPA
 ## What is the difference between CrudRepository and JpaRepository?
 </summary>
 
+CrudRepository and JpaRepository are both interfaces in the Spring Data JPA library. CrudRepository provides CRUD (Create, Read, Update, Delete) operations on a repository, while JpaRepository provides additional methods for working with JPA (Java Persistence API) persistence contexts.
+
+The main differences between CrudRepository and JpaRepository are:
+
+- JpaRepository extends CrudRepository.
+This means that any method that is available on CrudRepository is also available on JpaRepository.
+
+When should you use CrudRepository?
+
+You should use CrudRepository if you only need to perform basic CRUD operations on a repository. For example, you might use CrudRepository to save, retrieve, update, or delete JPA entities.
+
+When should you use JpaRepository?
+
+You should use JpaRepository if you need to perform more advanced operations on a repository, such as pagination, sorting, flushing the persistence context, or deleting records in a batch. For example, you might use JpaRepository to paginate the results of a query, flush the persistence context, or delete multiple JPA entities in a single operation.
+
+In general, you should use the most specific interface that meets your needs. If you only need to perform basic CRUD operations, use CrudRepository. If you need to perform more advanced operations, use JpaRepository.
 </details>
 <details><summary>
 
 ## Which No SQL databases does Spring support?
 </summary>
 
+Spring Data supports several NoSQL databases, including:
+
+MongoDB, Neo4j, Redis, Gemfire, Solr, Elasticsearch, Cassandra, Couchbase, LDAP.
+
+NoSQL databases are a classification of database systems that do not support the SQL standard. They can be document databases, key-value databases, wide-column stores, or graph databases. MongoDB is a popular document-based database that is designed to handle unstructured and semi-structured data.
 </details>
 <details><summary>
 
 ## Which ORMs are supported by Spring?
 </summary>
 
+Spring supports most popular Object Relational Mapping (ORM) frameworks, including:
+- Hibernate
+- JDO (Java Data Objects)
+- iBATIS
+- JPA (Java Persistence API)
+- Oracle Toplink
+- OJB
+
+Spring provides an API to easily integrate Spring with these frameworks.
+
+Using the Spring Framework to create ORM DAOs can make testing easier.
 </details>
 <details><summary>
 
