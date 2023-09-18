@@ -140,12 +140,46 @@ Hibernate implements the specifications of JPA (Java Persistence API) for data p
 ## What are the different types of transaction management supported by Spring?
 </summary>
 
+Spring supports two types of transaction management: declarative and programmatic.
+- **Declarative transaction management**
+
+is the recommended approach, as it is simpler and easier to use. With declarative transaction management, the programmer annotates methods with the @Transactional annotation to indicate that they should be executed in a transaction. Spring will automatically manage the transaction, ensuring that it is started, committed, or rolled back as needed.
+
+- **Programmatic transaction management**
+
+allows the programmer to explicitly manage transactions. This is typically used in more complex cases where the programmer needs more control over the transaction. Spring provides a number of classes for programmatic transaction management, including the TransactionTemplate and the PlatformTransactionManager.
+
+In addition to these two types of transaction management, Spring also provides a number of features for managing transactions, such as:
+
+- **Transaction rollback-only**
+
+allows the programmer to mark a transaction as rollback-only. This means that the transaction will always be rolled back, even if there are no exceptions.
+
+- **Transaction propagation**
+
+allows the programmer to control how transactions are propagated across method calls. For example, a programmer can specify that transactions should be propagated to all method calls in the same class, or that they should be propagated to all method calls in the same transaction.
+
+- **Transaction isolation**
+
+allows the programmer to control how transactions are isolated from each other. For example, a programmer can specify that transactions should be isolated from dirty reads, or that they should be isolated from dirty writes.
+
+By using Spring's transaction management features, developers can easily create robust and efficient applications.
 </details>
 <details><summary>
 
 ## Which transaction management type is preferred in Spring?
 </summary>
 
+Declarative transaction management is preferred in Spring. It is simpler to use and more maintainable than programmatic transaction management. With declarative transaction management, developers can annotate their code with @Transactional to specify that it should be executed within a transaction. Spring will then automatically manage the transaction, including starting, committing, or rolling it back. This frees developers from having to worry about the details of transaction management, allowing them to focus on their business logic.
+
+Programmatic transaction management is still available in Spring, but it is discouraged for new code. It is more complex to use and more difficult to maintain than declarative transaction management. Additionally, programmatic transaction management can lead to errors if it is not used correctly.
+
+Here are some of the advantages of declarative transaction management over programmatic transaction management:
+- It is simpler to use. Developers do not need to worry about the details of transaction management.
+- It is more maintainable. Changes to the transaction management configuration can be made without having to modify the code.
+- It is more reliable. Spring automatically manages the transaction, reducing the risk of errors.
+
+If you are developing a new Spring application, you should use declarative transaction management. It is simpler, more maintainable, and more reliable than programmatic transaction management.
 </details>
 <details><summary>
 
