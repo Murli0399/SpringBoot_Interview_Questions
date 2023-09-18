@@ -130,17 +130,59 @@ In summary, BeanFactory is a basic IoC container with lazy initialization and li
 ## How is ApplicationContext configured in Spring?
 </summary>
 
+The ApplicationContext can be configured in Spring in a number of ways, including:
+- **XML-based configuration:**
+
+This is the most common way of configuring the ApplicationContext. In this approach, the bean definitions are specified in an XML file. The XML file can be loaded using the ClassPathXmlApplicationContext or FileSystemXmlApplicationContext class.
+
+- **Annotation-based configuration:**
+
+In this approach, the bean definitions are specified using annotations. The annotations can be used on classes, methods, and fields. The AnnotationConfigApplicationContext class can be used to load the annotations.
+
+- **Java-based configuration:**
+
+In this approach, the bean definitions are specified in Java code. The JavaConfigApplicationContext class can be used to load the Java code.
+
+In addition to these three approaches, the ApplicationContext can also be configured using a number of other methods, such as:
+- **Property-based configuration:**
+
+In this approach, the bean definitions are specified using properties files. The PropertyPlaceholderConfigurer class can be used to load the properties files.
+
+- **Programmatic configuration:**
+
+In this approach, the bean definitions are specified programmatically. The ConfigurableApplicationContext class can be used to programmatically configure the ApplicationContext.
+
+The best way to configure the ApplicationContext depends on the specific needs of the application. For example, if the application is a simple one, then XML-based configuration may be the best option. However, if the application is more complex, then annotation-based or Java-based configuration may be a better option.
+
+Here are some additional tips for configuring the ApplicationContext:
+- Use consistent naming for your bean definitions. This will make it easier to manage your beans.
+- Use comments to document your bean definitions. This will make it easier for other developers to understand your code.
+- Use the @Bean annotation to configure beans that are used frequently. This will make your code more concise.
+- Use the @Scope annotation to specify the scope of your beans. This will help to improve the performance of your application.
+- Use the @Lazy annotation to specify that a bean should not be instantiated until it is first requested. This will help to improve the performance of your application.
 </details>
 <details><summary>
 
 ## What is WebApplicationContext?
 </summary>
 
+WebApplicationContext is a configuration file for web applications in Spring MVC. It's an extension of the ApplicationContext interface. WebApplicationContext is used to tell Spring MVC how to manage web-related components, such as controllers, view resolvers, and locale resolvers.
+
+WebApplicationContext is web-aware, meaning it has Servlet Context information. It's read-only while the application is running, but may be reloaded if the implementation supports this.
+
+In a single web application, there can be multiple WebApplicationContext. Each DispatcherServlet is associated with a single WebApplicationContext.
+
+ApplicationContext is used to inject all the middle-tier beans (Services, DAOs). These beans are instantiated using the “ContextLoaderListener” class configured in the web.
 </details>
 <details><summary>
 
 ## What happens if the context is not closed?
 </summary>
 
+It's important to close a context properly so that different lifecycle methods can run. This allows the application to release resources and clean up.
+
+If a context is not closed, a refresh can be triggered multiple times. This is possible if the chosen ApplicationContext supports "hot" refreshes. You can also trigger the event manually by calling the refresh() method on the ConfigurableApplicationContext interface.
+
+For web applications, the context will be closed automatically. When the web container wants to stop the application, the ContextLoadListener will receive the event from the servlet.
 </details>
 
