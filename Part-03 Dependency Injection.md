@@ -137,18 +137,47 @@ The choice of which type of dependency injection to use depends on the specific 
 ## What is constructor injection?
 </summary>
 
+Constructor injection is a form of dependency injection (DI) in software development. It's a design pattern where a class's dependencies (i.e., other objects or services that it relies on) are provided to it through its constructor when the class is instantiated. This allows for the inversion of control, where the responsibility of managing dependencies is shifted from the class itself to an external component (typically a DI container or framework).
+
+Here's how constructor injection works:
+
+- Dependency Definition: The dependencies that a class requires are defined as parameters in its constructor. Each parameter represents a dependency.
+
+- Dependency Injection: When an instance of the class is created, the DI container or framework injects (provides) the required dependencies into the constructor.
+
+- Initialization: The class stores these dependencies as private fields or properties for later use.
 </details>
 <details><summary>
 
 ## How does setter injection work?
 </summary>
 
+Setter injection is a form of dependency injection (DI) in software development. It's a design pattern where a class's dependencies (i.e., other objects or services that it relies on) are provided through setter methods rather than through the constructor. This allows for the inversion of control, where the responsibility of managing dependencies is shifted from the class itself to an external component (typically a DI container or framework).
+
+Here's how setter injection works:
+
+- Dependency Definition: The dependencies that a class requires are defined as private fields or properties in the class.
+
+- Setter Methods: The class provides setter methods for each dependency, allowing external components to set (inject) the dependencies after the class is instantiated.
+
+- Dependency Injection: When an instance of the class is created, the DI container or framework sets (injects) the required dependencies using the provided setter methods.
 </details>
 <details><summary>
 
 ## Explain setter injection for objects and literal values.
 </summary>
 
+1. Setter Injection for Objects:
+
+When using setter injection for objects, you provide a setter method in the class that allows external components (typically a DI container or framework) to inject instances of other classes or dependencies. These injected objects can be used by the class to perform various tasks.
+
+2. Setter Injection for Literal Values:
+
+Setter injection for literal values involves providing setter methods to inject constant values, such as strings, numbers, or configuration parameters, into a class. This is often used for runtime configuration.
+
+3. Usage:
+
+In both cases, after creating an instance of the class, you call the appropriate setter method to provide the required objects or values. This allows for flexibility in configuring the class for different use cases without modifying its constructor.
 </details>
 <details><summary>
 
