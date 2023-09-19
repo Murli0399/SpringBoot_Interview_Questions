@@ -45,8 +45,9 @@ Dependency Injection (DI) is a design pattern used in software development to ac
 
 1. Constructor Injection:
 
-In constructor injection, dependencies are injected through the constructor of a class.
-It's considered one of the most common and recommended forms of dependency injection because it ensures that an object is in a valid state when it's created.
+- In constructor injection, dependencies are injected through the constructor of a class.
+- It's considered one of the most common and recommended forms of dependency injection because it ensures that an object is in a valid state when it's created.
+
 Example (in Java):
 
 ```
@@ -63,8 +64,9 @@ public class ExampleService {
 
 2. Setter Injection:
 
-In setter injection, dependencies are injected through setter methods of a class.
-This approach is useful when you have optional dependencies or when you need to change dependencies at runtime.
+- In setter injection, dependencies are injected through setter methods of a class.
+- This approach is useful when you have optional dependencies or when you need to change dependencies at runtime.
+
 Example (in Java):
 
 ```
@@ -80,8 +82,9 @@ public class ExampleService {
 ```
 3. Method Injection:
 
-In method injection, dependencies are injected directly into methods that need them.
-This approach is useful when you have methods that require specific dependencies, but the class itself doesn't depend on them.
+- In method injection, dependencies are injected directly into methods that need them.
+- This approach is useful when you have methods that require specific dependencies, but the class itself doesn't depend on them.
+
 Example (in Python):
 
 ```
@@ -92,8 +95,9 @@ class ExampleService:
 ```
 4. Interface-based Injection:
 
-In this approach, an interface defines the contract for accessing dependencies, and concrete implementations provide the actual dependencies.
-It's often used in languages like Java and C#.
+- In this approach, an interface defines the contract for accessing dependencies, and concrete implementations provide the actual dependencies.
+- It's often used in languages like Java and C#.
+
 Example (in Java):
 
 ```
@@ -116,8 +120,9 @@ public class ExampleService {
 ```
 5. Parameter Injection:
 
-In parameter injection, dependencies are injected as method parameters when calling a method.
-This is commonly used in functional programming languages and when working with frameworks like Spring (in Java).
+- In parameter injection, dependencies are injected as method parameters when calling a method.
+- This is commonly used in functional programming languages and when working with frameworks like Spring (in Java).
+
 Example (in Scala):
 
 ```
