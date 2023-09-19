@@ -184,28 +184,55 @@ In both cases, after creating an instance of the class, you call the appropriate
 ## Explain the injection of Java Collection types.
 </summary>
 
+Injecting Java Collection types involves declaring a field for the collection in a class, providing the collection through a setter or constructor, and using it in the class. This is often done in DI frameworks like Spring, allowing flexibility in managing and passing groups of objects as dependencies.
 </details>
 <details><summary>
 
 ## What is the difference between constructor and setter injection?
 </summary>
 
+1. Constructor Injection:
+
+- Dependencies are provided through the class constructor when an instance is created.
+- Constructor injection enforces that all required dependencies are provided at the time of object creation, making the object immediately ready for use.
+- Typically, constructor-injected dependencies are marked as final, making them immutable after object creation.
+- It promotes the creation of objects in a valid state with all necessary dependencies.
+- Constructor injection is suitable for mandatory dependencies that the class cannot function without.
+
+2. Setter Injection:
+
+- Dependencies are provided through setter methods after the object is created.
+- Setter injection allows for optional or dynamic configuration of dependencies, as you can set or change them at runtime.
+- Dependencies set via setters can be modified after object creation, potentially leading to mutable objects.
+- It provides flexibility for changing dependencies over time without recreating objects.
+- Setter injection is suitable for optional or changeable dependencies.
 </details>
 <details><summary>
 
 ## Which dependency injection approach is better?
 </summary>
 
+There is no universally "better" dependency injection approach between constructor injection and setter injection. The choice depends on the specific requirements of your application. Constructor injection is suitable for mandatory dependencies and enforces immutability, while setter injection offers flexibility for optional or changeable dependencies. Use the approach that best fits your context and design goals.
 </details>
 <details><summary>
 
 ## What is method injection?
 </summary>
 
+Method injection is a form of dependency injection (DI) in software development, where dependencies are provided to a class or method through method parameters instead of constructor parameters or setters. In other words, the class or method receives its required dependencies directly when a particular method is called. This approach allows for more fine-grained control over dependency injection, as dependencies can be injected selectively for specific operations or methods.
 </details>
 <details><summary>
 
 ## What is a circular dependency and how should it be resolved?
 </summary>
 
+A circular dependency is a relationship between two or more modules that depend on each other to function properly. For example, if Project A depends on something in Project B, and Project B depends on something in Project A, then you can't compile Project A until you compile Project B.
+
+Here are some strategies for resolving circular dependencies:
+
+- Move small pieces of code from one project to the other.
+- Move code that both libraries depend on into a new shared library.
+- Combine project A and project B into one library.
+
+Circular dependencies should be avoided where possible, but you can't always do so.
 </details>
