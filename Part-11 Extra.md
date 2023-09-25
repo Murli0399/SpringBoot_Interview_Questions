@@ -1,5 +1,5 @@
-<details>
-<summary>
+<details><summary>
+  
 ## Explain Spring MVC.
 </summary>
 
