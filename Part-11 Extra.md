@@ -32,3 +32,37 @@ Key features and concepts of Spring MVC:
 Spring MVC is a versatile framework suitable for building a wide range of web applications, from simple web pages to complex enterprise applications. It promotes a clean separation of concerns and is known for its flexibility and ease of integration with other technologies and libraries.
 
 </details>
+<details><summary>
+
+## What is maven?
+</summary>
+
+Maven is an open-source build tool that helps developers build, publish, and deploy projects. It was developed by the Apache Software Foundation and is written in Java. Maven is used to create projects in other languages, such as C#, Scala, and Ruby. 
+
+Maven uses a standard directory layout and a default build lifecycle to help development teams automate the project's build infrastructure. It allows developers to create projects, dependencies, and documentation using Project Object Model (POM) and plugins. 
+
+Maven was originally developed to simplify the build process for the Jakarta Turbine Project. It is now widely used to manage project dependencies and the entire lifecycle of any project. 
+
+The word "Maven" comes from the Yiddish language and means "gatherer of knowledge".
+</details>
+<details><summary>
+
+## 
+</summary>
+
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+
+</details>
+<details><summary>
+
+## 
+</summary>
+
+
+</details>
