@@ -168,15 +168,6 @@ A pom.xml file is an XML file that contains information about a project and the 
 Build directory, Source directory, Dependencies, Test source directory, Plugin, Goals.
 
 The pom.xml file is located in the base directory of the project. Maven reads the pom.xml file and then executes the goal. The pom.xml file contains default values for most projects.
-
-To create a pom.xml file for a Java project with Eclipse, you can:
-
-1. Right-click on the current project.
-2. Select Configure.
-3. Select Convert to Maven Project.
-4. Complete all fields in the Create new POM window.
-5. Check "Delete original references from the project".
-6. Click on the Finish button.
 </details>
 <details><summary>
 
