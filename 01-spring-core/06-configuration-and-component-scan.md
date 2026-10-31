@@ -11,6 +11,21 @@ The purpose of a configuration file is to separate the configuration data from t
 Configuration files can contain a wide range of settings depending on the software. They may include options related to database connections, network settings, logging levels, security parameters, user interface preferences, and many other aspects that affect the software's behavior. The values specified in the configuration file are read and used by the application at runtime to determine how it should operate.
 
 By modifying the configuration file, users can tweak the behavior of the software without requiring recompilation or altering the original source code. This makes configuration files a valuable tool for managing and fine-tuning the behavior of applications in a flexible and user-friendly manner.
+
+**Example:**
+
+```java
+@Configuration
+public class HttpClientConfig {
+    @Bean
+    public RestClient companyApi(RestClient.Builder builder) {
+        return builder.baseUrl("https://api.example.com")
+                      .defaultHeader("Accept", "application/json")
+                      .build();
+    }
+}
+```
+
 </details>
 <details><summary>
   
@@ -27,6 +42,21 @@ In Spring, configuration metadata is provided to the Spring container through va
 Regardless of the configuration approach, once the configuration metadata is provided to the Spring container, it analyzes the metadata and creates the corresponding beans based on the configuration instructions. The container manages the lifecycle of these beans, handles their dependencies, and allows them to be injected into other beans as needed.
 
 Spring provides flexibility in choosing the appropriate configuration style based on your project's requirements and preferences. XML, annotation-based, Java-based, or Groovy-based configuration can be used individually or in combination, depending on the complexity and needs of your application.
+
+**Example:**
+
+```java
+// 1. Annotations on classes (component scanning)
+@Service class A { }
+
+// 2. Java configuration
+@Configuration class Cfg { @Bean B b() { return new B(); } }
+
+// 3. XML (legacy)
+// <bean id="c" class="com.example.C"/>
+// loaded with @ImportResource("classpath:beans.xml")
+```
+
 </details>
 <details><summary>
   
@@ -41,6 +71,22 @@ XML-based configuration involves creating an XML file where you define beans, th
 Annotation-based configuration, as the name suggests, utilizes annotations provided by Spring to configure beans and their dependencies. Instead of an XML file, you use annotations like @Component, @Configuration, @Autowired, and others to mark classes as beans, specify dependencies, and configure various aspects. Annotation configuration is typically done in regular Java classes and provides a more concise and expressive way to define the configuration metadata.
 
 In summary, XML configuration relies on a separate XML file for defining the configuration, while annotation configuration uses annotations directly within Java classes. XML configuration is more explicit and allows for a more visual representation of the configuration, while annotation configuration is more concise and leverages the power of annotations for configuration purposes. Both approaches have their own advantages and can be used based on personal preference or project requirements.
+
+**Example:**
+
+```xml
+<!-- XML: configuration separate from code -->
+<bean id="orderService" class="com.example.OrderService">
+    <constructor-arg ref="orderRepository"/>
+</bean>
+```
+
+```java
+// Annotations: configuration next to the code, type-safe, refactor-friendly
+@Service
+class OrderService { OrderService(OrderRepository repo) { } }
+```
+
 </details>
 <details><summary>
   
@@ -67,12 +113,36 @@ Annotate your classes and methods with Spring annotations to configure them as b
 Finally, you need to initialize the Spring container, which will process the annotations and create the necessary beans. This can be done by creating an instance of the AnnotationConfigApplicationContext class or by using other context initialization mechanisms provided by Spring, such as XML-based or Java-based configuration.
 
 By following these steps, you can enable and leverage annotation-based configuration in Spring. The container will scan the specified packages for annotated classes, create the beans, handle their dependencies, and allow them to be injected into other beans as required. Annotation-based configuration provides a more concise and expressive way to configure beans compared to XML configuration, and it is widely used in modern Spring applications.
+
+**Example:**
+
+```java
+@Configuration
+@ComponentScan(basePackages = "com.example")   // find @Component/@Service/... classes
+public class AppConfig { }
+
+// Spring Boot: @SpringBootApplication already includes @Configuration,
+// @EnableAutoConfiguration and @ComponentScan of the main class's package.
+```
+
 </details>
 <details><summary>
   
 ### Can there be multiple configuration files in a project?
 </summary>
 Yes, it is possible to have multiple configuration files in a project in Spring. Having multiple configuration files can help modularize and organize the configuration of different components or subsystems within the project.
+
+**Example:**
+
+```java
+@Configuration class DataConfig { @Bean DataSource ds() { ... } }
+@Configuration class KafkaConfig { @Bean ProducerFactory<String, String> pf() { ... } }
+
+@Configuration
+@Import({DataConfig.class, KafkaConfig.class})   // compose explicitly when not scanned
+class RootConfig { }
+```
+
 </details>
 <details><summary>
   
@@ -87,6 +157,17 @@ Component scanning simplifies the configuration process, especially in larger pr
 To enable component scanning, you typically use the @ComponentScan annotation at the configuration class level. This annotation specifies the base package or packages to scan for annotated classes. Spring will scan those packages and their sub-packages, identifying classes annotated with relevant annotations and registering them as beans.
 
 Component scanning is a powerful feature that promotes convention-over-configuration and can significantly reduce the amount of boilerplate configuration code needed in a Spring application.
+
+**Example:**
+
+```java
+@Configuration
+@ComponentScan(
+    basePackages = "com.example",
+    excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.example\\.legacy\\..*"))
+class AppConfig { }
+```
+
 </details>
 <details><summary>
   
@@ -109,6 +190,23 @@ If you have components or configurations located outside the default package or 
 Spring Boot allows further customization of component scanning through various annotations. For example, the @ComponentScan annotation supports attributes like basePackages, basePackageClasses, includeFilters, and excludeFilters, allowing fine-grained control over the scanning process.
 
 By default, Spring Boot's component scanning feature automatically detects and registers beans based on the project's structure and conventions, reducing the need for explicit configuration. However, you can still customize and extend the scanning behavior as required for your specific application by using annotations and additional configuration options provided by Spring Boot.
+
+**Example:**
+
+```java
+package com.example.app;                       // scanning starts here and goes into sub-packages
+
+@SpringBootApplication
+public class App {
+    public static void main(String[] args) { SpringApplication.run(App.class, args); }
+}
+
+// com.example.app.service.OrderService  -> found
+// com.example.shared.Utils              -> NOT found (outside the package); fix with:
+@SpringBootApplication(scanBasePackages = {"com.example.app", "com.example.shared"})
+class App2 { }
+```
+
 </details>
 <details><summary>
   
@@ -123,4 +221,15 @@ This tag is used to enable support for annotations in Spring. When **<<context:a
 This tag is used to enable component scanning in Spring. When **<<context:component-scan>>** is included in the XML configuration file, Spring will automatically scan the specified packages and their sub-packages to discover and register beans based on annotations such as **@Component**, **@Controller**, **@Service**, **@Repository**, etc. Component scanning eliminates the need for explicit bean configuration, as Spring dynamically detects and manages the beans based on the specified packages.
 
 In summary, the main difference between **<<context:annotation-config>>** and **<<context:component-scan>>** is that **<<context:annotation-config>>** enables support for annotations in Spring, while **<<context:component-scan>>** enables component scanning to automatically detect and register beans based on annotations. **<<context:annotation-config>>** is more focused on processing annotation-based functionality, while **<<context:component-scan>>** goes beyond that by allowing automatic bean detection and registration based on annotations.
+
+**Example:**
+
+```xml
+<!-- only activates @Autowired, @PostConstruct etc. on beans already declared -->
+<context:annotation-config/>
+
+<!-- also discovers and registers @Component classes (includes annotation-config) -->
+<context:component-scan base-package="com.example"/>
+```
+
 </details>

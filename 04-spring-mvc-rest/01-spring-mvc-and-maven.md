@@ -31,6 +31,20 @@ Key features and concepts of Spring MVC:
 
 Spring MVC is a versatile framework suitable for building a wide range of web applications, from simple web pages to complex enterprise applications. It promotes a clean separation of concerns and is known for its flexibility and ease of integration with other technologies and libraries.
 
+**Example:**
+
+```java
+@Controller
+public class ProductPageController {
+    @GetMapping("/products/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        model.addAttribute("product", service.find(id));   // Model
+        return "product-detail";                           // View name -> templates/product-detail.html
+    }
+}
+// Request flow: DispatcherServlet -> HandlerMapping -> Controller -> ViewResolver -> View
+```
+
 </details>
 <details><summary>
 
@@ -44,25 +58,17 @@ Maven uses a standard directory layout and a default build lifecycle to help dev
 Maven was originally developed to simplify the build process for the Jakarta Turbine Project. It is now widely used to manage project dependencies and the entire lifecycle of any project. 
 
 The word "Maven" comes from the Yiddish language and means "gatherer of knowledge".
-</details>
-<details><summary>
 
-## 
-</summary>
+**Example:**
 
+```bash
+mvn clean package            # compile, test, package the JAR
+mvn test -Dtest=OrderServiceTest
+mvn dependency:tree          # see transitive dependencies and version conflicts
+mvn spring-boot:run
+./mvnw verify                # Maven Wrapper: same Maven version on every machine/CI
+```
 
-</details>
-<details><summary>
-
-## 
-</summary>
-
-
-</details>
-<details><summary>
-
-## 
-</summary>
-
+Lifecycle phases run in order: `validate → compile → test → package → verify → install → deploy`.
 
 </details>

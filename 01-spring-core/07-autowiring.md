@@ -3,6 +3,17 @@
 ## What is autowiring in Spring?
 </summary>
 In Spring, autowiring is a feature that allows automatic dependency injection. It enables the framework to automatically wire (or connect) collaborating beans based on their types. By using autowiring, developers can avoid explicit configuration of dependencies and let Spring handle the wiring process behind the scenes.
+
+**Example:**
+
+```java
+@Service
+class OrderService {
+    private final OrderRepository repo;
+    OrderService(OrderRepository repo) { this.repo = repo; }  // Spring finds the matching bean by type
+}
+```
+
 </details>
 <details><summary>
 
@@ -21,6 +32,22 @@ In Spring, there are several modes of autowiring that determine how dependencies
 **5. By Annotation (@Autowired, @Inject, @Resource):** Autowiring is done based on annotations placed on fields, methods, or constructors. These annotations indicate the dependencies to be injected, and Spring resolves and injects them accordingly.
 
 Each autowiring mode has its advantages and considerations, and the appropriate mode should be chosen based on the specific requirements of the application.
+
+**Example:**
+
+```xml
+<!-- XML modes: no (default), byName, byType, constructor -->
+<bean id="orderService" class="com.example.OrderService" autowire="constructor"/>
+```
+
+```java
+// Annotation style (modern): by type, narrowed by name with @Qualifier
+@Service
+class OrderService {
+    OrderService(@Qualifier("mysqlOrderRepository") OrderRepository repo) { }
+}
+```
+
 </details>
 <details><summary>
 
@@ -43,6 +70,21 @@ Here is a simplified overview of how autowiring works internally in Spring:
 It's important to note that autowiring relies on the configuration of beans and their dependencies. The container must have sufficient information to determine how to wire the beans together. This information can be provided through XML configuration, Java-based configuration, or annotations such as **@Autowired**.
 
 Overall, autowiring simplifies the configuration and wiring process by reducing the need for explicit bean wiring, leading to more concise and maintainable code.
+
+**Example:**
+
+```java
+// AutowiredAnnotationBeanPostProcessor inspects each bean for @Autowired/@Inject/@Value.
+// For each injection point it asks the container for beans of the required type:
+//   0 matches -> NoSuchBeanDefinitionException (unless required=false/Optional)
+//   1 match   -> injected
+//   >1        -> narrowed by @Primary, @Qualifier, then parameter/field name
+@Service
+class Report {
+    Report(Optional<Cache> cache) { }   // Optional: no failure if no Cache bean exists
+}
+```
+
 </details>
 <details><summary>
 
@@ -59,6 +101,23 @@ Autowiring by constructor offers a few advantages:
 - It helps in creating immutable and thread-safe objects, as dependencies can be set once during construction and not modified afterwards.
 
 However, it's worth noting that autowiring by constructor requires the dependencies to be available as beans in the container. If multiple beans of the same type are present, Spring will raise an exception unless additional qualifiers or annotations are used to disambiguate the injection.
+
+**Example:**
+
+```java
+@Service
+class InvoiceService {
+    private final TaxService tax;
+    private final InvoiceRepository repo;
+
+    // Single constructor -> Spring autowires all parameters by type (no @Autowired needed)
+    InvoiceService(TaxService tax, InvoiceRepository repo) {
+        this.tax = tax;
+        this.repo = repo;
+    }
+}
+```
+
 </details>
 <details><summary>
 
@@ -79,6 +138,22 @@ While autowiring in Spring offers convenience and flexibility, there are some li
 **6. Limited Support for Non-Bean Dependencies:** Autowiring is primarily designed for resolving and injecting Spring-managed beans. It may not be suitable for resolving non-bean dependencies or dependencies that are managed outside of the Spring container.
 
 It's important to consider these limitations and evaluate the trade-offs before deciding to use autowiring in Spring. Depending on the complexity and specific requirements of the application, explicit configuration or a combination of autowiring and explicit wiring may be more appropriate.
+
+**Example:**
+
+```java
+interface Notifier { }
+@Component class Email implements Notifier { }
+@Component class Sms implements Notifier { }
+
+@Service
+class Alerts {
+    Alerts(Notifier n) { }   // fails: NoUniqueBeanDefinitionException (2 candidates)
+}
+// Fixes: @Primary on one, @Qualifier("sms") at the injection point, or inject List<Notifier>.
+// Primitives/Strings can't be autowired by type - use @Value("${prop}").
+```
+
 </details>
 <details><summary>
 
@@ -90,29 +165,36 @@ Yes, it is possible to exclude a bean from being autowired in Spring. There are 
 By default, when you use @Autowired annotation without specifying the required attribute, the dependency is considered as required and must be autowired. However, you can set the required attribute to false to indicate that the dependency is optional. In this case, if the dependency cannot be resolved, Spring will simply leave it as null without raising an exception.
 
 Example:
+
 ```
 @Autowired(required = false)
 private SomeBean someBean;
 ```
+
 ### 2. Using @Qualifier:
 The @Qualifier annotation can be used in combination with @Autowired to specify the specific bean to be autowired when multiple beans of the same type are available in the container. By specifying the desired bean's qualifier value, you can exclude other beans from being autowired.
 
 Example:
+
 ```
 @Autowired
 @Qualifier("desiredBean")
 private SomeBean someBean;
 ```
+
 ### 3. Explicitly configuring dependencies:
 Instead of relying on autowiring, you can explicitly configure the dependencies of a bean using XML configuration or annotations. This approach gives you full control over which dependencies are injected and allows you to exclude specific beans from being autowired.
 
 Example (XML configuration):
+
 ```
 <bean id="myBean" class="com.example.MyBean">
   <property name="someBean" ref="specificBean" />
 </bean>
 ```
+
 Example (Java configuration with @Bean):
+
 ```
 @Bean
 public MyBean myBean() {
@@ -121,6 +203,7 @@ public MyBean myBean() {
   return myBean;
 }
 ```
+
 By using these approaches, you can exclude a specific bean from being autowired or provide more fine-grained control over the autowiring process in Spring.
 </details>
 <details><summary>
@@ -148,6 +231,24 @@ By default, **@Autowired** assumes that the dependency is required and expects a
 **@Autowired** can be used in conjunction with the **@Qualifier** annotation to specify the desired bean when multiple beans of the same type exist in the container. The **@Qualifier** annotation helps to disambiguate the injection by providing the bean's qualifier value.
 
 Overall, the **@Autowired** annotation simplifies the process of dependency injection in Spring by allowing automatic wiring of dependencies. It reduces the need for explicit configuration and enables a more concise and readable codebase.
+
+**Example:**
+
+```java
+@Service
+class ReportService {
+    @Autowired private Clock clock;                       // field (avoid)
+
+    private final Repo repo;
+    @Autowired ReportService(Repo repo) { this.repo = repo; }  // constructor (preferred)
+
+    @Autowired(required = false)
+    void setMetrics(MeterRegistry registry) { }           // optional setter
+
+    @Autowired List<Exporter> exporters;                  // all beans of a type
+}
+```
+
 </details>
 <details><summary>
 
@@ -169,6 +270,19 @@ Here's what happens when you specify an interface in the **getBean()** method:
 - **No Bean Found:** If no bean implementing the specified interface is found, the framework may throw an exception or return a null reference, depending on its configuration.
 
 By using interfaces, you promote the use of abstraction and allow for the interchangeability of different implementations. This facilitates easier testing, modular design, and promotes the principles of object-oriented programming, such as encapsulation and polymorphism.
+
+**Example:**
+
+```java
+interface PaymentGateway { }
+@Component class RazorpayGateway implements PaymentGateway { }
+
+PaymentGateway g = ctx.getBean(PaymentGateway.class);   // works: returns RazorpayGateway
+// With two implementations: NoUniqueBeanDefinitionException unless one is @Primary.
+// Also: if the bean is proxied by a JDK dynamic proxy, getBean(RazorpayGateway.class) fails
+// while getBean(PaymentGateway.class) works.
+```
+
 </details>
 <details><summary>
 
@@ -185,29 +299,19 @@ A no-arg constructor (a constructor without any arguments) is often needed for v
 **4. Framework and Dependency Injection:** Certain frameworks and dependency injection containers rely on the no-arg constructor to create and manage instances of classes. They instantiate objects through reflection and populate them with dependencies, often through setter or field injection. A no-arg constructor is essential for these frameworks to create instances of classes and inject the required dependencies.
 
 Overall, a no-arg constructor provides a default way to create an object, supports serialization and deserialization, enables reflection-based instantiation, and facilitates integration with various frameworks and libraries that rely on constructor invocation without arguments.
-</details>
-<details><summary>
 
-## What is Spring Security?
-</summary>
-Spring Security is a powerful framework that provides authentication, authorization, and other security features for Java applications. It is built on top of the Spring Framework and offers comprehensive security services to ensure the protection of web and enterprise applications.
+**Example:**
 
-In short, Spring Security:
+```java
+@Entity
+public class Company {
+    @Id private Long id;
+    private String name;
 
-### 1. Authentication:
-It handles user authentication by providing mechanisms for login, logout, and user session management. It supports various authentication methods such as username/password authentication, token-based authentication, and integration with external identity providers.
+    protected Company() { }                  // required by JPA/Hibernate to create proxies/instances
+    public Company(String name) { this.name = name; }
+}
+// Jackson also needs a no-arg constructor (or @JsonCreator / records) to deserialize JSON.
+```
 
-### 2. Authorization:
-Spring Security enables fine-grained access control by defining access rules and permissions. It allows you to secure different parts of your application based on roles, authorities, or custom expressions, ensuring that only authorized users can access specific resources or perform certain actions.
-
-### 3. Security Filters:
-It integrates with the Servlet API to intercept and filter requests and responses, enabling the enforcement of security measures at various levels. Spring Security intercepts requests and applies security checks based on the configuration you define.
-
-### 4. Integration with Other Technologies:
-Spring Security seamlessly integrates with other components of the Spring ecosystem, such as Spring MVC, Spring Boot, and Spring Data. It provides easy configuration options and simplifies the integration of security features into Spring-based applications.
-
-### 5. Extensibility:
-Spring Security is highly customizable and extensible. It allows you to plug in custom authentication providers, implement custom authorization logic, and integrate with external authentication systems. You can also leverage its extensive set of built-in features and extensions to meet your specific security requirements.
-
-By using Spring Security, developers can focus on application logic while delegating the complex security aspects to the framework. It provides a robust foundation for securing applications against common security threats and offers flexibility to adapt to various security requirements.
 </details>
