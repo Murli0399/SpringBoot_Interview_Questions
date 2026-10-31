@@ -7,6 +7,21 @@ Inversion of Control (IoC) is a design principle in software development where t
 IoC promotes loose coupling between components and allows for better modularity and testability. By delegating the creation and management of dependencies to the IoC container, the application becomes more flexible and modular, as components can be easily replaced or modified without affecting the overall structure.
 
 In the context of Java backend development, IoC is commonly implemented using frameworks such as Spring or Java EE (now Jakarta EE). These frameworks provide features like dependency injection, where dependencies are automatically injected into components rather than being explicitly created and managed by the developer. This approach simplifies the code, improves maintainability, and promotes reusable and decoupled components.
+
+**Example:**
+
+```java
+// Without IoC: the class creates its own dependencies
+class ReportService { private final ReportRepository repo = new ReportRepository(); }
+
+// With IoC: the container creates and hands them in
+@Service
+class ReportService2 {
+    private final ReportRepository repo;
+    ReportService2(ReportRepository repo) { this.repo = repo; }   // Spring calls this
+}
+```
+
 </details>
 <details><summary>
 
@@ -27,6 +42,18 @@ The advantages of Inversion of Control (IoC) include:
 **6. Integration with third-party frameworks:** IoC containers often provide integration with other frameworks and libraries. This simplifies the integration of third-party components into the application, as the IoC container can handle the dependency injection and lifecycle management.
 
 Overall, IoC promotes a more modular, flexible, and maintainable codebase, making it easier to develop and evolve complex applications.
+
+**Example:**
+
+```java
+// Easy to test: pass a fake instead of the real dependency
+ReportRepository fakeRepo = mock(ReportRepository.class);
+ReportService2 service = new ReportService2(fakeRepo);
+
+// Easy to swap implementations with configuration/profiles
+@Bean @Profile("local") ReportRepository inMemory() { return new InMemoryReportRepository(); }
+```
+
 </details>
 <details><summary>
 
@@ -49,6 +76,16 @@ The main responsibilities of an IoC container are as follows:
 **6. Integration with Application Frameworks:** IoC containers often provide integration with application frameworks and libraries. They may offer hooks or extensions to seamlessly integrate with other components or provide additional functionality, such as database connection pooling, caching, or messaging.
 
 By assuming these responsibilities, the IoC container simplifies the development process, promotes loose coupling, and provides a centralized mechanism for managing the dependencies and lifecycle of objects within an application.
+
+**Example:**
+
+```java
+ApplicationContext ctx = SpringApplication.run(App.class, args);
+// The container has: scanned @Component classes, created beans, injected dependencies,
+// run @PostConstruct, applied proxies (@Transactional), and will run @PreDestroy on shutdown.
+OrderService svc = ctx.getBean(OrderService.class);
+```
+
 </details>
 <details><summary>
 
@@ -80,6 +117,17 @@ There are two main types of IoC containers:
  - **Integration with other frameworks:** The Application Context can integrate with various other frameworks and libraries, providing seamless integration and additional features.
 
 In summary, the Bean Factory is a basic IoC container that provides fundamental dependency injection capabilities, while the Application Context is a more advanced IoC container with enhanced features, lifecycle management, AOP integration, and support for various other application-related functionalities.
+
+**Example:**
+
+```java
+// BeanFactory: basic, lazy (beans created on first getBean)
+BeanFactory factory = new DefaultListableBeanFactory();
+
+// ApplicationContext: BeanFactory + events, i18n, AOP integration, eager singleton creation
+ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+```
+
 </details>
 <details><summary>
 
@@ -124,6 +172,17 @@ The main differences between BeanFactory and ApplicationContext in the Spring Fr
 - **ApplicationContext:** The eager loading approach of ApplicationContext may result in slightly slower startup performance as it preloads and initializes beans upfront. However, the performance difference is typically negligible in most applications.
 
 In summary, BeanFactory is a basic IoC container with lazy initialization and limited features, while ApplicationContext is an advanced IoC container that extends the capabilities of BeanFactory. ApplicationContext provides features such as eager initialization, resource handling, advanced bean lifecycle management, AOP integration, and event handling. The choice between BeanFactory and ApplicationContext depends on the specific needs and requirements of the application. In general, ApplicationContext is recommended for most applications due to its richer feature set and enhanced capabilities.
+
+**Example:**
+
+```java
+ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+ctx.getBean(OrderService.class);
+ctx.publishEvent(new OrderPlaced(1L));                 // only ApplicationContext publishes events
+String msg = ctx.getMessage("greeting", null, Locale.ENGLISH); // i18n support
+Resource r = ctx.getResource("classpath:data.json");   // resource loading
+```
+
 </details>
 <details><summary>
 
@@ -160,6 +219,21 @@ Here are some additional tips for configuring the ApplicationContext:
 - Use the @Bean annotation to configure beans that are used frequently. This will make your code more concise.
 - Use the @Scope annotation to specify the scope of your beans. This will help to improve the performance of your application.
 - Use the @Lazy annotation to specify that a bean should not be instantiated until it is first requested. This will help to improve the performance of your application.
+
+**Example:**
+
+```java
+@Configuration
+@ComponentScan("com.example")
+public class AppConfig {
+    @Bean
+    public Clock clock() { return Clock.systemUTC(); }
+}
+
+ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+// Spring Boot does this for you: SpringApplication.run(App.class, args)
+```
+
 </details>
 <details><summary>
 
@@ -184,5 +258,17 @@ It's important to close a context properly so that different lifecycle methods c
 If a context is not closed, a refresh can be triggered multiple times. This is possible if the chosen ApplicationContext supports "hot" refreshes. You can also trigger the event manually by calling the refresh() method on the ConfigurableApplicationContext interface.
 
 For web applications, the context will be closed automatically. When the web container wants to stop the application, the ContextLoadListener will receive the event from the servlet.
+
+**Example:**
+
+```java
+try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class)) {
+    ctx.getBean(Job.class).run();
+}   // close() runs @PreDestroy, closes connection pools, stops Kafka consumers
+
+// Or register a JVM shutdown hook (Spring Boot does this automatically):
+ctx.registerShutdownHook();
+```
+
 </details>
 

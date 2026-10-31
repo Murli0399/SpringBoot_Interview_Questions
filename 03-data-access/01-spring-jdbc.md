@@ -19,6 +19,21 @@ To utilize Spring Data for DAO support, you typically follow these steps:
 **5. Inject and use the DAO:** Inject your DAO interface into other components of your application (such as services or controllers) using Spring's dependency injection. You can then use the DAO methods to interact with your data store.
 
 By following these steps, Spring Data abstracts away much of the boilerplate code typically required for data access, making it easier and more efficient to work with databases in your Java applications.
+
+**Example:**
+
+```java
+@Repository                                  // enables exception translation to DataAccessException
+public class JdbcCompanyDao {
+    private final JdbcTemplate jdbc;
+    public JdbcCompanyDao(JdbcTemplate jdbc) { this.jdbc = jdbc; }
+
+    public int count() {
+        return jdbc.queryForObject("SELECT COUNT(*) FROM company", Integer.class);
+    }
+}
+```
+
 </details>
 <details><summary>
 
@@ -45,6 +60,18 @@ Spring DAO support allows you to define query methods in your repository interfa
 JpaRepositoryFactory is a factory class that creates instances of repository interfaces. It is responsible for dynamically generating proxy instances that implement the repository interfaces and provide the actual data access functionality.
 
 These are some of the important classes and interfaces involved in Spring's DAO support. They provide a consistent and efficient way to interact with databases and simplify the implementation of data access layers in Java applications.
+
+**Example:**
+
+```java
+public interface CompanyRepository extends JpaRepository<Company, Long> {
+    List<Company> findBySectorOrderByNameAsc(String sector);              // derived query
+    Page<Company> findByCountry(String country, Pageable pageable);       // paging
+    @Query("select c from Company c where c.fundingUsd > :min")
+    List<Company> funded(@Param("min") long min);                         // JPQL
+}
+```
+
 </details>
 <details><summary>
 
@@ -57,12 +84,14 @@ The @Repository annotation is part of the Spring Framework and serves as a speci
 By applying the @Repository annotation to a class, you are instructing Spring to create a bean of that class and make it available for dependency injection and other Spring features. It also enables Spring's exception translation mechanism, which automatically translates low-level data access exceptions into more meaningful and unchecked Spring-specific exceptions.
 
 Here's an example of how you can use the @Repository annotation to mark a DAO class:
+
 ```
 @Repository
 public class MyDAO {
     // DAO implementation
 }
 ```
+
 In the above example, the MyDAO class is annotated with @Repository, indicating that it is a DAO component. Spring will then detect and manage this class as a bean, allowing you to inject it into other components and utilize its data access functionality.
 
 It's worth noting that while the @Repository annotation is commonly used for DAO classes, it is not mandatory. In general, any Spring-managed bean can be used as a DAO, but using the @Repository annotation helps convey the intent and takes advantage of the additional features provided by Spring for repositories.
@@ -93,6 +122,18 @@ Unlike Spring Data JPA, which uses an ORM (Object-Relational Mapping) framework 
 Spring Data JDBC integrates seamlessly with Spring's transaction management capabilities. You can leverage Spring's declarative transaction support using annotations or XML configuration to ensure consistency and integrity when performing database operations.
 
 Overall, Spring Data JDBC provides a simpler alternative to traditional JDBC programming by leveraging Spring's features and conventions. It offers a lightweight and efficient approach for interacting with databases in Java applications while maintaining control and flexibility over SQL statements and database schema.
+
+**Example:**
+
+```java
+@Table("company")
+record Company(@Id Long id, String name, String sector) {}   // no lazy loading, no dirty checking
+
+interface CompanyRepository extends CrudRepository<Company, Long> {
+    List<Company> findBySector(String sector);
+}
+```
+
 </details>
 <details><summary>
 
@@ -125,6 +166,15 @@ Spring JDBC supports batch operations, allowing you to execute multiple SQL stat
 Although not directly provided by Spring JDBC, it often works in conjunction with connection pooling libraries. Connection pooling enables the reuse of database connections, enhancing performance and scalability. Spring JDBC seamlessly integrates with popular connection pooling libraries like Apache Commons DBCP and HikariCP.
 
 These tasks collectively make Spring JDBC a valuable tool for efficient and simplified database access in Java applications, reducing boilerplate code and providing higher-level abstractions for common database operations.
+
+**Example:**
+
+```java
+// You write only the SQL and the row mapping; Spring opens/closes connections,
+// prepares statements, iterates ResultSets, translates SQLExceptions and joins transactions.
+List<String> names = jdbc.queryForList("SELECT name FROM company WHERE sector = ?", String.class, "fintech");
+```
+
 </details>
 <details><summary>
 
@@ -158,6 +208,23 @@ JDBC (Java Database Connectivity) and Spring JDBC are both related to interactin
 - **Spring JDBC:** Spring JDBC simplifies SQL statement execution. It provides utilities for executing SQL statements, handling parameter binding, and processing result sets. It supports named parameters, making the code more readable and maintainable.
 
 Overall, Spring JDBC builds upon JDBC to provide a higher-level and more productive approach to database access. It abstracts away the low-level details, automates common tasks, and provides additional features for easier and more efficient database interactions.
+
+**Example:**
+
+```java
+// Plain JDBC: lots of boilerplate
+try (Connection c = ds.getConnection();
+     PreparedStatement ps = c.prepareStatement("SELECT name FROM company WHERE id = ?")) {
+    ps.setLong(1, 7);
+    try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) name = rs.getString("name");
+    }
+} catch (SQLException e) { throw new RuntimeException(e); }
+
+// Spring JDBC: one line
+String name = jdbc.queryForObject("SELECT name FROM company WHERE id = ?", String.class, 7L);
+```
+
 </details>
 <details><summary>
 
@@ -187,6 +254,17 @@ SqlQuery and SqlUpdate are classes that represent SQL queries and updates, respe
 PreparedStatementCreator is an interface used to create prepared statements for parameterized queries. It allows custom creation and configuration of the PreparedStatement before executing it.
 
 These are some of the important classes in the Spring JDBC API. They provide the foundation for performing database operations, handling parameters and result sets, and simplifying database interactions in Spring applications.
+
+**Example:**
+
+```java
+JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+NamedParameterJdbcTemplate named = new NamedParameterJdbcTemplate(dataSource);
+SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).withTableName("company").usingGeneratedKeyColumns("id");
+Number id = insert.executeAndReturnKey(Map.of("name", "Acme", "sector", "fintech"));
+JdbcClient client = JdbcClient.create(dataSource);   // Spring 6.1+ fluent API
+```
+
 </details>
 <details><summary>
 
@@ -219,6 +297,16 @@ JdbcTemplate seamlessly integrates with Spring's transaction management capabili
 While JdbcTemplate provides a high-level abstraction, it also allows for fine-grained control when needed. It provides access to the underlying Connection, Statement, and ResultSet, enabling developers to leverage specific JDBC features or perform advanced database operations when necessary.
 
 Overall, JdbcTemplate simplifies and streamlines database access in Spring applications, providing a higher level of abstraction, consistent error handling, efficient connection management, and support for transactional operations. It enhances developer productivity by reducing boilerplate code and allowing developers to focus on the core business logic.
+
+**Example:**
+
+```java
+// Batch insert in one call - fast for bulk loads
+jdbc.batchUpdate("INSERT INTO company(name, sector) VALUES (?, ?)",
+    companies, 500,
+    (ps, c) -> { ps.setString(1, c.name()); ps.setString(2, c.sector()); });
+```
+
 </details>
 <details><summary>
 
@@ -226,6 +314,17 @@ Overall, JdbcTemplate simplifies and streamlines database access in Spring appli
 </summary>
 
 The **NamedParameterJdbcTemplate** class is used to execute SQL queries and updates with named parameters instead of traditional positional parameters. It simplifies the process of parameter binding and enhances readability in SQL statements.
+
+**Example:**
+
+```java
+String sql = "SELECT * FROM company WHERE sector = :sector AND country IN (:countries)";
+MapSqlParameterSource params = new MapSqlParameterSource()
+    .addValue("sector", "fintech")
+    .addValue("countries", List.of("IN", "SG"));          // IN-list expanded automatically
+List<Company> list = named.query(sql, params, new DataClassRowMapper<>(Company.class));
+```
+
 </details>
 <details><summary>
 
@@ -251,6 +350,18 @@ JdbcTemplate retrieves the result set from the executed query and iterates over 
 The query() method returns the collection of mapped Java objects, which represents the fetched records from the database.
 
 This process allows you to fetch records from a database using JdbcTemplate. By leveraging the power of SQL queries and RowMapper implementations, you can map database data to Java objects in a convenient and efficient manner.
+
+**Example:**
+
+```java
+RowMapper<Company> mapper = (rs, rowNum) ->
+    new Company(rs.getLong("id"), rs.getString("name"), rs.getString("sector"));
+
+List<Company> all = jdbc.query("SELECT id, name, sector FROM company", mapper);
+Company one = jdbc.queryForObject("SELECT id, name, sector FROM company WHERE id = ?", mapper, 7L);
+// queryForObject throws EmptyResultDataAccessException when no row matches.
+```
+
 </details>
 <details><summary>
 
@@ -276,6 +387,21 @@ Here are the key differences between RowMapper and ResultSetExtractor:
 - **ResultSetExtractor:** ResultSetExtractor is used when there is a need to perform more complex operations on the entire result set, such as aggregating data from multiple rows, performing calculations, or transforming the data into a different representation. It provides greater flexibility to process the result set in a customized manner.
 
 In summary, RowMapper is used for mapping individual rows from a ResultSet to Java objects, while ResultSetExtractor is used for more complex processing of the entire ResultSet to extract customized data. RowMapper is suitable for most simple mapping scenarios, while ResultSetExtractor offers more flexibility for advanced result set handling.
+
+**Example:**
+
+```java
+// RowMapper: one row -> one object
+List<String> names = jdbc.query("SELECT name FROM company", (rs, i) -> rs.getString("name"));
+
+// ResultSetExtractor: whole ResultSet -> any structure (e.g. group rows)
+Map<String, List<String>> bySector = jdbc.query("SELECT sector, name FROM company", rs -> {
+    Map<String, List<String>> m = new HashMap<>();
+    while (rs.next()) m.computeIfAbsent(rs.getString("sector"), k -> new ArrayList<>()).add(rs.getString("name"));
+    return m;
+});
+```
+
 </details>
 <details><summary>
 
@@ -297,7 +423,19 @@ Here's a brief explanation of Spring's exception handling support with **DataAcc
 - Spring allows customization of exception translation by implementing the PersistenceExceptionTranslator interface. Developers can provide their own implementation to translate specific database exceptions into Spring's DataAccessException hierarchy, ensuring consistent error handling throughout the application.
 
 Overall, Spring's exception handling support with DataAccessException simplifies database error handling by providing a standardized and unified approach. It abstracts away the underlying database-specific exceptions and offers a clear and consistent way to handle database-related errors in a Spring application.
-</details>
+
+**Example:**
+
+```java
+try {
+    jdbc.update("INSERT INTO users(email) VALUES (?)", email);
+} catch (DuplicateKeyException e) {          // vendor-neutral, unchecked
+    throw new ConflictException("Email already registered");
+} catch (DataAccessException e) {            // root of Spring's data exception hierarchy
+    throw new ServiceUnavailableException("Database error", e);
+}
+```
+
 </details>
 <details><summary>
 
@@ -320,6 +458,16 @@ The SQLExceptionTranslator interface allows for customization of the exception t
 SQLExceptionTranslator is used in conjunction with Spring's JDBC operations, such as JdbcTemplate or NamedParameterJdbcTemplate. It is automatically invoked when a SQLException is encountered during database operations, allowing for the translation and throwing of the appropriate Spring exception.
 
 In summary, the SQLExceptionTranslator interface in Spring JDBC provides a way to translate low-level SQLExceptions into more meaningful exceptions defined by Spring's DataAccessException hierarchy. It ensures consistent and unified exception handling for database-related errors in a Spring application.
+
+**Example:**
+
+```java
+// MySQL error 1062 / SQLState 23000 -> DuplicateKeyException
+// Deadlock error 1213 -> CannotAcquireLockException / DeadlockLoserDataAccessException
+SQLExceptionTranslator translator = new SQLErrorCodeSQLExceptionTranslator(dataSource);
+DataAccessException ex = translator.translate("insert user", sql, sqlException);
+```
+
 </details>
 <details><summary>
 
@@ -345,4 +493,18 @@ Here are some important JdbcTemplate callback interfaces:
 - The BatchPreparedStatementSetter interface is used when executing batch updates with the JdbcTemplate. It allows developers to set parameter values for each statement in the batch and provides methods like setValues() and getBatchSize().
 
 These callback interfaces provide flexibility and customization options when working with the JdbcTemplate class. By implementing these interfaces and providing custom logic, developers can control the behavior of parameter binding, result extraction, row mapping, stored procedure execution, and batch updates during database operations with Spring JDBC.
+
+**Example:**
+
+```java
+jdbc.query("SELECT id, name FROM company", (RowCallbackHandler) rs -> {
+    exporter.write(rs.getLong("id"), rs.getString("name"));   // stream rows without building a list
+});
+
+jdbc.execute((ConnectionCallback<Void>) con -> {
+    con.setReadOnly(true);                                    // low-level access when needed
+    return null;
+});
+```
+
 </details>

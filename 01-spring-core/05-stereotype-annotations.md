@@ -11,6 +11,21 @@ By using the @Component annotation, you can define reusable and manageable compo
 The @Component annotation is a generic stereotype annotation, which means it serves as the base annotation for more specific stereotypes like @Service, @Repository, and @Controller. These specialized annotations are typically used to provide additional semantic meaning to the components based on their roles in the application architecture.
 
 In summary, the @Component annotation is used to mark a class as a Spring component, allowing it to be managed and utilized by the Spring container for dependency injection and other application-wide features.
+
+**Example:**
+
+```java
+@Component
+public class SlugGenerator {
+    public String slug(String name) { return name.toLowerCase().replaceAll("[^a-z0-9]+", "-"); }
+}
+
+@Service
+class CompanyService {
+    CompanyService(SlugGenerator slugs) { }   // injected because @Component made it a bean
+}
+```
+
 </details>
 <details><summary>
   
@@ -50,6 +65,23 @@ In the Spring Framework, @Component, @Service, @Repository, and @Controller are 
 - It is commonly used in web applications and typically exposes RESTful endpoints or web pages.
 
 While these annotations serve different purposes and have different names, they all ultimately function as components managed by the Spring container. The distinction between them is mostly for clarity and semantic understanding of their roles in the application architecture. However, from a technical perspective, they are all handled in a similar way by Spring's component scanning and dependency injection mechanisms.
+
+**Example:**
+
+```java
+@Repository                 // data access; adds DataAccessException translation
+class JdbcOrderRepository { }
+
+@Service                    // business logic; marker for readability/AOP pointcuts
+class OrderService { }
+
+@RestController             // web layer; handles HTTP requests
+class OrderController { }
+
+@Component                  // generic bean that fits none of the above
+class Clocks { }
+```
+
 </details>
 <details><summary>
   
@@ -63,6 +95,7 @@ Here's how it works:
 
 ### Multiple Beans of the Same Type:
 Let's say you have multiple beans implementing the same interface or extending the same class. For example, you may have two implementations of an interface ExampleInterface: BeanA and BeanB.
+
 ```
 public interface ExampleInterface {
     // ...
@@ -79,8 +112,10 @@ public class BeanB implements ExampleInterface {
     // ...
 }
 ```
+
 ### Autowiring with @Autowired:
 If you have a dependent class that requires an instance of ExampleInterface, you can use the @Autowired annotation to inject it.
+
 ```
 @Component
 public class DependentClass {
@@ -91,8 +126,10 @@ public class DependentClass {
     // ...
 }
 ```
+
 ### Resolving Ambiguity with @Primary:
 In this scenario, since you have multiple beans of the same type, Spring may not know which one to inject. To specify the primary bean, you can use the @Primary annotation on BeanA.
+
 ```
 @Component
 @Primary
@@ -100,6 +137,7 @@ public class BeanA implements ExampleInterface {
     // ...
 }
 ```
+
 Now, when Spring encounters the @Autowired annotation for ExampleInterface in the DependentClass, it will inject BeanA because it is marked as the primary bean. If you remove the @Primary annotation from BeanA, Spring will throw an exception indicating that it cannot determine which bean to inject.
 
 The @Primary annotation simplifies the resolution of bean dependencies in situations where there are multiple beans of the same type. It provides a clear indication to Spring about the primary bean to be used for injection.
@@ -116,6 +154,7 @@ Here's how it works:
 
 ### 1. Multiple Beans of the Same Type:
 Let's say you have multiple beans implementing the same interface or extending the same class. For example, you may have two implementations of an interface ExampleInterface: BeanA and BeanB.
+
 ```
 public interface ExampleInterface {
     // ...
@@ -131,8 +170,10 @@ public class BeanB implements ExampleInterface {
     // ...
 }
 ```
+
 ### 2. Autowiring with @Autowired and @Qualifier:
 If you have a dependent class that requires an instance of ExampleInterface, you can use the @Autowired annotation along with the @Qualifier annotation to specify the desired bean.
+
 ```
 @Component
 public class DependentClass {
@@ -144,8 +185,10 @@ public class DependentClass {
     // ...
 }
 ```
+
 ### 3. Specifying Qualifier Values with @Qualifier:
 In this scenario, you can use the @Qualifier annotation and provide a qualifier value that matches the desired bean's qualifier value. You can assign a qualifier value to each bean using the @Qualifier annotation.
+
 ```
 @Component
 @Qualifier("beanA")
@@ -159,6 +202,7 @@ public class BeanB implements ExampleInterface {
     // ...
 }
 ```
+
 Now, when Spring encounters the @Autowired annotation for ExampleInterface in the DependentClass, it will inject BeanA because the @Qualifier annotation specifies the qualifier value as "beanA". If you change the @Qualifier value to "beanB", Spring will inject BeanB instead.
 
 The @Qualifier annotation is useful when @Primary is not sufficient to determine the desired bean for injection. It allows you to provide additional information to Spring for resolving bean dependencies. By assigning qualifier values to beans and using the @Qualifier annotation in the dependent class, you can precisely control which bean gets injected.
@@ -184,6 +228,21 @@ Here's how the precedence works:
 - If the @Qualifier annotation is used without a specific qualifier value and no primary bean is defined, an exception will be thrown because Spring cannot determine which bean to inject.
 
 In summary, the @Qualifier annotation takes precedence over @Primary when both are used together. The @Qualifier annotation allows for more fine-grained control over bean resolution by specifying a qualifier value, whereas @Primary is a broader mechanism to indicate a default or primary bean when no specific qualifier is provided.
+
+**Example:**
+
+```java
+interface Sender { }
+@Component @Primary class EmailSender implements Sender { }
+@Component("smsSender") class SmsSender implements Sender { }
+
+@Service
+class Alerts {
+    Alerts(Sender defaultSender,                              // EmailSender (@Primary)
+           @Qualifier("smsSender") Sender sms) { }            // SmsSender: @Qualifier wins
+}
+```
+
 </details>
 <details><summary>
   
@@ -198,6 +257,19 @@ However, starting from Spring 3.0, the @Required annotation was deprecated and i
 In modern versions of Spring, you can use the @Autowired annotation on constructor parameters or directly on properties and methods to indicate that dependency injection should be performed. If a dependency is not satisfied or cannot be resolved, Spring will throw an exception indicating the issue during the application context initialization process.
 
 To summarize, the @Required annotation was used in older versions of Spring to enforce that a bean property must be set, but it has been deprecated and is no longer needed in current versions of the framework. The preferred approach is to use @Autowired for dependency injection and let Spring handle the configuration and resolution of dependencies.
+
+**Example:**
+
+```java
+// @Required was deprecated in Spring 5.1 and removed in Spring 6.
+// Modern equivalent: make the dependency a constructor argument.
+@Service
+class ReportService {
+    private final ReportRepository repo;            // required: app won't start without it
+    ReportService(ReportRepository repo) { this.repo = Objects.requireNonNull(repo); }
+}
+```
+
 </details>
 <details><summary>
   
@@ -210,11 +282,14 @@ When a class is annotated with @Autowired, Spring will try to find a matching de
 The @Autowired annotation can be used in the following ways:
 
 ### 1. Field Injection:
+
 ```
 @Autowired
 private DependencyType dependency;
 ```
+
 ### 2. Constructor Injection:
+
 ```
 private DependencyType dependency;
 
@@ -223,7 +298,9 @@ public MyClass(DependencyType dependency) {
     this.dependency = dependency;
 }
 ```
+
 ### 3. Setter Method Injection:
+
 ```
 private DependencyType dependency;
 
@@ -232,6 +309,7 @@ public void setDependency(DependencyType dependency) {
     this.dependency = dependency;
 }
 ```
+
 When the @Autowired annotation is used, Spring will search for a bean of the required type in the application context. If exactly one matching bean is found, it will be injected into the annotated field, constructor parameter, or setter method parameter. If multiple beans of the same type are available, additional mechanisms such as @Qualifier can be used to specify the desired bean.
 
 The @Autowired annotation greatly simplifies the process of dependency injection in Spring applications. Instead of manually wiring dependencies, Spring automatically resolves and injects the required dependencies, allowing for loosely coupled and modular code. It promotes the principles of inversion of control (IoC) and reduces the need for explicit configuration.
@@ -271,4 +349,23 @@ Considering these differences, here are some general guidelines for choosing bet
 - When using @Inject, if you need to specify qualifiers for dependencies, you can use @Named from javax.inject or choose to use the @Qualifier annotation provided by Spring along with @Inject.
 
 It's worth noting that in modern versions of the Spring Framework, both @Inject and @Autowired can be used interchangeably, as Spring has added support for the @Inject annotation and aligned it with the behavior of @Autowired. This allows you to use @Inject or @Autowired based on your preference and project requirements.
+
+**Example:**
+
+```java
+import jakarta.inject.Inject;      // JSR-330 standard (needs jakarta.inject dependency)
+import org.springframework.beans.factory.annotation.Autowired;
+
+@Service
+class A {
+    @Inject A(Repo repo) { }                      // portable across DI frameworks
+}
+
+@Service
+class B {
+    @Autowired(required = false)                  // Spring-only; supports required=false
+    void setCache(Cache cache) { }
+}
+```
+
 </details>

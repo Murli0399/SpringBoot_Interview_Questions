@@ -6,6 +6,22 @@
 Dependency Injection (DI) is a design pattern and a software development technique commonly used in object-oriented programming to achieve the separation of concerns, increase modularity, and improve testability and maintainability of code.
 
 In simpler terms, Dependency Injection is about providing the necessary dependencies (objects, services, or other components) to a class rather than the class creating those dependencies itself. This helps to decouple components and make them more independent, which in turn makes the code easier to manage, test, and extend.
+
+**Example:**
+
+```java
+@Service
+public class InvoiceService {
+    private final InvoiceRepository repo;
+    private final TaxCalculator tax;
+
+    public InvoiceService(InvoiceRepository repo, TaxCalculator tax) {  // dependencies injected
+        this.repo = repo;
+        this.tax = tax;
+    }
+}
+```
+
 </details>
 <details><summary>
 
@@ -35,6 +51,19 @@ Key characteristics of DI:
 - Enhances testability by allowing dependencies to be easily replaced with mock objects for testing.
 
 In summary, IoC is a design principle that shifts control flow management to an external entity, while Dependency Injection is a specific technique used to achieve IoC by managing how an object obtains its dependencies. Together, they lead to more modular, maintainable, and testable software systems. IoC is a broader concept, and DI is one of the techniques employed to implement IoC.
+
+**Example:**
+
+```java
+// IoC = the principle (framework controls object creation)
+// DI  = the technique Spring uses to implement it (passing dependencies in)
+@Service
+class A {
+    private final B b;
+    A(B b) { this.b = b; }   // Spring decides when to create B and injects it -> control inverted
+}
+```
+
 </details>
 <details><summary>
 
@@ -80,6 +109,7 @@ public class ExampleService {
     // ...
 }
 ```
+
 3. Method Injection:
 
 - In method injection, dependencies are injected directly into methods that need them.
@@ -93,6 +123,7 @@ class ExampleService:
         # Use the injected dependency here
         pass
 ```
+
 4. Interface-based Injection:
 
 - In this approach, an interface defines the contract for accessing dependencies, and concrete implementations provide the actual dependencies.
@@ -118,6 +149,7 @@ public class ExampleService {
     }
 }
 ```
+
 5. Parameter Injection:
 
 - In parameter injection, dependencies are injected as method parameters when calling a method.
@@ -130,6 +162,7 @@ def doSomething(dependency: Dependency): Unit = {
     // Use the injected dependency here
 }
 ```
+
 The choice of which type of dependency injection to use depends on the specific needs of your application and the programming language or framework you are working with. Constructor injection is often recommended as a default choice due to its clarity and ability to ensure that objects are properly initialized.
 </details>
 <details><summary>
@@ -146,6 +179,21 @@ Here's how constructor injection works:
 - Dependency Injection: When an instance of the class is created, the DI container or framework injects (provides) the required dependencies into the constructor.
 
 - Initialization: The class stores these dependencies as private fields or properties for later use.
+
+**Example:**
+
+```java
+@Service
+public class PaymentService {
+    private final PaymentGateway gateway;    // final: immutable, can't be null after construction
+
+    public PaymentService(PaymentGateway gateway) {   // @Autowired optional with one constructor
+        this.gateway = gateway;
+    }
+}
+// With Lombok: @RequiredArgsConstructor generates this constructor for final fields.
+```
+
 </details>
 <details><summary>
 
@@ -161,6 +209,21 @@ Here's how setter injection works:
 - Setter Methods: The class provides setter methods for each dependency, allowing external components to set (inject) the dependencies after the class is instantiated.
 
 - Dependency Injection: When an instance of the class is created, the DI container or framework sets (injects) the required dependencies using the provided setter methods.
+
+**Example:**
+
+```java
+@Service
+public class ReportService {
+    private Formatter formatter = new PlainFormatter();   // sensible default
+
+    @Autowired(required = false)                          // optional dependency
+    public void setFormatter(Formatter formatter) {
+        this.formatter = formatter;
+    }
+}
+```
+
 </details>
 <details><summary>
 
@@ -185,6 +248,28 @@ In both cases, after creating an instance of the class, you call the appropriate
 </summary>
 
 Injecting Java Collection types involves declaring a field for the collection in a class, providing the collection through a setter or constructor, and using it in the class. This is often done in DI frameworks like Spring, allowing flexibility in managing and passing groups of objects as dependencies.
+
+**Example:**
+
+```java
+interface Validator { void validate(Order o); }
+@Component @Order(1) class StockValidator implements Validator { ... }
+@Component @Order(2) class FraudValidator implements Validator { ... }
+
+@Service
+class OrderService {
+    private final List<Validator> validators;          // all Validator beans, in @Order order
+    private final Map<String, Validator> byName;       // bean name -> bean
+
+    OrderService(List<Validator> validators, Map<String, Validator> byName) {
+        this.validators = validators;
+        this.byName = byName;
+    }
+
+    void place(Order o) { validators.forEach(v -> v.validate(o)); }
+}
+```
+
 </details>
 <details><summary>
 
@@ -206,6 +291,22 @@ Injecting Java Collection types involves declaring a field for the collection in
 - Dependencies set via setters can be modified after object creation, potentially leading to mutable objects.
 - It provides flexibility for changing dependencies over time without recreating objects.
 - Setter injection is suitable for optional or changeable dependencies.
+
+**Example:**
+
+```java
+@Service
+class A {
+    private final Repo repo;          // required -> constructor
+    private Cache cache;              // optional -> setter
+
+    A(Repo repo) { this.repo = repo; }
+
+    @Autowired(required = false)
+    void setCache(Cache cache) { this.cache = cache; }
+}
+```
+
 </details>
 <details><summary>
 
@@ -213,6 +314,24 @@ Injecting Java Collection types involves declaring a field for the collection in
 </summary>
 
 There is no universally "better" dependency injection approach between constructor injection and setter injection. The choice depends on the specific requirements of your application. Constructor injection is suitable for mandatory dependencies and enforces immutability, while setter injection offers flexibility for optional or changeable dependencies. Use the approach that best fits your context and design goals.
+
+**Example:**
+
+```java
+// Prefer constructor injection
+@Service
+class Good {
+    private final Repo repo;
+    Good(Repo repo) { this.repo = repo; }      // testable with plain `new Good(mockRepo)`
+}
+
+// Avoid field injection
+@Service
+class Bad {
+    @Autowired private Repo repo;              // hidden dependency, can't be final, needs Spring/reflection in tests
+}
+```
+
 </details>
 <details><summary>
 
@@ -220,6 +339,27 @@ There is no universally "better" dependency injection approach between construct
 </summary>
 
 Method injection is a form of dependency injection (DI) in software development, where dependencies are provided to a class or method through method parameters instead of constructor parameters or setters. In other words, the class or method receives its required dependencies directly when a particular method is called. This approach allows for more fine-grained control over dependency injection, as dependencies can be injected selectively for specific operations or methods.
+
+**Example:**
+
+```java
+@Component
+@Scope("prototype")
+class ReportBuilder { /* new instance each time */ }
+
+@Service
+abstract class ReportService {           // singleton needing a fresh prototype each call
+    public Report build() {
+        ReportBuilder b = newBuilder();  // Spring overrides this method (lookup method injection)
+        return b.build();
+    }
+
+    @Lookup
+    protected abstract ReportBuilder newBuilder();
+}
+// Alternative: inject ObjectProvider<ReportBuilder> and call getObject()
+```
+
 </details>
 <details><summary>
 
@@ -235,4 +375,22 @@ Here are some strategies for resolving circular dependencies:
 - Combine project A and project B into one library.
 
 Circular dependencies should be avoided where possible, but you can't always do so.
+
+**Example:**
+
+```java
+@Service class A { A(B b) {} }
+@Service class B { B(A a) {} }
+// Startup fails: "The dependencies of some of the beans in the application context form a cycle"
+// (Spring Boot 2.6+ forbids cycles by default)
+
+// Best fix: redesign - extract the shared logic into a third bean C used by both
+@Service class C { }
+@Service class A2 { A2(C c) {} }
+@Service class B2 { B2(C c) {} }
+
+// Quick workaround (use sparingly): break the cycle with @Lazy
+@Service class A3 { A3(@Lazy B3 b) {} }
+```
+
 </details>
