@@ -2,7 +2,7 @@
 
 <details><summary>
 
-## What is AOP? Explain aspect, advice, pointcut and join point.
+## [Medium] What is AOP? Explain aspect, advice, pointcut and join point.
 </summary>
 
 Aspect-Oriented Programming moves **cross-cutting concerns** (logging, metrics, security, transactions) out of business code.
@@ -44,20 +44,7 @@ class ReportService {
 
 <details><summary>
 
-## How does Spring AOP work internally? JDK proxy vs CGLIB?
-</summary>
-
-Spring wraps the bean in a **proxy** at startup; callers get the proxy, which runs the advice and then calls the real method.
-
-- **JDK dynamic proxy:** implements the bean's interfaces.
-- **CGLIB proxy:** subclasses the bean class. Spring Boot uses CGLIB by default (`proxyTargetClass=true`).
-
-Consequences (same as `@Transactional`): self-invocation bypasses the proxy, and `private`/`final` methods can't be advised. Spring AOP is runtime and method-level only; full AspectJ (compile/load-time weaving) can advise fields and constructors.
-</details>
-
-<details><summary>
-
-## How does caching work in Spring Boot?
+## [Medium] How does caching work in Spring Boot?
 </summary>
 
 Enable with `@EnableCaching` and annotate methods; the provider can be Caffeine (local) or Redis (shared across instances).
@@ -90,7 +77,7 @@ Always set a TTL, cache DTOs (not lazy JPA entities), and remember the proxy rul
 
 <details><summary>
 
-## How do @Async methods work and what are the pitfalls?
+## [Medium] How do @Async methods work and what are the pitfalls?
 </summary>
 
 ```java
@@ -121,7 +108,7 @@ Pitfalls: self-invocation isn't async; exceptions in `void` methods are lost unl
 
 <details><summary>
 
-## How do you schedule jobs, and what happens with multiple instances?
+## [Medium] How do you schedule jobs, and what happens with multiple instances?
 </summary>
 
 ```java
@@ -144,7 +131,7 @@ With 3 pods, the job runs **3 times**. Fixes: a distributed lock with **ShedLock
 
 <details><summary>
 
-## How do Spring application events work?
+## [Medium] How do Spring application events work?
 </summary>
 
 ```java
@@ -170,4 +157,17 @@ class OrderListeners {
 ```
 
 Events are synchronous by default (add `@Async` to decouple). They stay inside one JVM; across services use Kafka.
+</details>
+
+<details><summary>
+
+## [Hard] How does Spring AOP work internally? JDK proxy vs CGLIB?
+</summary>
+
+Spring wraps the bean in a **proxy** at startup; callers get the proxy, which runs the advice and then calls the real method.
+
+- **JDK dynamic proxy:** implements the bean's interfaces.
+- **CGLIB proxy:** subclasses the bean class. Spring Boot uses CGLIB by default (`proxyTargetClass=true`).
+
+Consequences (same as `@Transactional`): self-invocation bypasses the proxy, and `private`/`final` methods can't be advised. Spring AOP is runtime and method-level only; full AspectJ (compile/load-time weaving) can advise fields and constructors.
 </details>

@@ -1,131 +1,68 @@
 <details><summary>
 
-## What are the major features of Spring 5?
+## [Easy] Which Java versions do Spring 5, 6 and 7 require?
 </summary>
 
-## The major features of Spring 5 are:
+| Spring Framework | Spring Boot | Minimum Java | Notes |
+|---|---|---|---|
+| 4.x | 1.x | Java 6 | End of life |
+| 5.x | 2.x | **Java 8** | Supports up to Java 17 (5.3); end of OSS support |
+| 6.x | 3.x | **Java 17** | Moves from `javax.*` to **`jakarta.*`** (Jakarta EE 9+), AOT/native support |
+| 7.x | 4.x | **Java 17** (embraces Java 25) | Jakarta EE 11, JSpecify null-safety, released November 2025 |
 
-### Reactive programming support:
-Spring 5 provides support for reactive programming, which is a programming paradigm that is well-suited for building highly scalable and responsive applications.
+So older Java can't run newer Spring: a Java 11 project is limited to Spring 5 / Boot 2, and moving to Boot 3 means upgrading to Java 17 and replacing `javax` imports with `jakarta`.
 
-### Core features upgrades:
-Spring 5 has upgraded its core features, such as the Spring MVC framework, to make them more powerful and easier to use.
-
-### Spring WebFlux:
-Spring 5 introduces a new functional web framework, Spring WebFlux, which is based on reactive programming.
-
-### Modularity support:
-Spring 5 has been redesigned to be more modular, which makes it easier to use and maintain.
-
-### Kotlin language support:
-Spring 5 provides full support for the Kotlin programming language, which makes it a more attractive option for developing Spring applications.
-
-### Improved testing support:
-Spring 5 has improved its testing support, which makes it easier to write and run unit tests for Spring applications.
-
-### Deprecated support and removed packages:
-Spring 5 has deprecated some of its older features and removed some of its older packages. This makes the framework more focused and easier to use.
-
-Overall, Spring 5 is a major release that brings a number of new features and improvements to the Spring framework. These features make Spring 5 a more powerful, scalable, and easier-to-use framework for developing Java applications.
 </details>
+
 <details><summary>
 
-## Is Spring 5 compatible with older versions of Java?
+## [Easy] What are the advantages of using the Spring framework?
 </summary>
-Spring 5 is not compatible with older versions of Java. It requires Java 8 as a minimum JDK version. Spring 5 is fully compatible with Java 9 on the classpath, as well as the module path, and it passes the JDK 9 test suite.
-If you are using an older version of Java, you can use Spring 4.x. Spring 4.x is compatible with Java 6, 7, and 8.
+
+- **Dependency injection / IoC:** objects get their dependencies from the container, so code is loosely coupled and easy to unit test.
+- **Declarative transactions:** `@Transactional` gives one consistent transaction model over JDBC, JPA and JTA.
+- **AOP:** cross-cutting concerns (transactions, security, caching, logging) are applied without cluttering business code.
+- **Less boilerplate:** `JdbcTemplate`, Spring Data repositories, `RestClient` and `KafkaTemplate` remove repetitive code.
+- **Modular:** use only what you need (core, web, data, security, messaging).
+- **Lightweight POJO programming:** no need to extend framework classes or run in a heavy application server.
+- **Integration:** works with Hibernate/JPA, Kafka, Redis, MongoDB, Elasticsearch, messaging, cloud platforms.
+- **Testability:** the TestContext framework, `MockMvc`, slice tests and Testcontainers support.
+- **Ecosystem:** Spring Boot (auto-configuration), Spring Security, Spring Cloud, Spring Batch.
+
 </details>
+
 <details><summary>
 
-## What are the advantages of using the Spring framework?
+## [Easy] List the modules of the Spring framework.
 </summary>
 
-## The Spring framework has several advantages, including:
+Spring Framework (6/7) is organised into these module groups:
 
-### Transaction management
-The Spring framework combines with the Transaction Management Framework to help developers build transactional systems that span across applications.
+- **Core Container:** `spring-core`, `spring-beans`, `spring-context`, `spring-context-support`, `spring-expression` (SpEL).
+- **AOP and Instrumentation:** `spring-aop`, `spring-aspects` (AspectJ integration), `spring-instrument`.
+- **Data Access / Integration:** `spring-jdbc`, `spring-tx` (transactions), `spring-orm` (JPA/Hibernate), `spring-oxm` (object/XML mapping), `spring-jms`, `spring-r2dbc`.
+- **Web (Servlet):** `spring-web`, `spring-webmvc`, `spring-websocket`.
+- **Web (Reactive):** `spring-webflux`.
+- **Messaging:** `spring-messaging`.
+- **Test:** `spring-test`.
 
-### Lightweight
-The Spring framework is a lightweight application development framework for Enterprise Java (JEE).
+The old **Portlet** module was removed in Spring 5. Projects like Spring Data, Spring Security, Spring Boot and Spring Kafka are separate projects built on top of the framework.
 
-### Loose coupling
-The Spring framework uses interface-based programming and dependency injection to achieve loose coupling.
-
-### Modularity
-The Spring framework provides modularity, allowing developers to choose which packages or classes to use or ignore.
-
-### Decreased boilerplate code
-The Spring framework avoids writing lots of boilerplate code, annotations, and XML configuration.
-
-### Dependency management
-The Spring framework uses dependency injection to help with object management and make code more testable.
-
-### Easy integration with other frameworks
-The Spring framework is designed to be used with all other Java frameworks.
-
-### Layered architecture
-The Spring framework has layered architecture, so you can use what you need and leave what you don't need.
 </details>
+
 <details><summary>
 
-## List the modules of the Spring framework.
+## [Easy] What is tight coupling?
 </summary>
 
-The Spring Framework has many modules, which can be grouped into the following categories:
-- Core Container
-  - Beans
-  - Context
-  - Expression Language
+**Tight coupling** means a class depends directly on a concrete implementation of another class, usually by creating it with `new`. You can't swap the dependency, configure it from outside, or replace it with a mock in tests without changing the class's code.
 
-- Data Access/Integration
-  - JDBC
-  - ORM
-  - OXM
-  - JMS
-  - Transaction
+Problems it causes:
+- Changes in one class ripple into others.
+- Hard to unit test (you can't inject a fake).
+- Hard to reuse or extend with new implementations.
 
-- Web
-  - Web
-  - Web-Servlet
-  - Web-Portlet
-
-- AOP and Instrumentation
-  - AOP
-  - Aspects
-  - Instrumentation
-
-- Test
-
-These modules provide a wide range of features for developing enterprise applications, including:
-
-Dependency injection, Aspect-oriented programming, Data access, Web development, and Testing.
-
-The Spring Framework is a powerful and versatile framework that can be used to develop a wide variety of applications.
-</details>
-<details><summary>
-
-## What is tight coupling?
-</summary>
-
-Tight coupling in Spring refers to the situation where a class or object knows too much about another class or object. This can make the code difficult to change or maintain, as any changes to the tightly coupled class or object may also require changes to the other class or object.
-
-For example, if a class has a direct reference to another class, this would be considered tight coupling. This is because the first class is dependent on the second class, and any changes to the second class would also require changes to the first class.
-
-Spring provides a number of features that can help to reduce tight coupling, such as dependency injection and aspect-oriented programming. These features can help to make code more modular and reusable, which can make it easier to change and maintain.
-
-Here are some of the disadvantages of tight coupling:
-- It makes the code difficult to change or maintain.
-- It can lead to code that is not reusable.
-- It can make the code less flexible.
-- It can make the code less secure.
-
-Here are some of the advantages of loose coupling:
-- It makes the code easier to change or maintain.
-- It can lead to code that is more reusable.
-- It can make the code more flexible.
-- It can make the code more secure.
-
-In general, it is good practice to avoid tight coupling in Spring. By using the features that Spring provides, you can make your code more modular and reusable, which can make it easier to change and maintain.
+Spring reduces tight coupling through **dependency injection** (the container supplies dependencies) and **programming to interfaces**.
 
 **Example:**
 
@@ -137,9 +74,10 @@ class OrderService {
 ```
 
 </details>
+
 <details><summary>
 
-## What is loose coupling?
+## [Easy] What is loose coupling?
 </summary>
 
 Loose coupling in Spring is a design principle that allows components to be independent of each other. This means that changes to one component do not affect other components. Loose coupling is achieved through the use of interfaces and dependency injection.
@@ -172,16 +110,17 @@ class OrderService {
 ```
 
 </details>
+
 <details><summary>
 
-## What is the purpose of the application.properties file?
+## [Easy] What is the purpose of the application.properties file?
 </summary>
 
-The application.properties file is a configuration file in Spring Boot applications. It stores key-value pairs of properties that are used to configure various aspects of the application. These properties include the server port, database connection, and logging configuration. The application.properties file is located in the main/resources directory of the project.
+`application.properties` (or `application.yml`) in `src/main/resources` is Spring Boot's main **externalised configuration** file. Boot loads it at startup and binds its values to framework settings and to your own `@Value` / `@ConfigurationProperties` beans. Typical entries: server port, datasource URL, JPA settings, logging levels, Kafka brokers, feature flags.
 
-The application.properties file is used to write application-related properties into the file. Each environment will have a different property defined by the application.properties file. The application.properties file can be bundled in the application jar or put in the filesystem of the runtime environment. It is loaded on Spring Boot startup.
-
-Application properties are configurable application parameters that change an application's behavior. Only system administrators and/or application administrators can read and write application properties.
+- **Per-environment values** go in profile-specific files like `application-dev.yml` and `application-prod.yml`, activated with `spring.profiles.active`.
+- **Packaged values can be overridden** without rebuilding, by external config files, environment variables or command-line arguments (which take precedence).
+- **Secrets** (passwords, API keys) shouldn't be committed in this file; reference environment variables (`${DB_PASSWORD}`) or a secret manager.
 
 **Example:**
 
@@ -198,16 +137,21 @@ logging.level.com.example=DEBUG
 Secrets come from environment variables (`${DB_PASSWORD}`), never committed to Git.
 
 </details>
+
 <details><summary>
 
-## What is a pom.xml file?
+## [Easy] What is a pom.xml file?
 </summary>
 
-A pom.xml file is an XML file that contains information about a project and the configuration details that Maven uses to build the project. The POM stands for Project Object Model. The pom.xml file contains information such as:
+`pom.xml` is the **Project Object Model** file Maven reads to build a project. It sits in the project root and declares:
 
-Build directory, Source directory, Dependencies, Test source directory, Plugin, Goals.
+- **Coordinates:** `groupId`, `artifactId`, `version`, `packaging` (jar/war).
+- **Parent:** e.g. `spring-boot-starter-parent`, which supplies dependency versions and plugin defaults.
+- **Dependencies** with scopes: `compile` (default), `provided`, `runtime`, `test`.
+- **Build plugins:** compiler, Surefire (tests), `spring-boot-maven-plugin` (executable JAR, container images).
+- **Properties** (e.g. `java.version`), **profiles**, repositories, and modules for multi-module builds.
 
-The pom.xml file is located in the base directory of the project. Maven reads the pom.xml file and then executes the goal. The pom.xml file contains default values for most projects.
+Maven combines your POM with defaults (the "super POM"), so you only write what differs from convention: source code in `src/main/java`, tests in `src/test/java`, output in `target/`.
 
 **Example:**
 
@@ -242,24 +186,47 @@ The pom.xml file is located in the base directory of the project. Maven reads th
 ```
 
 </details>
+
 <details><summary>
 
-## What design patterns are used in the Spring framework?
+## [Medium] What were the major features of Spring 5?
 </summary>
 
-The Spring framework uses several design patterns, including:
-- Singleton pattern: Maintains a single instance of an object throughout the application.
-- Factory design pattern: Creates objects of beans.
-- Prototype pattern: Creates objects based on a template of an existing object.
-- Decorator pattern: Builds important functionalities such as transactions, cache synchronization, and security-related tasks.
-- Inversion of Control and Dependency Injection: A core design pattern of Spring framework.
-- Model-View-Controller (MVC) pattern: Structures web applications. In MVC, controllers handle incoming requests, models manage data and business logic, and view display information to users.
+Spring Framework 5 (2017) was a major release; its main additions were:
 
-Other design patterns used in Spring include:
-- Proxy design pattern
-- Template design pattern
-- Front Controller pattern
-- View Helper pattern
+- **Java 8 baseline** with Java 9 compatibility (lambdas, `Optional`, functional style inside the framework).
+- **Spring WebFlux:** a new **reactive**, non-blocking web stack built on Project Reactor (`Mono`, `Flux`), running on Netty or Servlet 3.1+ containers, alongside the classic Spring MVC.
+- **Functional bean registration** and functional web endpoints (`RouterFunction`) as an alternative to annotations.
+- **First-class Kotlin support** (null-safety, extensions).
+- **JUnit 5 support** in the TestContext framework, and parallel test execution.
+- **Reactive `WebClient`** for non-blocking HTTP calls.
+- **Removals:** Portlet, Velocity, JasperReports, XMLBeans, JDO and Guava caching support.
+
+Spring 5 is no longer supported. Today's versions are **Spring Framework 6** (with Spring Boot 3, Java 17+, Jakarta EE) and **Spring Framework 7** (with Spring Boot 4, released November 2025). See `02-spring-boot/03-spring-boot-3-and-4.md`.
+
+</details>
+
+<details><summary>
+
+## [Medium] What design patterns are used in the Spring framework?
+</summary>
+
+| Pattern | Where Spring uses it |
+|---|---|
+| **Dependency Injection / IoC** | The core container |
+| **Factory** | `BeanFactory`, `ApplicationContext`, `FactoryBean`, `@Bean` methods |
+| **Singleton** | Default bean scope (one instance per container, not per JVM) |
+| **Proxy** | AOP: `@Transactional`, `@Cacheable`, `@Async`, Spring Security method security, Spring Data repositories |
+| **Template Method** | `JdbcTemplate`, `RestTemplate`, `TransactionTemplate`, `KafkaTemplate` |
+| **Front Controller** | `DispatcherServlet` in Spring MVC |
+| **MVC** | Spring MVC: controllers, models, views |
+| **Observer** | `ApplicationEvent` + `@EventListener` |
+| **Strategy** | Pluggable `PlatformTransactionManager`, `Resource` loaders, injecting different implementations of one interface |
+| **Adapter** | `HandlerAdapter` in MVC, `MessageListenerAdapter` |
+| **Decorator** | `BeanPostProcessor`s wrapping beans; `TransactionAwareDataSourceProxy` |
+| **Builder** | `UriComponentsBuilder`, `RestClient.builder()`, `MockMvcRequestBuilders` |
+
+Note: Spring's **prototype scope** (a new instance per request) is not the GoF Prototype pattern, which creates objects by cloning.
 
 **Example:**
 
@@ -280,55 +247,43 @@ public void onStart(ApplicationReadyEvent e) { }
 ```
 
 </details>
+
 <details><summary>
 
-## What are some of the best practices for Spring Framework?
+## [Medium] What are some of the best practices for Spring Framework?
 </summary>
 
-Some best practices for Spring Framework include:
-- **Dependency management**
+- **Use constructor injection** with `final` fields; avoid field injection.
+- **Keep layers clear:** controllers handle HTTP, services hold business logic and transactions, repositories handle persistence.
+- **Put `@Transactional` on service methods**, keep transactions short, and don't make remote calls inside them.
+- **Handle errors globally** with `@RestControllerAdvice` and a consistent error body (`ProblemDetail`).
+- **Use DTOs** at the API boundary instead of exposing JPA entities.
+- **Externalise configuration** with `@ConfigurationProperties` and profiles; keep secrets out of Git.
+- **Validate input** with Bean Validation (`@Valid`).
+- **Paginate** large queries and avoid N+1 problems.
+- **Use Spring Boot starters** and its managed dependency versions; keep Boot up to date.
+- **Make it observable:** Actuator, Micrometer metrics, structured logs, tracing.
+- **Test at the right level:** unit tests, slice tests (`@WebMvcTest`, `@DataJpaTest`), Testcontainers for integration.
+- **Secure by default** with Spring Security; don't expose sensitive Actuator endpoints.
 
-Use Maven or Gradle to manage dependencies. It's recommended to use the latest stable GA versions.
-
-- **Exception handling**
-
-Use the HandlerExceptionResolver to define a global exception-handling strategy. You can also add the @ExceptionHandler annotation to the controller.
-
-- **Dependency injection**
-
-Use constructor injection to keep code clean and avoid circular dependencies. It also makes it easier to instantiate and test classes.
-
-- **Business logic**
-
-Use services for business logic, including validations and caching. Services communicate with the persistence layer and receive results.
-
-- **Microservices**
-
-Design services around business capabilities, ensure service independence and use lightweight communication protocols. Also, implement fault tolerance and resilience, and secure microservices using Spring Security.
-
-- **Performance**
-
-Use pagination to improve application performance. The PagingAndSortingRepository makes using pagination easy.
-
-- **Auto-configuration**
-
-Use Spring Boot Starters to take advantage of Spring Boot's auto-configuration.
 </details>
+
 <details><summary>
 
-## Describe some standard Spring events.
+## [Medium] Describe some standard Spring events.
 </summary>
 
-Spring Framework has several standard events, including:
-- ContextRefreshedEvent: This event is published when the ApplicationContext is initialized or refreshed.
-- ContextStartedEvent
-- ContextStoppedEvent
-- ContextClosedEvent
-- RequestHandledEvent
+The `ApplicationContext` publishes lifecycle events that beans can listen to:
 
-Events in Spring are objects that contain information about a specific occurrence or state change within the application. They are usually triggered by user actions, such as logging in or out of the system, or by changes to the application configuration.
+- **`ContextRefreshedEvent`** – the context has been initialised or refreshed (all singletons created).
+- **`ContextStartedEvent`** – `start()` was called on the context.
+- **`ContextStoppedEvent`** – `stop()` was called.
+- **`ContextClosedEvent`** – the context is closing (shutdown); beans are about to be destroyed.
+- **`RequestHandledEvent`** / `ServletRequestHandledEvent` – a web request has been handled.
 
-For versions before Spring Framework 4.2, the event class should extend ApplicationEvent. The publisher should inject an ApplicationEventPublisher object, and the listener should implement the ApplicationListener interface.
+Spring Boot adds startup events: `ApplicationStartingEvent`, `ApplicationEnvironmentPreparedEvent`, `ApplicationPreparedEvent`, `ApplicationStartedEvent`, **`ApplicationReadyEvent`** (app ready to serve traffic) and `ApplicationFailedEvent`.
+
+You can also publish **your own events** with `ApplicationEventPublisher.publishEvent(obj)`. Since Spring 4.2, any object can be an event and listeners are plain methods annotated with `@EventListener`; before 4.2, events had to extend `ApplicationEvent` and listeners had to implement `ApplicationListener`. `@TransactionalEventListener` runs a listener only after the surrounding transaction commits.
 
 **Example:**
 
@@ -345,43 +300,16 @@ class StartupListener {
 ```
 
 </details>
+
 <details><summary>
 
-## How does Spring 5 make use of JDK 9 modularity?
+## [Hard] How does Spring work with Java modules (JPMS)?
 </summary>
 
-Spring 5 makes use of JDK 9 modularity in the following ways:
-- **Modularizes the Spring framework.**
+Spring Framework doesn't require the Java Platform Module System, and most Spring apps run on the classpath.
 
-Spring 5 is organized into a set of modules, each with its own set of dependencies. This makes it easier to manage dependencies and to create smaller, more focused applications.
+- **Spring 5** added `Automatic-Module-Name` entries to its JARs, so Spring can be used from a modular application (`requires spring.context;`) with stable module names, and it runs on both the classpath and the module path.
+- Spring relies on reflection, so a modular application must **open** its packages to Spring (`opens com.example.app to spring.core, spring.beans, spring.context;`) for dependency injection and proxies to work.
+- In practice, Spring Boot applications usually stay on the classpath and are packaged as executable JARs or container images. For faster startup and smaller footprints, Spring 6+ offers **AOT processing and GraalVM native images** rather than JPMS.
 
-- **Uses the Java Platform Module System (JPMS).**
-
-JPMS is the modularity system introduced in JDK 9. It provides a number of benefits, such as improved performance, improved security, and more reliable dependency management.
-
-- **Supports automatic modules.**
-
-Automatic modules are modules that are created automatically when you build your application. This makes it easier to get started with modularity without having to manually configure your modules.
-
-- **Provides support for legacy code.**
-
-If you have legacy code that is not modular, you can still use Spring 5 to run it. Spring 5 provides a number of features to help you migrate your legacy code to modularity.
-
-Overall, Spring 5 provides a number of benefits when used with JDK 9 modularity. These benefits include improved performance, improved security, more reliable dependency management, and easier migration from legacy code.
-
-In addition to the above, Spring 5 also takes advantage of the following JDK 9 features:
-
-- **JEP 264: Foreign Memory Access (FMA)**
-
-FMA provides a safe and efficient way to access memory outside of the Java Virtual Machine (JVM). This can be used to improve the performance of applications that use native code.
-
-- **JEP 269: Shenandoah GC**
-
-Shenandoah is a new garbage collector that is designed to improve the performance of Java applications. It does this by using a concurrent garbage collection algorithm that does not block the main thread.
-
-- **JEP 271: ZGC**
-
-ZGC is a new garbage collector that is designed to improve the scalability of Java applications. It does this by using a generational garbage collection algorithm that can handle large heaps.
-
-These JDK 9 features provide a number of benefits that can be used to improve the performance, scalability, and security of Spring applications.
 </details>

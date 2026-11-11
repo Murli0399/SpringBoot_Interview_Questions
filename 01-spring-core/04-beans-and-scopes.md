@@ -1,7 +1,8 @@
 <details><summary>
   
-### What are beans in Spring?
+### [Easy] What are beans in Spring?
 </summary>
+
 In the Spring framework, beans refer to the objects that are managed by the Spring IoC (Inversion of Control) container. A bean is an instance of a class that is initialized, assembled, and managed by the Spring container. Beans are the fundamental building blocks of a Spring application.
 
 The Spring framework provides several mechanisms to configure beans, including XML-based configuration, Java-based configuration, and annotation-based configuration. By defining beans in the configuration files or through annotations, you can instruct the Spring container to create and manage instances of these beans.
@@ -24,109 +25,12 @@ class AppConfig {
 ```
 
 </details>
+
 <details><summary>
   
-### What is the lifecycle of a Spring Bean?
+### [Easy] What are some features of custom init and destroy methods?
 </summary>
-The lifecycle of a Spring Bean consists of several phases:
 
-- **Instantiation:** During this phase, the Spring container creates an instance of the bean using the bean's constructor or a factory method.
-
-- **Population of Dependencies:** Once the bean instance is created, the container injects the dependencies into the bean. This process is known as dependency injection, where the dependencies are resolved and provided to the bean.
-
-- **Bean Initialization:** After the dependencies are injected, the container calls any custom initialization methods defined in the bean. These methods allow the bean to perform any necessary setup or initialization tasks.
-
-- **Bean Post-Processing:** At this stage, the container applies any registered BeanPostProcessors to the bean. BeanPostProcessors can modify the bean instance or provide additional processing logic before and after bean initialization.
-
-- **Bean Ready for Use:** After the initialization phase, the bean is considered ready for use. It can now handle requests and perform its designated tasks.
-
-- **Bean Destruction:** When the application context is being shut down or the bean is no longer needed, the container triggers the destruction phase. During this phase, any custom destruction methods defined in the bean are called, allowing the bean to release resources or perform cleanup operations.
-
-It's important to note that not all beans go through every phase. Some beans may not have any custom initialization or destruction methods, while others may have complex initialization or cleanup requirements. The Spring framework provides hooks and interfaces that allow developers to customize the bean lifecycle as needed.
-
-**Example:**
-
-```java
-@Component
-class CacheWarmer implements InitializingBean, DisposableBean {
-    CacheWarmer(Repo repo) { System.out.println("1. constructor + dependencies injected"); }
-
-    @PostConstruct
-    void init() { System.out.println("2. @PostConstruct"); }
-
-    @Override
-    public void afterPropertiesSet() { System.out.println("3. afterPropertiesSet"); }
-
-    @PreDestroy
-    void cleanup() { System.out.println("4. @PreDestroy on shutdown"); }
-
-    @Override
-    public void destroy() { System.out.println("5. destroy"); }
-}
-// Between creation and init, BeanPostProcessors run (this is where AOP proxies get created).
-```
-
-</details>
-<details><summary>
-  
-### What are custom bean lifecycle methods?
-</summary>
-Custom bean lifecycle methods are methods defined within a Spring bean that allow developers to perform additional logic during the initialization and destruction phases of the bean's lifecycle. These methods are invoked by the Spring container at specific points in the bean's lifecycle.
-
-There are two types of custom bean lifecycle methods in Spring:
-
-**Initialization methods:** These methods are invoked after the bean is instantiated and dependencies are injected, but before the bean is considered ready for use. To define an initialization method, you can use either the @PostConstruct annotation or implement the InitializingBean interface. The method annotated with @PostConstruct or the afterPropertiesSet() method in InitializingBean will be called by the container to perform any necessary setup or initialization tasks.
-Example using @PostConstruct:
-
-```
-public class MyBean {
-    @PostConstruct
-    public void init() {
-        // Initialization logic here
-    }
-}
-```
-
-Example using InitializingBean interface:
-
-```
-public class MyBean implements InitializingBean {
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // Initialization logic here
-    }
-}
-```
-
-**Destruction methods:** These methods are invoked when the bean is being destroyed, either during application context shutdown or when the bean is being removed from the container. To define a destruction method, you can use either the @PreDestroy annotation or implement the DisposableBean interface. The method annotated with @PreDestroy or the destroy() method in DisposableBean will be called by the container to perform any necessary cleanup or resource releasing tasks.
-Example using @PreDestroy:
-
-```
-public class MyBean {
-    @PreDestroy
-    public void cleanup() {
-        // Cleanup logic here
-    }
-}
-```
-
-Example using DisposableBean interface:
-
-```
-public class MyBean implements DisposableBean {
-    @Override
-    public void destroy() throws Exception {
-        // Cleanup logic here
-    }
-}
-```
-
-By implementing these custom lifecycle methods, developers have fine-grained control over the initialization and destruction phases of Spring beans, allowing them to perform any necessary setup, initialization, or cleanup tasks as required by their application.
-</details>
-<details><summary>
-  
-### What are some features of custom init and destroy methods?
-</summary>
 Custom init and destroy methods in Spring beans offer several features and advantages:
 
 **1. Initialization logic:** Custom init methods allow you to perform any necessary setup or initialization logic for your bean. You can use these methods to initialize resources, establish connections, configure settings, or perform any other actions required before the bean is ready for use.
@@ -159,68 +63,34 @@ class Config {
 ```
 
 </details>
+
 <details><summary>
   
-### What information does the bean definition contain?
+### [Easy] How can you provide a bean id when using annotations?
 </summary>
-A bean definition in Spring contains various information that defines how the bean should be created, configured, and managed by the Spring container. The bean definition typically includes the following information:
 
-**1. Bean Class:** The class or interface that represents the bean. It specifies the type of object that will be created and managed by the container.
+By default, a scanned component's name is the **simple class name with the first letter lowercased** (`OrderService` → `orderService`). To choose the name yourself:
 
-**2. Bean Name:** A unique identifier for the bean within the container. The name is used to reference and retrieve the bean from the container.
+```java
+@Component("paymentClient")            // also works with @Service("..."), @Repository("..."), @Controller("...")
+public class RazorpayClient { }
 
-**3. Scope:** The scope of the bean, which defines the lifecycle and visibility of the bean instance. Common scope options include singleton (one instance per container), prototype (new instance per request), request, session, etc.
-
-**4. Constructor Arguments:** The values or references to be passed to the bean's constructor during instantiation. This information allows the container to create the bean with the required dependencies.
-
-**5. Properties:** The properties or dependencies of the bean that need to be set after instantiation. These properties can be configured with values or references to other beans.
-
-**6. Initialization and Destruction Methods:** Custom initialization and destruction methods to be invoked during the bean's lifecycle. These methods are used to perform additional setup or cleanup tasks.
-
-**7. Bean Dependencies:** Information about other beans or components that the current bean depends on. This information enables the container to resolve and inject the dependencies.
-
-**8. Autowiring Mode:** Specifies how the bean's dependencies should be automatically resolved and injected. Autowiring eliminates the need for explicit wiring by automatically discovering and connecting the dependencies based on specific rules.
-
-**9. Bean Post-Processors:** Configuration for any BeanPostProcessors to be applied to the bean. BeanPostProcessors allow you to modify or enhance the bean instance before and after initialization.
-
-**10. Additional Metadata:** Other optional metadata or configuration settings specific to the bean, such as custom annotations, bean aliases, lazy initialization, etc.
-
-Bean definitions can be declared in various ways, including XML-based configuration files, Java-based configuration classes, or through annotations. The information within the bean definition provides the necessary instructions to the Spring container for creating, configuring, and managing the beans within the application context.
-</details>
-<details><summary>
-  
-### How can you provide a bean id when using annotations?
-</summary>
-When using annotations in Spring, you can provide a bean ID by using the @Component annotation or its specialized counterparts such as @Service, @Repository, or @Controller. By default, if you don't specify a bean ID, Spring will generate a bean name based on the class name with the first letter in lowercase. However, if you want to explicitly specify the bean ID, you can do so by passing a value to the annotation.
-
-Here's an example of providing a bean ID using annotations:
-
-```
-@Component("myBean")
-public class MyBean {
-    // Bean implementation
+@Configuration
+class AppConfig {
+	@Bean(name = {"primaryDataSource", "mainDs"})   // a @Bean name plus an alias; default name = method name
+	DataSource dataSource() { return new HikariDataSource(); }
 }
 ```
 
-In this example, the @Component annotation is used to mark the class MyBean as a Spring bean. The value "myBean" is passed as an argument to the annotation, explicitly specifying the bean ID. You can choose any desired name as the bean ID, as long as it follows the naming conventions.
+You can also use the JSR-330 annotation `@Named("paymentClient")` from **`jakarta.inject`** (Spring 7 removed support for the old `javax.inject` package). Refer to a named bean with `@Qualifier("paymentClient")`.
 
-Alternatively, you can also use the @Named annotation from the javax.inject package to provide a bean ID:
-
-```
-@Named("myBean")
-public class MyBean {
-    // Bean implementation
-}
-```
-
-Both @Component and @Named annotations serve the same purpose of marking the class as a Spring bean and providing a bean ID. The choice between them depends on your preference or any existing dependencies on the annotations.
-
-By explicitly providing a bean ID, you have more control over the name of the bean and can refer to it by that specific ID when referencing or injecting the bean in other parts of your application.
 </details>
+
 <details><summary>
   
-### Are Spring beans same as JavaBeans?
+### [Easy] Are Spring beans same as JavaBeans?
 </summary>
+
 No, Spring beans are not the same as JavaBeans, although there is some overlap in their concepts and usage.
 
 JavaBeans is a specification and convention for creating reusable components in Java. JavaBeans are Java classes that follow specific naming and design patterns, such as having private fields, public getters and setters (accessor methods), and a no-argument constructor. JavaBeans are typically used for encapsulating data and providing access to that data through getter and setter methods.
@@ -248,48 +118,12 @@ class UserService { UserService(UserRepo repo) {} }   // no no-arg constructor, 
 ```
 
 </details>
+
 <details><summary>
   
-### How are beans created?
+### [Easy] What does the @Bean annotation do?
 </summary>
-In Spring, beans are created by the Spring IoC (Inversion of Control) container. The container is responsible for managing the lifecycle of beans and creating their instances when needed. The process of creating beans involves the following steps:
 
-**1. Bean Definition:** First, the bean must have a corresponding bean definition that specifies how the bean should be created and configured. Bean definitions can be declared in XML-based configuration files, Java-based configuration classes, or through annotations.
-
-**2. Instantiation:** Once the bean definition is available, the container starts the instantiation process. It creates an instance of the bean by invoking the bean's constructor or a factory method, depending on the configuration.
-
-**3. Dependency Injection:** After the bean instance is created, the container performs dependency injection. It resolves the dependencies of the bean, either by matching them to other beans in the container or by providing literal values. The dependencies can be injected via constructor injection, setter injection, or field injection, based on the configuration.
-
-**4. Initialization:** Once the dependencies are injected, the container proceeds with the initialization phase. It calls any custom initialization methods defined in the bean, such as methods annotated with @PostConstruct or implementing the InitializingBean interface. These methods allow the bean to perform any necessary setup or initialization tasks.
-
-**5. Bean Post-Processing:** After initialization, the container applies any registered BeanPostProcessors to the bean. BeanPostProcessors can modify the bean instance or provide additional processing logic before and after bean initialization.
-
-**6. Bean Ready for Use:** At this stage, the bean is considered ready for use. It can now handle requests and perform its designated tasks.
-
-The Spring container manages the lifecycle of the beans, creating and initializing them when needed and destroying them when the application context is being shut down or when the beans are no longer needed. The container ensures that the beans are created in the correct order, with their dependencies correctly resolved, and their initialization and destruction methods called as required.
-
-By leveraging the Spring container's bean creation mechanism, developers can focus on defining the bean configuration and let the container handle the instantiation, dependency injection, and lifecycle management of the beans.
-
-**Example:**
-
-```java
-// 1. Component scanning
-@Service class A {}
-
-// 2. @Bean methods
-@Configuration class Cfg { @Bean B b() { return new B(); } }
-
-// 3. Programmatic registration
-ctx.registerBean(C.class, () -> new C());
-
-// 4. Spring Boot auto-configuration (@ConditionalOnMissingBean beans you didn't declare)
-```
-
-</details>
-<details><summary>
-  
-### What does the @Bean annotation do?
-</summary>
 In Spring, the @Bean annotation is used to indicate that a method in a configuration class should be used to create and configure a bean. When you annotate a method with @Bean, it serves as a factory method for creating a bean instance. The @Bean annotation works in conjunction with @Configuration or @Component annotations.
 
 Here's an example of using @Bean annotation:
@@ -322,49 +156,39 @@ In this modified example, the name attribute is used to specify the bean name as
 
 By using @Bean, you can define beans and their associated configuration in a flexible and programmatic manner. The Spring container will recognize the @Bean annotated methods and create bean instances based on the method's return type and configuration.
 </details>
+
 <details><summary>
   
-### Both @Bean and @Component annotations create beans. What is the difference between the two?
+### [Easy] Both @Bean and @Component annotations create beans. What is the difference between the two?
 </summary>
-The @Bean and @Component annotations in Spring serve different purposes and have distinct usage scenarios:
 
-**1. @Bean Annotation:** The @Bean annotation is used at the method level within a @Configuration or @Component class to explicitly declare a bean creation method. It allows you to define custom configuration logic and explicitly specify how a bean should be created and configured. The annotated method acts as a factory method for creating and providing instances of beans.
+| | `@Component` (and `@Service`, `@Repository`, `@Controller`) | `@Bean` |
+|---|---|---|
+| Placed on | A **class** | A **method** in a `@Configuration` (or `@Component`) class |
+| How it's registered | Discovered by **component scanning** | Explicitly declared; the method's return value becomes the bean |
+| Control over creation | Spring calls the constructor | You write the creation logic (any code, conditions, builders) |
+| Third-party classes | Not possible (you can't annotate library code) | **Yes** – the main use case (e.g. `ObjectMapper`, `RestClient`, `DataSource`) |
+| Default bean name | Class name, first letter lowercase | Method name |
 
-```
+```java
 @Configuration
-public class AppConfig {
-    @Bean
-    public MyBean myBean() {
-        return new MyBean();
-    }
+class HttpConfig {
+	@Bean
+	RestClient companyApi(RestClient.Builder builder) {   // library class configured in code
+		return builder.baseUrl("https://api.example.com").build();
+	}
 }
 ```
 
-With @Bean, you have fine-grained control over the bean creation process, and you can customize various aspects such as name, initialization, destruction, and dependencies.
+Rule of thumb: use `@Component` for your own classes, `@Bean` for library classes or when creation needs logic. In a `@Configuration` class, calls between `@Bean` methods return the same singleton (the class is CGLIB-proxied); in a plain `@Component` ("lite mode") they would create new objects.
 
-**2. @Component Annotation:** The @Component annotation is used at the class level to indicate that a class is a candidate for Spring's component scanning. It allows Spring to automatically detect and create instances of beans based on classpath scanning. By default, @Component acts as a generic stereotype for any Spring-managed component.
-
-```
-@Component
-public class MyComponent {
-    // Component implementation
-}
-```
-
-When using @Component, Spring automatically creates an instance of the annotated class and registers it as a bean within the application context. The bean's name is derived from the class name (with the first letter in lowercase) unless explicitly specified using additional stereotypes like @Service, @Repository, or @Controller.
-
-In summary, the key difference between @Bean and @Component is the level at which they are used and the control they provide:
-
-- **@Bean** is used at the method level within a configuration class to explicitly define and customize the creation and configuration of individual beans.
-
-- **@Component** is used at the class level to mark a class as a Spring-managed component and allows for automatic detection and registration of beans based on component scanning.
-
-While @Bean provides more control and flexibility, @Component is suitable for cases where you want Spring to automatically manage the instantiation and configuration of beans based on component scanning and conventions.
 </details>
+
 <details><summary>
   
-### How can dependencies be injected using the @Bean annotation?
+### [Easy] How can dependencies be injected using the @Bean annotation?
 </summary>
+
 Dependencies can be injected using the @Bean annotation by specifying the dependencies as method parameters in the @Bean annotated method. The Spring container will automatically resolve and inject the dependencies when invoking the method to create the bean instance.
 
 Here's an example that demonstrates injecting dependencies using the @Bean annotation:
@@ -402,29 +226,25 @@ In this updated example, both AnotherBean and MyBean are defined as beans within
 
 By specifying the dependencies as method parameters in the @Bean annotated method, you can achieve dependency injection within the @Bean configuration method itself, allowing for more flexibility and control over the bean creation process.
 </details>
+
 <details><summary>
   
-### What are the different scopes of a bean?
+### [Easy] What are the different scopes of a bean?
 </summary>
-In Spring, beans can have different scopes, which define the lifecycle and visibility of bean instances within the application context. The following are the commonly used bean scopes in Spring:
 
-- **Singleton:** The default scope in Spring. A singleton bean has a single instance per Spring IoC container. The container creates the bean instance when it is first requested and subsequently returns the same instance for subsequent requests.
+| Scope | One instance per… | Available in |
+|---|---|---|
+| **singleton** (default) | Spring container (`ApplicationContext`) | All apps |
+| **prototype** | Every injection / `getBean()` call | All apps |
+| **request** | HTTP request | Web apps |
+| **session** | HTTP session | Web apps |
+| **application** | `ServletContext` | Web apps |
+| **websocket** | WebSocket session | WebSocket apps |
 
-- **Prototype:** A new instance of a prototype bean is created every time it is requested from the container. Each request for the bean results in a new instance being created. Prototype beans are not shared across the application and have no guarantees about their lifecycle.
-
-- **Request:** A bean with the request scope is created once per HTTP request. It is specific to web applications and allows each HTTP request to have its own instance of the bean. The bean is destroyed at the end of the request.
-
-- **Session:** A bean with the session scope is created once per user session in a web application. It allows maintaining stateful data specific to each user session. The bean is destroyed when the session expires or is invalidated.
-
-- **Application:** A bean with the application scope is created once per ServletContext in a web application. It allows sharing a single instance of the bean across the entire application. The bean is created when the application starts and is destroyed when the application shuts down.
-
-- **WebSocket:** A bean with the WebSocket scope is created once per WebSocket connection. It allows maintaining stateful data specific to each WebSocket connection. The bean is destroyed when the WebSocket connection is closed.
-
-Additionally, custom bean scopes can be defined by implementing the org.springframework.beans.factory.config.Scope interface and registering the custom scope with the container.
-
-The choice of bean scope depends on the specific requirements of your application. Singleton scope is suitable for sharing stateless objects, prototype scope is useful when you need a new instance every time, and request/session/application scopes are relevant for web applications to manage data at different levels of granularity.
-
-You can specify the scope of a bean using the @Scope annotation or by configuring it in XML-based configuration or Java-based configuration classes.
+- **Singleton** beans are created **eagerly at startup** by the `ApplicationContext` (unless marked `@Lazy`) and destroyed when the context closes. They should be stateless or thread-safe.
+- **Prototype** beans are created fresh each time; Spring doesn't manage their destruction.
+- Web scopes (`@RequestScope`, `@SessionScope`) injected into singletons need a **scoped proxy** (the shortcut annotations add one automatically), so each call goes to the current request's instance.
+- You can register **custom scopes** by implementing `org.springframework.beans.factory.config.Scope`.
 
 **Example:**
 
@@ -437,10 +257,12 @@ You can specify the scope of a bean using the @Scope annotation or by configurin
 ```
 
 </details>
+
 <details><summary>
   
-### What is the default bean scope in Spring?
+### [Easy] What is the default bean scope in Spring?
 </summary>
+
 The default bean scope in Spring is singleton. When you create a bean without explicitly specifying a scope, it will be treated as a singleton bean by default.
 
 A singleton bean is created once per Spring IoC container and shared across the application context. Whenever the bean is requested, the same instance is returned. Subsequent requests for the bean within the same application context will always receive a reference to the same singleton instance.
@@ -460,10 +282,12 @@ When the Spring container initializes, it will create a single instance of MyBea
 
 If you require a different scope for your beans, such as prototype or request scope, you can explicitly specify it using the @Scope annotation or other means of configuration.
 </details>
+
 <details><summary>
   
-### What is the default scope in the web context?
+### [Easy] What is the default scope in the web context?
 </summary>
+
 In a web context, the default scope for a bean in Spring is singleton. This means that if you create a bean without explicitly specifying a scope, it will be treated as a singleton bean by default, even in a web application.
 
 The default singleton scope implies that a single instance of the bean is created and shared across the entire web application. The bean is created when the application starts and remains in memory until the application shuts down.
@@ -482,37 +306,166 @@ class RequestContext { String requestId = UUID.randomUUID().toString(); }
 ```
 
 </details>
+
 <details><summary>
   
-### When are singleton and prototype scopes used?
+### [Easy] How is bean scope defined?
 </summary>
-Singleton and prototype scopes in Spring are used in different scenarios based on the requirements of your application. Here's a breakdown of when each scope is typically used:
 
-### Singleton Scope:
+Use the `@Scope` annotation (on a `@Component` class or on a `@Bean` method), or the `scope` attribute in XML. `@Bean` itself has no scope attribute.
 
-- Use the singleton scope when you want to share a single instance of a bean throughout the application.
-- Singleton beans are suitable for stateless objects or objects that can be shared safely across multiple components.
-- Singleton scope is the default scope in Spring and is appropriate for most scenarios where a shared instance is sufficient.
-- However, be cautious when using mutable state within singleton beans to avoid concurrency issues.
-### Prototype Scope:
+```java
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)       // "prototype"
+public class ReportJob { }
 
-- Use the prototype scope when you want a new instance of a bean each time it is requested.
-- Prototype beans are suitable when you need a stateful object or when you want to isolate instances and avoid shared state.
-- Prototype scope is useful for situations where you explicitly want to control the lifecycle of each bean instance.
-- Be aware that the Spring container does not manage the destruction of prototype beans automatically. You are responsible for cleaning up and destroying prototype bean instances when no longer needed.
+@Configuration
+public class AppConfig {
+	@Bean
+	@Scope("prototype")
+	public CsvWriter csvWriter() { return new CsvWriter(); }
 
-Consider the following examples to better understand when to use each scope:
+	@Bean
+	@RequestScope                                      // shortcut for @Scope("request") with a proxy
+	public RequestContext requestContext() { return new RequestContext(); }
+}
+```
 
-**1. Singleton Scope Example:**
+```xml
+<bean id="reportJob" class="com.example.ReportJob" scope="prototype"/>
+```
 
-- Configuring a database connection pool as a singleton bean makes sense because you want to reuse the same connection pool instance throughout the application.
-- A logging service or a utility class that doesn't have any mutable state can also be defined as a singleton bean.
+Built-in scope names: `singleton`, `prototype`, `request`, `session`, `application`, `websocket`. Shortcut annotations: `@RequestScope`, `@SessionScope`, `@ApplicationScope`.
 
-**2. Prototype Scope Example:**
-- When creating a shopping cart for an e-commerce application, you may want each user session to have its own instance of the shopping cart. In this case, you would define the shopping cart bean with the prototype scope to ensure a new instance is created for each user session.
-- If you have a stateful object that stores user-specific information, such as user preferences or user-specific caches, using prototype scope can help ensure that each user has a separate instance with its own state.
+</details>
 
-Remember, these are just general guidelines, and the appropriate scope for a bean depends on the specific requirements of your application. You can also define custom scopes if none of the built-in scopes meet your needs.
+<details><summary>
+  
+### [Medium] What is the lifecycle of a Spring Bean?
+</summary>
+
+For a singleton bean in an `ApplicationContext`, the order is:
+
+1. **Instantiation** – the constructor (or factory method) is called; constructor dependencies are injected here.
+2. **Populate properties** – setter and field injection (`@Autowired`, `@Value`).
+3. **Aware callbacks** – `BeanNameAware`, `BeanFactoryAware`, `ApplicationContextAware`, … if implemented.
+4. **`BeanPostProcessor.postProcessBeforeInitialization`** – for every registered post-processor. `@PostConstruct` methods are invoked at this stage (by `CommonAnnotationBeanPostProcessor`).
+5. **Initialization callbacks** – `InitializingBean.afterPropertiesSet()`, then a custom `init-method` / `@Bean(initMethod = ...)`.
+6. **`BeanPostProcessor.postProcessAfterInitialization`** – this is where **AOP proxies** are created (for `@Transactional`, `@Async`, `@Cacheable`), so other beans receive the proxy.
+7. **Bean in use.** (Singletons are created eagerly at startup; `SmartInitializingSingleton` and `ApplicationReadyEvent` fire once all are ready.)
+8. **Destruction** on context shutdown – `@PreDestroy`, then `DisposableBean.destroy()`, then a custom `destroy-method`.
+
+**Prototype beans** go through steps 1–6, but Spring **does not call their destruction callbacks**; the caller owns them after creation.
+
+**Example:**
+
+```java
+@Component
+class CacheWarmer implements InitializingBean, DisposableBean {
+    CacheWarmer(Repo repo) { System.out.println("1. constructor + dependencies injected"); }
+
+    @PostConstruct
+    void init() { System.out.println("2. @PostConstruct"); }
+
+    @Override
+    public void afterPropertiesSet() { System.out.println("3. afterPropertiesSet"); }
+
+    @PreDestroy
+    void cleanup() { System.out.println("4. @PreDestroy on shutdown"); }
+
+    @Override
+    public void destroy() { System.out.println("5. destroy"); }
+}
+// Between creation and init, BeanPostProcessors run (this is where AOP proxies get created).
+```
+
+</details>
+
+<details><summary>
+  
+### [Medium] What are custom bean lifecycle methods?
+</summary>
+
+They are hooks Spring calls after a bean is fully initialised and before it's destroyed. There are three ways to declare each, which run in this order:
+
+**Initialization:** `@PostConstruct` method → `InitializingBean.afterPropertiesSet()` → custom init method (`@Bean(initMethod = "init")`).
+
+**Destruction:** `@PreDestroy` method → `DisposableBean.destroy()` → custom destroy method (`@Bean(destroyMethod = "close")`).
+
+```java
+@Component
+public class CacheWarmer {
+	@PostConstruct
+	public void init() { /* load reference data after dependencies are injected */ }
+
+	@PreDestroy
+	public void cleanup() { /* flush and release resources on shutdown */ }
+}
+```
+
+Prefer `@PostConstruct` / `@PreDestroy` (from `jakarta.annotation` in Spring 6+) because they don't tie your class to Spring interfaces. Use `initMethod`/`destroyMethod` for third-party classes you can't annotate. Spring Boot infers a destroy method named `close` or `shutdown` on `@Bean` objects automatically.
+
+</details>
+
+<details><summary>
+  
+### [Medium] How are beans created?
+</summary>
+
+In Spring, beans are created by the Spring IoC (Inversion of Control) container. The container is responsible for managing the lifecycle of beans and creating their instances when needed. The process of creating beans involves the following steps:
+
+**1. Bean Definition:** First, the bean must have a corresponding bean definition that specifies how the bean should be created and configured. Bean definitions can be declared in XML-based configuration files, Java-based configuration classes, or through annotations.
+
+**2. Instantiation:** Once the bean definition is available, the container starts the instantiation process. It creates an instance of the bean by invoking the bean's constructor or a factory method, depending on the configuration.
+
+**3. Dependency Injection:** After the bean instance is created, the container performs dependency injection. It resolves the dependencies of the bean, either by matching them to other beans in the container or by providing literal values. The dependencies can be injected via constructor injection, setter injection, or field injection, based on the configuration.
+
+**4. Initialization:** Once the dependencies are injected, the container proceeds with the initialization phase. It calls any custom initialization methods defined in the bean, such as methods annotated with @PostConstruct or implementing the InitializingBean interface. These methods allow the bean to perform any necessary setup or initialization tasks.
+
+**5. Bean Post-Processing:** After initialization, the container applies any registered BeanPostProcessors to the bean. BeanPostProcessors can modify the bean instance or provide additional processing logic before and after bean initialization.
+
+**6. Bean Ready for Use:** At this stage, the bean is considered ready for use. It can now handle requests and perform its designated tasks.
+
+The Spring container manages the lifecycle of the beans, creating and initializing them when needed and destroying them when the application context is being shut down or when the beans are no longer needed. The container ensures that the beans are created in the correct order, with their dependencies correctly resolved, and their initialization and destruction methods called as required.
+
+By leveraging the Spring container's bean creation mechanism, developers can focus on defining the bean configuration and let the container handle the instantiation, dependency injection, and lifecycle management of the beans.
+
+**Example:**
+
+```java
+// 1. Component scanning
+@Service class A {}
+
+// 2. @Bean methods
+@Configuration class Cfg { @Bean B b() { return new B(); } }
+
+// 3. Programmatic registration
+ctx.registerBean(C.class, () -> new C());
+
+// 4. Spring Boot auto-configuration (@ConditionalOnMissingBean beans you didn't declare)
+```
+
+</details>
+
+<details><summary>
+  
+### [Medium] When are singleton and prototype scopes used?
+</summary>
+
+### Singleton (default)
+- For **stateless** components shared across the app: services, repositories, controllers, clients, mappers, configuration.
+- Created once at startup and reused, which is efficient.
+- Must be **thread-safe**: avoid mutable instance fields, or protect them.
+
+### Prototype
+- For **stateful, short-lived** objects where each user of the bean needs its own copy: a builder, a per-task worker holding intermediate state, a non-thread-safe helper.
+- Spring creates a new instance per injection/lookup and **does not call destroy callbacks**; the caller must clean up any resources.
+- Injecting a prototype into a singleton gives that singleton **one** instance forever. To get a new one each time, use `ObjectProvider<T>`, `@Lookup`, or a scoped proxy.
+
+Examples:
+- A connection pool, a logging service, an `ObjectMapper` → **singleton**.
+- A per-user **shopping cart** → **session** scope (not prototype – prototype would give a new cart on every injection, unrelated to the user's session).
+- A CSV export job object that accumulates rows → **prototype**.
 
 **Example:**
 
@@ -528,76 +481,12 @@ class CsvExportJob {
 ```
 
 </details>
+
 <details><summary>
   
-### How is bean scope defined?
+### [Medium] Is Singleton scope in Spring same as the Singleton design pattern?
 </summary>
-In Spring, the scope of a bean is defined using the @Scope annotation or by configuring it in XML-based configuration or Java-based configuration classes. Here's how you can define the scope of a bean:
 
-### 1. Using @Scope annotation:
-You can annotate the bean class or the bean creation method with the @Scope annotation and specify the desired scope as its value.
-
-```
-@Component
-@Scope("singleton")
-public class MySingletonBean {
-    // Singleton bean implementation
-}
-```
-
-```
-@Component
-@Scope("prototype")
-public class MyPrototypeBean {
-    // Prototype bean implementation
-}
-```
-
-In these examples, the MySingletonBean is explicitly defined as a singleton bean, while MyPrototypeBean is defined as a prototype bean.
-
-### 2. Using XML-based configuration:
-In XML-based configuration, you can define the scope using the scope attribute within the <bean> element.
-
-```
-<bean id="mySingletonBean" class="com.example.MySingletonBean" scope="singleton" />
-```
-
-```
-<bean id="myPrototypeBean" class="com.example.MyPrototypeBean" scope="prototype" />
-```
-
-Here, the scope attribute is set to either "singleton" or "prototype" to define the corresponding bean scope.
-
-### 3. Using Java-based configuration:
-In Java-based configuration, you can use the scope() method of the Bean annotation to define the scope.
-
-```
-@Configuration
-public class AppConfig {
-    @Bean
-    @Scope("singleton")
-    public MySingletonBean mySingletonBean() {
-        return new MySingletonBean();
-    }
-
-    @Bean
-    @Scope("prototype")
-    public MyPrototypeBean myPrototypeBean() {
-        return new MyPrototypeBean();
-    }
-}
-```
-
-Here, the scope attribute of the @Scope annotation is set to either "singleton" or "prototype" within the @Bean annotated methods.
-
-It's important to note that the available scopes in Spring are: "singleton", "prototype", "request", "session", "application", and "websocket". Additionally, you can define custom scopes by implementing the org.springframework.beans.factory.config.Scope interface and registering the custom scope with the container.
-
-By specifying the scope of a bean, you define its lifecycle and visibility within the application context, allowing Spring to manage the bean instance accordingly based on the specified scope.
-</details>
-<details><summary>
-  
-### Is Singleton scope in Spring same as the Singleton design pattern?
-</summary>
 The Singleton scope in Spring is similar to the Singleton design pattern in terms of creating a single instance of a class. However, there are some differences to consider:
 
 **1. Implementation:** In the Singleton design pattern, the class itself is responsible for ensuring that only one instance is created and providing global access to that instance. This typically involves using static methods or a static instance variable.
@@ -627,10 +516,12 @@ class Cfg {
 ```
 
 </details>
+
 <details><summary>
   
-### Are Singleton beans thread safe?
+### [Medium] Are Singleton beans thread safe?
 </summary>
+
 Singleton beans in Spring are not inherently thread-safe by default. The thread safety of a singleton bean depends on how it is implemented and the synchronization mechanisms applied within the bean's methods and fields.
 
 When multiple threads access and modify shared data within a singleton bean concurrently, there can be potential thread safety issues, such as race conditions, data corruption, or inconsistent state.
@@ -667,29 +558,22 @@ class SafeCounterService {
 ```
 
 </details>
+
 <details><summary>
   
-### Explain prototype bean scope.
+### [Medium] Explain prototype bean scope.
 </summary>
-In Spring, the prototype bean scope is one of the available bean scopes and it defines that a new instance of the bean should be created every time it is requested from the container. In other words, a prototype bean is not shared across the application and each request for the bean results in a new instance being created.
 
-Here are some key characteristics of the prototype bean scope:
+With **prototype** scope, Spring creates a **new instance every time** the bean is injected or requested with `getBean()`.
 
-**1. Instance Creation:** When a bean with prototype scope is requested, the Spring container will create a new instance of the bean and return it to the requesting component.
+Key characteristics:
+1. **New instance per request** to the container; nothing is shared.
+2. **No destruction management:** Spring runs initialization callbacks (`@PostConstruct`), but never calls `@PreDestroy` for prototypes and keeps no reference to them. The caller must release any resources; unreferenced instances are simply garbage-collected.
+3. **Can hold state** safely for a single user/task.
+4. **Its dependencies keep their own scopes:** a prototype that depends on a singleton gets the **same shared singleton** instance; only prototype-scoped dependencies are created anew.
+5. **Prototype inside a singleton:** the singleton gets one prototype instance at creation time and keeps it. Use `ObjectProvider<T>.getObject()`, `@Lookup`, or a scoped proxy to get a fresh one per call.
 
-**2. Lifecycle Management:** Unlike singleton beans, prototype beans are not managed by the container after they are created. The container does not keep a reference to the instances and does not destroy them automatically. It is the responsibility of the caller to manage the lifecycle of the prototype beans.
-
-**3. Stateful Nature:** Prototype beans can hold mutable state, and each instance can have its own separate state. This allows you to have different instances of a bean with different values or configurations.
-
-**4. Dependency Injection:** Dependencies of a prototype bean are injected when the bean is requested. If a prototype bean has dependencies, those dependencies will also be created as separate instances. Each instance of the prototype bean will have its own independent set of dependencies.
-
-**5. No Sharing:** Prototype beans are not shared among other beans or components. Each time a prototype bean is injected or requested, a new instance will be created.
-
-**6. Scoped Dependencies:** If a prototype bean has dependencies with narrower scopes (e.g., singleton, request), those dependencies will be managed according to their respective scopes. For example, a prototype bean with a singleton-scoped dependency will receive the same singleton instance throughout its lifecycle.
-
-Prototype beans are useful when you need a new instance of a bean each time it is required, especially in scenarios where you want to maintain independent state or when the bean's creation is expensive or time-consuming.
-
-It's important to note that due to the lack of managed lifecycle, excessive usage of prototype beans can lead to increased memory consumption and potential memory leaks if not properly managed and disposed of when no longer needed.
+Use prototypes for stateful, short-lived objects. Don't use them for expensive-to-create objects; creating a new one each time is the opposite of what you want there.
 
 **Example:**
 
@@ -708,11 +592,17 @@ class Booking {
 ```
 
 </details>
+
 <details><summary>
   
-### Does Spring manage the complete lifecycle of beans?
+### [Medium] Does Spring manage the complete lifecycle of beans?
 </summary>
-Yes, Spring manages the complete lifecycle of beans within its container. The Spring container, also known as the Spring IoC (Inversion of Control) container, takes responsibility for the creation, initialization, dependency injection, and destruction of beans.
+
+**For singleton beans, yes:** Spring creates them, injects dependencies, runs initialization callbacks, applies post-processors and proxies, and calls destruction callbacks when the context closes.
+
+**For prototype beans, no:** Spring creates and initialises them, then hands them over and forgets them. It never calls their `@PreDestroy` / `destroy()` methods. If a prototype holds resources (connections, files, threads), the code that obtained it must release them.
+
+Request and session scoped beans are destroyed when the request ends or the session expires.
 
 **Example:**
 
@@ -728,80 +618,57 @@ class TempFileWriter {
 ```
 
 </details>
+
 <details><summary>
   
-### What is an inner bean?
+### [Medium] What is an inner bean?
 </summary>
-In Spring, an inner bean is a bean that is defined within the scope of another bean's definition. It is used when a bean is only required by the enclosing bean and does not need to be accessed or referenced by other parts of the application.
 
-Here are some key points about inner beans:
+An **inner bean** is a bean defined **inside** another bean's definition and used only as that bean's dependency. It has no meaningful name, can't be injected anywhere else, and is always created with its outer bean (its scope is ignored).
 
-**1. Scoped within Enclosing Bean:** An inner bean's scope is limited to the enclosing bean that contains its definition. It cannot be referenced or accessed from outside the enclosing bean.
+XML (where the term comes from):
 
-**2. No Explicit Bean ID:** Inner beans do not require an explicit bean ID since they are only used within the context of the enclosing bean. They are identified by their association with the enclosing bean.
-
-**3. Definition Inside Enclosing Bean:** The definition of an inner bean is declared directly inside the XML-based or Java-based configuration of the enclosing bean. It is typically defined as a nested <bean> element within the enclosing bean's configuration.
-
-Example of inner bean declaration in XML-based configuration:
-
-```
-<bean id="enclosingBean" class="com.example.EnclosingBean">
-    <property name="innerBean">
-        <bean class="com.example.InnerBean">
-            <!-- Inner bean properties and configuration -->
-        </bean>
-    </property>
+```xml
+<bean id="orderService" class="com.example.OrderService">
+	<property name="pricingStrategy">
+		<bean class="com.example.FestivePricing"/>   <!-- inner bean: only orderService uses it -->
+	</property>
 </bean>
 ```
 
-Example of inner bean declaration in Java-based configuration:
+Java configuration equivalent – create the object inside the `@Bean` method instead of declaring a separate bean:
 
-```
+```java
 @Configuration
-public class EnclosingBeanConfig {
-    @Bean
-    public EnclosingBean enclosingBean() {
-        return new EnclosingBean() {
-            @Bean
-            public InnerBean innerBean() {
-                // Inner bean configuration
-                return new InnerBean();
-            }
-        };
-    }
+public class AppConfig {
+	@Bean
+	public OrderService orderService() {
+		return new OrderService(new FestivePricing());   // not registered as its own bean
+	}
 }
 ```
 
-**4. Dependency Injection:** Inner beans are primarily used to fulfill the dependencies of the enclosing bean. They can be referenced and injected into the properties or constructor parameters of the enclosing bean.
+If the dependency should be shared, injectable or proxied (e.g. needs `@Transactional`), declare it as a normal top-level bean instead.
 
-Example of inner bean injection in XML-based configuration:
+</details>
 
-```
-<bean id="enclosingBean" class="com.example.EnclosingBean">
-    <property name="innerBean" ref="innerBean" />
-</bean>
+<details><summary>
+  
+### [Hard] What information does the bean definition contain?
+</summary>
 
-<bean id="innerBean" class="com.example.InnerBean" />
-```
+A `BeanDefinition` is Spring's recipe for creating a bean. It holds:
 
-Example of inner bean injection in Java-based configuration:
+- **Bean class** (or a factory bean + factory method that produces it)
+- **Bean name** and **aliases**
+- **Scope** (singleton, prototype, request, session, …)
+- **Constructor arguments** and **property values** (literal values or references to other beans)
+- **Autowire mode** and whether it's an autowire **candidate** / **primary**
+- **Lazy-init** flag
+- **`dependsOn`** (beans that must be created first)
+- **Init and destroy method names**
+- **Role**, description, and whether it's **abstract** (a template for child definitions)
 
-```
-@Configuration
-public class EnclosingBeanConfig {
-    @Bean
-    public EnclosingBean enclosingBean(InnerBean innerBean) {
-        EnclosingBean bean = new EnclosingBean();
-        bean.setInnerBean(innerBean);
-        return bean;
-    }
+Bean definitions come from component scanning, `@Bean` methods, XML or programmatic registration. `BeanFactoryPostProcessor`s can modify them **before** any bean is created (that's how `${...}` placeholders are resolved).
 
-    @Bean
-    public InnerBean innerBean() {
-        return new InnerBean();
-    }
-}
-```
-
-Inner beans provide a way to encapsulate bean definitions and limit their scope to the context of the enclosing bean. They are useful in cases where a bean is only needed internally and does not need to be accessed or managed independently by other components.
 </details>
