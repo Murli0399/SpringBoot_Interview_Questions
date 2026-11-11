@@ -1,3 +1,5 @@
+# Configuration and component scan
+
 <details><summary>
   
 ### [Easy] What is a configuration file?

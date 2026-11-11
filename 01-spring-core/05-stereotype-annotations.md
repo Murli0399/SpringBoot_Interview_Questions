@@ -1,3 +1,5 @@
+# Stereotype annotations
+
 <details><summary>
   
 ### [Easy] What is the purpose of @Component annotation?

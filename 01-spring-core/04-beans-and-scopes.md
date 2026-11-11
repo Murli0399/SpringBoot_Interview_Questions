@@ -1,3 +1,5 @@
+# Beans and scopes
+
 <details><summary>
   
 ### [Easy] What are beans in Spring?

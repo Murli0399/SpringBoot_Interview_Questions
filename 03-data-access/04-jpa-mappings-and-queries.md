@@ -1,3 +1,5 @@
+# JPA mappings and queries
+
 <details><summary>
 
 ## [Medium] How do you map one-to-many and many-to-one relationships in JPA?

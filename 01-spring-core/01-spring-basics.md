@@ -1,3 +1,5 @@
+# Spring basics
+
 <details><summary>
 
 ## [Easy] Which Java versions do Spring 5, 6 and 7 require?
