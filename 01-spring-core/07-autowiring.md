@@ -1,7 +1,10 @@
+# Autowiring
+
 <details><summary>
 
-## What is autowiring in Spring?
+## [Easy] What is autowiring in Spring?
 </summary>
+
 In Spring, autowiring is a feature that allows automatic dependency injection. It enables the framework to automatically wire (or connect) collaborating beans based on their types. By using autowiring, developers can avoid explicit configuration of dependencies and let Spring handle the wiring process behind the scenes.
 
 **Example:**
@@ -15,81 +18,12 @@ class OrderService {
 ```
 
 </details>
+
 <details><summary>
 
-## What are the different modes of autowiring in Spring?
+## [Easy] What is autowiring by constructor?
 </summary>
-In Spring, there are several modes of autowiring that determine how dependencies are resolved and injected. The different modes of autowiring are:
 
-**1. No Autowiring (autowire="no"):** This is the default mode where no autowiring occurs. Dependencies need to be explicitly configured using XML or annotations.
-
-**2. By Name (autowire="byName"):** Autowiring is done by matching the dependency name with a bean name in the container. The names must be the same for successful autowiring.
-
-**3. By Type (autowire="byType"):** Autowiring is done by matching the dependency type with a bean type in the container. If there is a single bean of the required type, it will be autowired. If there are multiple beans of the same type, an exception will be thrown.
-
-**4. Constructor (autowire="constructor"):** Autowiring is done by matching constructor arguments with the beans available in the container. Spring tries to find a constructor with matching argument types, and if found, it autowires the dependencies.
-
-**5. By Annotation (@Autowired, @Inject, @Resource):** Autowiring is done based on annotations placed on fields, methods, or constructors. These annotations indicate the dependencies to be injected, and Spring resolves and injects them accordingly.
-
-Each autowiring mode has its advantages and considerations, and the appropriate mode should be chosen based on the specific requirements of the application.
-
-**Example:**
-
-```xml
-<!-- XML modes: no (default), byName, byType, constructor -->
-<bean id="orderService" class="com.example.OrderService" autowire="constructor"/>
-```
-
-```java
-// Annotation style (modern): by type, narrowed by name with @Qualifier
-@Service
-class OrderService {
-    OrderService(@Qualifier("mysqlOrderRepository") OrderRepository repo) { }
-}
-```
-
-</details>
-<details><summary>
-
-## How does autowiring internally work?
-</summary>
-Internally, autowiring in Spring works through a process called Dependency Injection (DI). When autowiring is enabled for a bean, Spring container examines the dependencies of that bean and tries to fulfill them automatically.
-
-Here is a simplified overview of how autowiring works internally in Spring:
-
-**1. Scanning for Beans:** Spring scans the application context or configuration files to identify beans that are candidates for autowiring. This is usually done during the application startup or when the container is refreshed.
-
-**2. Dependency Resolution:** For each bean with autowiring enabled, Spring analyzes its dependencies (fields, methods, or constructor parameters) to determine how they should be resolved.
-
-**3. Dependency Matching:** Spring matches the dependencies of the bean with the available beans in the container based on the autowiring mode. It may use the type, name, or annotations to find suitable beans.
-
-**4. Dependency Injection:** Once a suitable bean is found, Spring injects it into the dependent bean. This can be done using reflection, where the appropriate field, method, or constructor is accessed and the dependency is set.
-
-**5. Lifecycle Management:** After all dependencies are resolved and injected, Spring manages the lifecycle of the beans. It initializes the beans if necessary, applies any configured post-processors, and manages their destruction when the application context is closed.
-
-It's important to note that autowiring relies on the configuration of beans and their dependencies. The container must have sufficient information to determine how to wire the beans together. This information can be provided through XML configuration, Java-based configuration, or annotations such as **@Autowired**.
-
-Overall, autowiring simplifies the configuration and wiring process by reducing the need for explicit bean wiring, leading to more concise and maintainable code.
-
-**Example:**
-
-```java
-// AutowiredAnnotationBeanPostProcessor inspects each bean for @Autowired/@Inject/@Value.
-// For each injection point it asks the container for beans of the required type:
-//   0 matches -> NoSuchBeanDefinitionException (unless required=false/Optional)
-//   1 match   -> injected
-//   >1        -> narrowed by @Primary, @Qualifier, then parameter/field name
-@Service
-class Report {
-    Report(Optional<Cache> cache) { }   // Optional: no failure if no Cache bean exists
-}
-```
-
-</details>
-<details><summary>
-
-## What is autowiring by constructor?
-</summary>
 Autowiring by constructor is a mode of autowiring in Spring where dependencies are resolved and injected through the constructor of a class. It allows Spring to automatically identify the appropriate constructor for dependency injection based on the types of the constructor arguments.
 
 In this mode, you annotate the constructor of a class with **@Autowired** or specify **autowire="constructor"** in XML configuration. When the bean is created, Spring analyzes the constructor arguments and tries to find matching beans in the container based on their types. If a suitable bean is found, it is automatically injected into the constructor parameter.
@@ -119,96 +53,10 @@ class InvoiceService {
 ```
 
 </details>
+
 <details><summary>
 
-## What are the limitations of autowiring?
-</summary>
-While autowiring in Spring offers convenience and flexibility, there are some limitations to consider:
-
-**1. Ambiguity:** Autowiring can become ambiguous when multiple beans of the same type are present in the container. In such cases, Spring may not be able to determine which bean to inject, leading to an exception. Additional qualifiers or annotations can be used to resolve the ambiguity.
-
-**2. Limited Control:** Autowiring reduces explicit configuration, but it also reduces control over the wiring process. If fine-grained control is required, explicit configuration using XML or annotations may be more suitable.
-
-**3. Complexity and Readability:** Autowiring can make the codebase less readable and harder to understand, especially when multiple dependencies are being resolved automatically. Explicitly configuring dependencies can make the code more self-explanatory.
-
-**4. Tight Coupling:** Autowiring can introduce tight coupling between classes, as dependencies are resolved automatically based on types. This can make the codebase more difficult to maintain and test.
-
-**5. Runtime Errors:** Since autowiring is resolved at runtime, errors related to missing or incompatible dependencies may only be discovered during runtime. This can lead to potential runtime errors and make it harder to catch them during development.
-
-**6. Limited Support for Non-Bean Dependencies:** Autowiring is primarily designed for resolving and injecting Spring-managed beans. It may not be suitable for resolving non-bean dependencies or dependencies that are managed outside of the Spring container.
-
-It's important to consider these limitations and evaluate the trade-offs before deciding to use autowiring in Spring. Depending on the complexity and specific requirements of the application, explicit configuration or a combination of autowiring and explicit wiring may be more appropriate.
-
-**Example:**
-
-```java
-interface Notifier { }
-@Component class Email implements Notifier { }
-@Component class Sms implements Notifier { }
-
-@Service
-class Alerts {
-    Alerts(Notifier n) { }   // fails: NoUniqueBeanDefinitionException (2 candidates)
-}
-// Fixes: @Primary on one, @Qualifier("sms") at the injection point, or inject List<Notifier>.
-// Primitives/Strings can't be autowired by type - use @Value("${prop}").
-```
-
-</details>
-<details><summary>
-
-## Is it possible to exclude a bean from being autowired?
-</summary>
-Yes, it is possible to exclude a bean from being autowired in Spring. There are a couple of approaches to achieve this:
-
-### 1. Using @Autowired with required attribute:
-By default, when you use @Autowired annotation without specifying the required attribute, the dependency is considered as required and must be autowired. However, you can set the required attribute to false to indicate that the dependency is optional. In this case, if the dependency cannot be resolved, Spring will simply leave it as null without raising an exception.
-
-Example:
-
-```
-@Autowired(required = false)
-private SomeBean someBean;
-```
-
-### 2. Using @Qualifier:
-The @Qualifier annotation can be used in combination with @Autowired to specify the specific bean to be autowired when multiple beans of the same type are available in the container. By specifying the desired bean's qualifier value, you can exclude other beans from being autowired.
-
-Example:
-
-```
-@Autowired
-@Qualifier("desiredBean")
-private SomeBean someBean;
-```
-
-### 3. Explicitly configuring dependencies:
-Instead of relying on autowiring, you can explicitly configure the dependencies of a bean using XML configuration or annotations. This approach gives you full control over which dependencies are injected and allows you to exclude specific beans from being autowired.
-
-Example (XML configuration):
-
-```
-<bean id="myBean" class="com.example.MyBean">
-  <property name="someBean" ref="specificBean" />
-</bean>
-```
-
-Example (Java configuration with @Bean):
-
-```
-@Bean
-public MyBean myBean() {
-  MyBean myBean = new MyBean();
-  myBean.setSomeBean(specificBean());
-  return myBean;
-}
-```
-
-By using these approaches, you can exclude a specific bean from being autowired or provide more fine-grained control over the autowiring process in Spring.
-</details>
-<details><summary>
-
-## What does the @Autowired annotation do?
+## [Easy] What does the @Autowired annotation do?
 </summary>
 
 The **@Autowired** annotation in Spring is used to mark a dependency for automatic dependency injection. It allows Spring to automatically wire (or inject) the appropriate bean into the annotated field, method, or constructor.
@@ -250,9 +98,10 @@ class ReportService {
 ```
 
 </details>
+
 <details><summary>
 
-## What happens if we specify an interface instead of a class in getBean() method?
+## [Easy] What happens if we specify an interface instead of a class in getBean() method?
 </summary>
 
 In the context of Java programming, the **getBean()** method is typically associated with dependency injection frameworks like Spring. It is commonly used to retrieve an instance of a class from the framework's container based on the specified class or interface.
@@ -284,21 +133,153 @@ PaymentGateway g = ctx.getBean(PaymentGateway.class);   // works: returns Razorp
 ```
 
 </details>
+
 <details><summary>
 
-## Why do we need a no-arg constructor?
+## [Medium] What are the different modes of autowiring in Spring?
 </summary>
-A no-arg constructor (a constructor without any arguments) is often needed for various reasons, including:
 
-**1. Object Initialization:** A no-arg constructor allows for the initialization of an object with default values. It ensures that an object can be created and properly initialized even when no specific arguments are provided.
+The classic modes come from XML configuration (`autowire="..."` on `<bean>`):
 
-**2. Serialization and Deserialization:** Many serialization frameworks and libraries require a no-arg constructor in order to create objects during the deserialization process. The absence of a no-arg constructor can result in errors or data loss when serializing or deserializing objects.
+1. **`no`** (default) – no autowiring; dependencies are wired explicitly with `<property>` / `<constructor-arg>`.
+2. **`byName`** – a property is wired to the bean whose **name** matches the property name (via setters).
+3. **`byType`** – a property is wired to the single bean of matching **type**; more than one candidate is an error.
+4. **`constructor`** – like `byType`, but for constructor arguments.
 
-**3. Reflection and Instantiation:** Some frameworks and libraries use reflection to dynamically create instances of classes. In such cases, a no-arg constructor is necessary because the reflection mechanism typically relies on being able to create an instance of a class without passing any arguments.
+(`autodetect` existed in Spring 2.x and was removed.)
 
-**4. Framework and Dependency Injection:** Certain frameworks and dependency injection containers rely on the no-arg constructor to create and manage instances of classes. They instantiate objects through reflection and populate them with dependencies, often through setter or field injection. A no-arg constructor is essential for these frameworks to create instances of classes and inject the required dependencies.
+**Annotation-based autowiring** (`@Autowired`, `@Inject`, `@Resource`) is what modern Spring uses. `@Autowired`/`@Inject` resolve **by type**, then narrow with `@Qualifier`/`@Primary` and finally the parameter name; `@Resource` resolves **by name** first. With a single constructor, Spring autowires it without any annotation.
 
-Overall, a no-arg constructor provides a default way to create an object, supports serialization and deserialization, enables reflection-based instantiation, and facilitates integration with various frameworks and libraries that rely on constructor invocation without arguments.
+**Example:**
+
+```xml
+<!-- XML modes: no (default), byName, byType, constructor -->
+<bean id="orderService" class="com.example.OrderService" autowire="constructor"/>
+```
+
+```java
+// Annotation style (modern): by type, narrowed by name with @Qualifier
+@Service
+class OrderService {
+    OrderService(@Qualifier("mysqlOrderRepository") OrderRepository repo) { }
+}
+```
+
+</details>
+
+<details><summary>
+
+## [Medium] How does autowiring internally work?
+</summary>
+
+Internally, autowiring in Spring works through a process called Dependency Injection (DI). When autowiring is enabled for a bean, Spring container examines the dependencies of that bean and tries to fulfill them automatically.
+
+Here is a simplified overview of how autowiring works internally in Spring:
+
+**1. Scanning for Beans:** Spring scans the application context or configuration files to identify beans that are candidates for autowiring. This is usually done during the application startup or when the container is refreshed.
+
+**2. Dependency Resolution:** For each bean with autowiring enabled, Spring analyzes its dependencies (fields, methods, or constructor parameters) to determine how they should be resolved.
+
+**3. Dependency Matching:** Spring matches the dependencies of the bean with the available beans in the container based on the autowiring mode. It may use the type, name, or annotations to find suitable beans.
+
+**4. Dependency Injection:** Once a suitable bean is found, Spring injects it into the dependent bean. This can be done using reflection, where the appropriate field, method, or constructor is accessed and the dependency is set.
+
+**5. Lifecycle Management:** After all dependencies are resolved and injected, Spring manages the lifecycle of the beans. It initializes the beans if necessary, applies any configured post-processors, and manages their destruction when the application context is closed.
+
+It's important to note that autowiring relies on the configuration of beans and their dependencies. The container must have sufficient information to determine how to wire the beans together. This information can be provided through XML configuration, Java-based configuration, or annotations such as **@Autowired**.
+
+Overall, autowiring simplifies the configuration and wiring process by reducing the need for explicit bean wiring, leading to more concise and maintainable code.
+
+**Example:**
+
+```java
+// AutowiredAnnotationBeanPostProcessor inspects each bean for @Autowired/@Inject/@Value.
+// For each injection point it asks the container for beans of the required type:
+//   0 matches -> NoSuchBeanDefinitionException (unless required=false/Optional)
+//   1 match   -> injected
+//   >1        -> narrowed by @Primary, @Qualifier, then parameter/field name
+@Service
+class Report {
+    Report(Optional<Cache> cache) { }   // Optional: no failure if no Cache bean exists
+}
+```
+
+</details>
+
+<details><summary>
+
+## [Medium] What are the limitations of autowiring?
+</summary>
+
+1. **Ambiguity:** several beans of the same type cause `NoUniqueBeanDefinitionException` until you add `@Primary`, `@Qualifier`, or inject a `List`/`Map` of them.
+2. **Missing beans fail at startup:** `NoSuchBeanDefinitionException` (good – early failure – but you must understand why a bean wasn't created, e.g. a condition or package not scanned).
+3. **Simple values can't be autowired by type:** `String`, `int` and other configuration values need `@Value` or `@ConfigurationProperties`.
+4. **Less explicit wiring:** it isn't visible in one place which implementation is injected, so very large applications can feel "magical". Constructor injection and clear package structure keep it understandable.
+5. **Only Spring-managed objects** can be injected: objects you create with `new` don't get autowired.
+6. **Overuse of field injection** hides dependencies and makes classes hard to test.
+
+None of these make autowiring tightly coupled – injecting by interface is still loose coupling.
+
+**Example:**
+
+```java
+interface Notifier { }
+@Component class Email implements Notifier { }
+@Component class Sms implements Notifier { }
+
+@Service
+class Alerts {
+    Alerts(Notifier n) { }   // fails: NoUniqueBeanDefinitionException (2 candidates)
+}
+// Fixes: @Primary on one, @Qualifier("sms") at the injection point, or inject List<Notifier>.
+// Primitives/Strings can't be autowired by type - use @Value("${prop}").
+```
+
+</details>
+
+<details><summary>
+
+## [Medium] Is it possible to exclude a bean from being autowired?
+</summary>
+
+Yes – you can mark a bean as **not an autowire candidate**. It still exists and can be fetched by name, but it won't be injected when Spring resolves a dependency by type:
+
+```java
+@Configuration
+class DataConfig {
+	@Bean(autowireCandidate = false)       // Spring 5.1+
+	DataSource reportingDataSource() { return new HikariDataSource(); }
+
+	@Bean
+	@Primary
+	DataSource mainDataSource() { return new HikariDataSource(); }
+}
+```
+
+```xml
+<bean id="legacyClient" class="com.example.LegacyClient" autowire-candidate="false"/>
+```
+
+Related techniques:
+- `@Primary` on the bean you *do* want, so others are ignored by default.
+- `@Qualifier` at the injection point to choose explicitly.
+- Exclude a class from component scanning entirely: `@ComponentScan(excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = LegacyClient.class))`.
+- `@Autowired(required = false)` makes a dependency optional, but that doesn't exclude any bean.
+
+</details>
+
+<details><summary>
+
+## [Medium] Why do we need a no-arg constructor?
+</summary>
+
+Spring itself **doesn't need** a no-arg constructor: with constructor injection, Spring calls your constructor with the required beans (if there are several constructors, mark the one to use with `@Autowired`). A no-arg constructor is needed when Spring has **no other way to create the object** (e.g. setter/field injection only).
+
+Where a no-arg constructor *is* commonly required:
+- **JPA/Hibernate entities:** the JPA spec requires a no-arg constructor (it may be `protected`) so the provider can instantiate entities and create proxies.
+- **Jackson deserialization:** needs a no-arg constructor plus setters/fields, unless you use `@JsonCreator`, records, or the parameter-names module (Spring Boot includes it).
+- **JavaBeans conventions** and some older frameworks/libraries that create objects reflectively.
+- **Java serialization:** the class itself doesn't need one, but its first **non-serializable superclass** must have an accessible no-arg constructor; `Externalizable` classes need a public one.
 
 **Example:**
 

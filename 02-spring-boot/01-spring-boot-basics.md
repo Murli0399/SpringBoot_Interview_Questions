@@ -1,7 +1,10 @@
+# Spring Boot basics
+
 <details><summary>
 
-## What is Spring Boot?
+## [Easy] What is Spring Boot?
 </summary>
+
 Spring Boot is an open-source Java-based framework that simplifies the development of standalone, production-grade applications. It is a part of the broader Spring Framework ecosystem, designed to provide a streamlined way to create Java applications with minimal configuration and boilerplate code.
 
 Spring Boot aims to address the complexity often associated with setting up and configuring Spring-based applications. It adopts an opinionated approach by providing defaults and auto-configuration, allowing developers to quickly build applications with sensible defaults while still retaining the flexibility to customize and override configurations when needed.
@@ -12,7 +15,7 @@ Key features and benefits of Spring Boot include:
 
 **2. Standalone applications:** Spring Boot applications are self-contained and can be deployed as standalone JAR files, which simplifies deployment and eliminates the need for setting up complex application servers.
 
-**3. Embedded web servers:** Spring Boot provides support for embedding servlet containers like Apache Tomcat, Jetty, or Undertow, allowing developers to create web applications without the need for deploying them on a separate server.
+**3. Embedded web servers:** Spring Boot provides support for embedding servlet containers like Apache Tomcat (default) or Jetty (Undertow too, up to Boot 3), allowing developers to create web applications without the need for deploying them on a separate server.
 
 **4. Dependency management:** Spring Boot manages dependencies for you, ensuring compatibility and reducing conflicts by providing a curated list of compatible versions for popular libraries.
 
@@ -40,10 +43,12 @@ class HelloController {
 ```
 
 </details>
+
 <details><summary>
 
-## Why do we need Spring Boot?
+## [Easy] Why do we need Spring Boot?
 </summary>
+
 We need Spring Boot because it simplifies the development of Java applications by providing defaults, auto-configuration, and an opinionated approach. It reduces the complexity of setting up and configuring Spring applications, allows for standalone deployment, and offers features like embedded web servers, dependency management, and developer tools. Overall, Spring Boot enhances productivity, promotes best practices, and is widely used for developing microservices, web applications, and RESTful APIs in the Java ecosystem.
 
 **Example:**
@@ -64,29 +69,20 @@ spring.datasource.url=jdbc:mysql://localhost:3306/app
 Boot auto-configures the `DataSource` (HikariCP), `EntityManagerFactory`, transaction manager and repositories.
 
 </details>
+
 <details><summary>
 
-## How can a Spring Boot application be created?
+## [Easy] How can a Spring Boot application be created?
 </summary>
-To create a Spring Boot application, you can follow these steps:
 
-**1. Set up your development environment:** Ensure that you have Java Development Kit (JDK) installed on your system. You can download and install the latest JDK version from the Oracle or OpenJDK website. Additionally, you will need a compatible Integrated Development Environment (IDE) such as IntelliJ IDEA, Eclipse, or Spring Tool Suite (STS).
-
-**2. Choose a build tool:** Spring Boot supports popular build tools like Apache Maven and Gradle. Choose either Maven or Gradle based on your preference and familiarity.
-
-**3. Create a new project:** Use your chosen build tool to create a new project. If you're using Maven, you can use the Maven archetype spring-boot-starter-parent as a base for your project. Alternatively, you can use the Spring Initializr web tool (start.spring.io) to generate a project structure with predefined dependencies.
-
-**4. Configure your project:** Open the project in your IDE and configure any additional dependencies or plugins you may require. For example, if you're building a web application, you would include the spring-boot-starter-web dependency.
-
-**5. Create application entry point:** In your project, create a Java class with a main method. Annotate the class with @SpringBootApplication, which combines several Spring annotations into one. This class will serve as the entry point for your Spring Boot application.
-
-**6. Implement your application logic:** Start developing your application by creating controllers, services, repositories, and other components as per your requirements. Use Spring annotations such as @Controller, @Service, and @Repository to define these components and enable Spring's dependency injection.
-
-**7. Run the application:** Once you have implemented your application logic, you can run the Spring Boot application. You can run it directly from your IDE by executing the main method in your entry point class. Alternatively, you can build an executable JAR file using your build tool and run it using the command-line interface.
-
-**8. Verify the application:** After the application starts, you can access it through the specified HTTP endpoints or by visiting the defined URLs in a web browser. You can also use tools like Postman to test your RESTful APIs.
-
-This is a basic outline of creating a Spring Boot application. You can explore additional features and functionalities provided by Spring Boot, such as database integration, security, and caching, to enhance your application further. The official Spring Boot documentation provides comprehensive guides and examples for building different types of applications.
+1. **Install a JDK** – Java 17 or later for Spring Boot 3 and 4.
+2. **Generate the project** with **Spring Initializr** (start.spring.io, or built into IntelliJ IDEA / VS Code / STS): choose Maven or Gradle, Java version, Boot version and dependencies such as Web, Data JPA, Validation, Actuator.
+3. The generated `pom.xml` uses **`spring-boot-starter-parent` as its parent POM** (it is a parent, not an archetype) and includes the chosen starters plus `spring-boot-maven-plugin`.
+4. The generated main class is annotated with **`@SpringBootApplication`** and calls `SpringApplication.run(App.class, args)`.
+5. **Add code** in sub-packages of the main class's package: controllers, services, repositories, configuration.
+6. **Configure** in `application.yml` / `application.properties`.
+7. **Run** from the IDE, with `./mvnw spring-boot:run`, or build a JAR (`./mvnw package`) and run `java -jar target/app.jar`.
+8. **Test** endpoints with curl/Postman and write tests with `@SpringBootTest`, `@WebMvcTest`, etc.
 
 **Example:**
 
@@ -102,10 +98,12 @@ unzip order-service.zip && cd order-service && ./mvnw spring-boot:run
 Or use start.spring.io in the browser, or IntelliJ's "New Project → Spring Boot".
 
 </details>
+
 <details><summary>
 
-## What is Spring Initializr?
+## [Easy] What is Spring Initializr?
 </summary>
+
 Spring Initializr is a web-based tool provided by the Spring team that helps in creating and generating the initial structure of a new Spring Boot project. It offers a user-friendly interface where developers can specify project metadata, dependencies, and settings, and then generates a project skeleton with the necessary files and configurations.
 
 Key features of Spring Initializr include:
@@ -129,10 +127,12 @@ curl https://start.spring.io/starter.zip -d dependencies=web,actuator -d type=ma
 It generates the project skeleton: `pom.xml` with starters, the main class, `application.properties` and a test class.
 
 </details>
+
 <details><summary>
 
-## What are the components of Spring Boot?
+## [Easy] What are the components of Spring Boot?
 </summary>
+
 The components of Spring Boot include:
 
 **1. Spring Boot Starter:** Starter dependencies are a set of curated dependencies that provide a specific functionality or feature to a Spring Boot application. They simplify dependency management by bringing in all the required dependencies and configurations for a particular feature, such as web, data access, security, testing, etc.
@@ -143,7 +143,7 @@ The components of Spring Boot include:
 
 **4. Spring Boot CLI:** The Spring Boot Command-Line Interface (CLI) allows developers to quickly create and prototype Spring Boot applications using a command-line tool. It provides a faster way to develop and test Spring Boot applications without requiring the overhead of a full-fledged IDE.
 
-**5. Embedded web servers:** Spring Boot supports embedding servlet containers like Apache Tomcat, Jetty, and Undertow directly into the application. This allows developers to create standalone web applications that can be run without the need for deploying them on a separate web server.
+**5. Embedded web servers:** Spring Boot supports embedding servlet containers like Apache Tomcat (default) and Jetty (Undertow too, up to Boot 3) directly into the application. This allows developers to create standalone web applications that can be run without the need for deploying them on a separate web server.
 
 **6. DevTools:** Spring Boot DevTools is a set of development tools that enhance productivity during the development process. It provides features like automatic application restart, live reloading of changes, and detailed error reporting, improving the developer's experience and speeding up the development cycle.
 
@@ -161,9 +161,10 @@ management.endpoints.web.exposure.include=health,info,metrics
 ```
 
 </details>
+
 <details><summary>
 
-## What is the purpose of @SpringBootApplication annotation?
+## [Easy] What is the purpose of @SpringBootApplication annotation?
 </summary>
 
 The **@SpringBootApplication** annotation is a combination of three annotations: **@Configuration**, **@EnableAutoConfiguration**, and **@ComponentScan**. It is a convenience annotation provided by Spring Boot to simplify the configuration of a Spring application.
@@ -192,26 +193,19 @@ class NoDbApp { }
 ```
 
 </details>
+
 <details><summary>
 
-## What is the purpose of @RestController annotation in Spring Boot?
+## [Easy] What is the purpose of @RestController annotation in Spring Boot?
 </summary>
 
-The **@RestController** annotation is a specialized version of the **@Controller** annotation in Spring Boot. It is used to mark a class as a RESTful controller, specifically designed for building RESTful web services or APIs.
+`@RestController` comes from **Spring MVC** (Spring 4.0) and is used heavily in Spring Boot. It is `@Controller` + `@ResponseBody`:
 
-The purpose of the **@RestController** annotation is to combine the functionality of **@Controller** and **@ResponseBody**. By applying the **@RestController** annotation to a class, it indicates that the class is responsible for handling incoming HTTP requests and returning the response in a format suitable for RESTful APIs (usually JSON or XML).
+- The class is detected as a web **request handler**, and its methods are mapped with `@GetMapping`, `@PostMapping`, `@RequestMapping`, etc.
+- Every method's return value is written **directly to the HTTP response body** by an `HttpMessageConverter` (JSON via Jackson by default, XML if Jackson XML is on the classpath and the client asks for it) instead of being treated as a view name.
+- No view resolver or template is involved, which is exactly what REST APIs need.
 
-Key features and purposes of the **@RestController** annotation include:
-
-**1. Request handling:** The **@RestController** annotation enables the class to handle HTTP requests and map them to specific methods. Methods within the class are typically annotated with **@RequestMapping**, **@GetMapping**, **@PostMapping**, etc., to specify the URL mapping and HTTP methods they handle.
-
-**2. Response formatting:** The **@RestController** annotation combines the functionality of **@Controller** and **@ResponseBody**. It eliminates the need to annotate individual methods with **@ResponseBody** as it indicates that the return value of the methods should be serialized and returned directly in the response body. By default, the response is serialized as JSON, but it can be customized to support other formats like XML.
-
-**3. RESTful API development:** The primary purpose of the **@RestController** annotation is to facilitate the development of RESTful APIs. It provides a convenient and streamlined way to create endpoints that respond to HTTP requests, handle data input and output, and communicate using the HTTP protocol.
-
-**4. Simplified configuration:** Using **@RestController** in Spring Boot eliminates the need for additional configuration, such as specifying a view resolver, as it automatically configures the class to handle RESTful requests and format the responses accordingly.
-
-In summary, the **@RestController** annotation in Spring Boot simplifies the development of RESTful APIs by combining the **@Controller** and **@ResponseBody** annotations. It enables the class to handle HTTP requests, automatically serializes the return values to the appropriate format (e.g., JSON), and eliminates the need for additional configuration.
+Return a plain object for a `200 OK`, or `ResponseEntity<T>` when you need to control the status code and headers (e.g. `201 Created` with a `Location` header).
 
 **Example:**
 
@@ -226,40 +220,17 @@ class UserController {
 ```
 
 </details>
+
 <details><summary>
 
-## What is the purpose of @ConditionalOnMissingBean annotation?
+## [Easy] What is an embedded server in Spring Boot?
 </summary>
 
-The purpose of the **@ConditionalOnMissingBean** annotation is to conditionally enable a bean definition based on the absence of a specific bean in the Spring application context. If the specified bean does not exist, the annotated bean definition will be created and added to the context. However, if the specified bean already exists, the annotated bean definition will not be created.
-
-In short, **@ConditionalOnMissingBean** allows conditional bean creation based on the absence of a specific bean.
-
-**Example:**
-
-```java
-@Configuration
-class ClockConfig {
-    @Bean
-    @ConditionalOnMissingBean         // only created if the app didn't define its own Clock
-    Clock clock() { return Clock.systemUTC(); }
-}
-
-// In a test config, defining your own Clock bean makes the default back off:
-@TestConfiguration
-class FixedClock { @Bean Clock clock() { return Clock.fixed(Instant.parse("2026-01-01T00:00:00Z"), ZoneOffset.UTC); } }
-```
-
-</details>
-<details><summary>
-
-## What is an embedded server in Spring Boot?
-</summary>
 An embedded server in Spring Boot refers to the capability of running a web server directly within the Spring Boot application itself. Instead of deploying the application to an external server like Apache Tomcat or Jetty, Spring Boot provides the option to include an embedded server within the application, making it self-contained and independent of any external server installation.
 
 The embedded server acts as a lightweight servlet container that can handle HTTP requests and serve web content. It eliminates the need for manual server setup, deployment, and configuration, simplifying the deployment process and making it easier to develop and deploy Spring Boot applications.
 
-Spring Boot supports various embedded servers, including Tomcat, Jetty, and Undertow, among others. These servers are packaged as dependencies in the application, and the necessary configurations are automatically handled by Spring Boot's auto-configuration mechanism.
+Spring Boot supports various embedded servers, including Tomcat (the default) and Jetty, plus Netty for reactive WebFlux apps (Undertow was supported up to Boot 3). These servers are packaged as dependencies in the application, and the necessary configurations are automatically handled by Spring Boot's auto-configuration mechanism.
 
 When a Spring Boot application is started, the embedded server starts along with it, listening for incoming HTTP requests. The application's controllers and request mappings are processed by the embedded server, allowing it to handle and respond to web requests without the need for an external server.
 
@@ -278,60 +249,46 @@ server:
 ```
 
 </details>
+
 <details><summary>
 
-## Can we change the default embedded server to Jetty?
+## [Easy] Can we change the default embedded server to Jetty?
 </summary>
-Yes, we can change the default embedded server to Jetty in Spring Boot applications.
 
-To change the default embedded server to Jetty, you need to follow these steps:
+Yes. Exclude the default Tomcat starter from the web starter and add the Jetty starter:
 
-### 1. Add the Jetty dependency:
-In your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle), add the Jetty dependency as a runtime dependency. For Maven, you can add the following dependency:
-
-```
+```xml
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-jetty</artifactId>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+	<exclusions>
+		<exclusion>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jetty</artifactId>
 </dependency>
 ```
 
-### 2. Exclude the default embedded server:
-To avoid conflicts with the default embedded server (e.g., Tomcat), you need to exclude it from the dependencies. In your build configuration file, exclude the default embedded server dependency. For Maven, you can add the exclusion as follows:
+Boot's auto-configuration detects Jetty on the classpath and starts it instead of Tomcat. Common settings (`server.port`, SSL, compression) stay the same; Jetty-specific ones use the `server.jetty.*` prefix (e.g. `server.jetty.threads.max`).
 
-```
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-    <exclusions>
-        <exclusion>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-        </exclusion>
-    </exclusions>
-</dependency>
-```
+Note: **Undertow** was supported in Boot 2 and 3, but **Spring Boot 4 dropped Undertow** because it isn't yet compatible with Servlet 6.1. For reactive (WebFlux) apps the default server is **Netty**.
 
-### 3. Customize application properties (optional):
-If you want to customize Jetty-specific configurations, you can add them to your application.properties or application.yml file. For example, you can specify Jetty-specific properties like server port, thread pool settings, or SSL configurations.
-
-```
-server.port=8080
-# Add additional Jetty-specific configurations here
-```
-
-### 4. Build and run the application:
-After making the necessary changes, build and run your Spring Boot application. The embedded server will now be Jetty instead of the default embedded server.
-With these steps, you can change the default embedded server to Jetty in your Spring Boot application.
 </details>
+
 <details><summary>
 
-## How are Spring Boot web applications deployed?
+## [Easy] How are Spring Boot web applications deployed?
 </summary>
+
 Spring Boot web applications can be deployed in various ways, depending on the specific deployment requirements and preferences. Here are some common deployment options for Spring Boot web applications:
 
 ### 1. Standalone JAR:
-One of the key features of Spring Boot is the ability to create executable JAR files. You can build a standalone JAR file that includes all the application dependencies and an embedded server (such as Tomcat, Jetty, or Undertow). This JAR file can be executed directly using the java -jar command, and the application will start the embedded server and serve the web content.
+One of the key features of Spring Boot is the ability to create executable JAR files. You can build a standalone JAR file that includes all the application dependencies and an embedded server (such as Tomcat or Jetty). This JAR file can be executed directly using the java -jar command, and the application will start the embedded server and serve the web content.
 
 ### 2. Traditional WAR file deployment:
 If you prefer to deploy the Spring Boot application as a traditional WAR (Web Application Archive) file, you can configure the application to create a deployable WAR file instead of an executable JAR. This allows you to deploy the WAR file to a standalone servlet container like Apache Tomcat, Jetty, or others.
@@ -364,10 +321,12 @@ docker run -p 8080:8080 order-service
 Then deploy the image to Kubernetes with a Deployment, Service, liveness/readiness probes on `/actuator/health/liveness` and `/readiness`, and an HPA for autoscaling.
 
 </details>
+
 <details><summary>
 
-## What is Spring Boot Dependency Management?
+## [Easy] What is Spring Boot Dependency Management?
 </summary>
+
 Spring Boot Dependency Management is a feature that simplifies the management of dependencies in a Spring Boot application. It provides a curated list of dependencies, known as starters, which encapsulate common sets of dependencies required for specific functionalities, such as web development, data access, security, testing, and more.
 
 With Spring Boot Dependency Management, you no longer need to manually specify and manage individual dependency versions in your project. Instead, you declare the starters as dependencies in your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle), and Spring Boot takes care of managing the versions and transitive dependencies.
@@ -394,51 +353,12 @@ In summary, Spring Boot Dependency Management simplifies the management of depen
 Without the parent POM, import the BOM: `spring-boot-dependencies` with `<scope>import</scope>` in `dependencyManagement`.
 
 </details>
+
 <details><summary>
 
-## What happens when a web application is run using Spring Boot?
+## [Easy] How can the default port of the embedded tomcat server be changed?
 </summary>
-When a web application is run using Spring Boot, several key steps are executed to initialize and start the application. Here's an overview of what happens:
 
-**1. Application Startup:** The Spring Boot application starts by executing the main method in the designated main class, typically annotated with **@SpringBootApplication**. This class serves as the entry point for the application.
-
-**2. Auto-configuration:** Spring Boot's auto-configuration feature analyzes the classpath and dependencies to automatically configure the application. It detects the presence of various libraries and frameworks and applies sensible defaults and configurations based on conventions.
-
-**3. Embedded Server Initialization:** If the application includes an embedded server (such as Tomcat, Jetty, or Undertow), it is initialized and started. The embedded server provides the runtime environment for the application to handle incoming HTTP requests and serve responses.
-
-**4. Component Scanning:** Spring Boot scans the application's packages and sub-packages to identify components such as controllers, services, repositories, and other Spring-managed beans. It uses component scanning annotations like **@Component**, **@RestController**, **@Service**, etc., to detect and register these components in the application context.
-
-**5. Bean Creation and Dependency Injection:** Spring Boot creates instances of the detected beans and manages their lifecycle. It performs dependency injection, injecting dependencies into beans based on their configurations and annotations (e.g., @Autowired).
-
-**6. Request Mapping and Handling:** Spring Boot maps incoming HTTP requests to the appropriate controllers and methods based on annotations like **@RequestMapping**, **@GetMapping**, **@PostMapping**, etc. The controllers process the requests, execute business logic, interact with services and repositories, and prepare the response.
-
-**7. View Resolution (if applicable):** If the application involves rendering views, Spring Boot resolves the views based on the configured view resolver. It processes templates, combines data from the model, and generates the final HTML, JSON, or other view formats.
-
-**8. Error Handling and Exception Resolution:** Spring Boot handles exceptions and errors that occur during request processing. It maps exceptions to appropriate error codes and formats error responses to provide meaningful feedback to clients.
-
-**9. Application Lifecycle Management:** Spring Boot manages the lifecycle of the application, including initialization, configuration updates, graceful shutdown, and other management operations. It provides features like actuator endpoints for health checks, metrics, and monitoring.
-
-**10. Application Execution:** With all the components initialized and the server running, the Spring Boot application is ready to handle incoming requests. It listens for HTTP requests on the configured port and executes the appropriate controllers to process and respond to the requests.
-
-In summary, when a web application is run using Spring Boot, the framework initializes and configures the application, starts an embedded server, detects and registers components, handles incoming requests, processes business logic, and manages the application's lifecycle. Spring Boot provides a streamlined and opinionated approach to web application development, allowing developers to focus on writing business logic rather than managing low-level configurations.
-
-**Example:**
-
-```java
-SpringApplication.run(App.class, args);
-// 1. Create the environment (properties, profiles, env vars)
-// 2. Create the ApplicationContext and run component scanning
-// 3. Apply auto-configurations whose conditions match
-// 4. Create singleton beans, inject dependencies, run @PostConstruct
-// 5. Start embedded Tomcat, register DispatcherServlet
-// 6. Run CommandLineRunner/ApplicationRunner beans, publish ApplicationReadyEvent
-```
-
-</details>
-<details><summary>
-
-## How can the default port of the embedded tomcat server be changed?
-</summary>
 To change the default port of the embedded Tomcat server in a Spring Boot application, you can modify the application's configuration. Here are the steps to do so:
 
 - Open the application.properties file or create one if it doesn't exist in your project's src/main/resources directory.
@@ -459,45 +379,37 @@ Upon restart, the embedded Tomcat server will start and listen on the specified 
 
 You can also specify the port number through other means such as command-line arguments, system properties, or environment variables. However, using the server.port property in application.properties is the most common and straightforward approach.
 </details>
+
 <details><summary>
 
-## How can the default web server in a Spring Boot application be disabled?
+## [Easy] How can the default web server in a Spring Boot application be disabled?
 </summary>
-To disable the default web server in a Spring Boot application, you can exclude the embedded server dependency from your project's dependencies. Here's how you can do it:
 
-- 1. Open your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle).
+Tell Spring Boot not to start a web server:
 
-- 2. Locate the dependency related to the embedded server you want to disable. For example, if you want to disable the embedded Tomcat server, the dependency might look like this in Maven:
-
-```
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-tomcat</artifactId>
-</dependency>
+```yaml
+spring:
+  main:
+    web-application-type: none     # options: servlet, reactive, none
 ```
 
-- 3. Exclude the embedded server dependency by adding the exclude configuration. Modify the dependency declaration to exclude the embedded server artifact. For example, in Maven:
+or in code:
 
-```
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-tomcat</artifactId>
-    <exclusions>
-        <exclusion>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-        </exclusion>
-    </exclusions>
-</dependency>
+```java
+new SpringApplicationBuilder(App.class)
+	.web(WebApplicationType.NONE)
+	.run(args);
 ```
 
-- 4. Save the build configuration file.
+Alternatively, don't include `spring-boot-starter-web` / `spring-boot-starter-webflux` at all. Boot then starts as a plain (non-web) application, which is the right setup for batch jobs, Kafka consumers, CLI tools and scheduled workers. Excluding only the Tomcat JAR while keeping Spring MVC on the classpath leads to startup errors, so that is not the way to do it.
 
-By excluding the embedded server dependency, you effectively disable the default web server in your Spring Boot application. You can then use alternative deployment options, such as deploying your application to an external server or using a different embedded server implementation if needed. Keep in mind that if you disable the default web server, you should handle the HTTP request handling and routing through an alternative mechanism or framework.
+To use a different port instead, set `server.port`; `server.port=0` picks a random free port (useful in tests).
+
 </details>
+
 <details><summary>
 
-## What are Spring Boot starter projects?
+## [Easy] What are Spring Boot starter projects?
 </summary>
 
 Spring Boot starter projects are a set of curated dependencies bundled together to provide a convenient way to include commonly used functionality in Spring Boot applications. They simplify dependency management and configuration by offering a cohesive set of dependencies for specific use cases or technologies.
@@ -506,7 +418,7 @@ Each starter project focuses on a particular area or feature of application deve
 
 Using a starter project involves adding a single dependency to your project, which automatically brings in all the required dependencies for the chosen functionality. This simplifies the setup process, as you don't need to manually identify and add individual dependencies. Spring Boot starters also handle the version management of the dependencies, ensuring compatibility and reducing the chances of version conflicts.
 
-For example, if you are building a web application, you can include the spring-boot-starter-web starter project. It includes dependencies for web-related functionality like embedded server (Tomcat, Jetty, or Undertow), Spring MVC, and other related libraries. By adding this starter dependency to your project, you get all the necessary dependencies for web development without having to specify each one individually.
+For example, if you are building a web application, you can include the spring-boot-starter-web starter project. It includes dependencies for web-related functionality like embedded server (Tomcat or Jetty), Spring MVC, and other related libraries. By adding this starter dependency to your project, you get all the necessary dependencies for web development without having to specify each one individually.
 
 Starter projects are an essential aspect of Spring Boot's convention-over-configuration approach, enabling developers to quickly get started with specific functionalities and focus more on application development rather than managing dependencies and configurations.
 
@@ -523,9 +435,10 @@ Starter projects are an essential aspect of Spring Boot's convention-over-config
 Common starters: `-web`, `-data-jpa`, `-security`, `-validation`, `-actuator`, `-test`, `-data-redis`, `-cache`, plus `spring-kafka`.
 
 </details>
+
 <details><summary>
 
-## What is spring-boot-starter-parent?
+## [Easy] What is spring-boot-starter-parent?
 </summary>
 
 **spring-boot-starter-parent** is a special starter project in Spring Boot that provides a parent POM (Project Object Model) for Maven-based projects. It defines a consistent set of configurations and dependencies that are inherited by the child projects.
@@ -557,24 +470,12 @@ In summary, spring-boot-starter-parent is a special starter project that provide
 It provides dependency versions (BOM), the Java version and UTF-8 encoding defaults, resource filtering and plugin configuration (`spring-boot-maven-plugin`, Surefire).
 
 </details>
+
 <details><summary>
 
-## Can Spring Boot be used for applications not built using the Spring framework?
+## [Easy] How can we connect Spring Boot with databases?
 </summary>
-Yes, Spring Boot can be used for applications not built using the Spring framework. While Spring Boot is designed to simplify the development of Spring-based applications, it is not limited to only Spring projects.
 
-Spring Boot provides a standalone runtime environment and various features that can be beneficial for any Java-based application, regardless of whether it uses the Spring framework or not. Some of the features provided by Spring Boot, such as auto-configuration, embedded servers, dependency management, externalized configuration, and production-ready monitoring, can be valuable for non-Spring applications as well.
-
-You can leverage Spring Boot's features and capabilities by including it as a dependency in your project and using its various libraries and utilities. For example, you can use Spring Boot's embedded server (Tomcat, Jetty, or Undertow) to simplify the deployment of your application, or you can utilize Spring Boot's externalized configuration support for managing your application's settings.
-
-However, it's important to note that some Spring Boot features may be more relevant and useful in the context of Spring-based applications. Spring Boot is tightly integrated with the Spring framework, and many of its features are specifically designed to enhance Spring-based development.
-
-In summary, while Spring Boot is primarily targeted towards Spring-based applications, it can still be used for non-Spring applications to leverage its standalone runtime, embedded servers, dependency management, and other useful features.
-</details>
-<details><summary>
-
-## How can we connect Spring Boot with databases?
-</summary>
 To connect Spring Boot with databases, you can utilize Spring Data, a subproject of the Spring Framework that provides a unified and simplified way to interact with different databases. Here's a brief overview of the steps involved:
 
 **1. Include Database Driver Dependency:** In your project's build configuration file (e.g., pom.xml for Maven or build.gradle for Gradle), include the appropriate database driver dependency for the database you want to connect to. For example, if you're using MySQL, include the MySQL Connector/J dependency.
@@ -615,44 +516,12 @@ interface CompanyRepository extends JpaRepository<Company, Long> {
 ```
 
 </details>
+
 <details><summary>
 
-## What does the exclude attribute of the @SpringBootApplication do?
+## [Easy] How can external configuration be done in Spring Boot?
 </summary>
-The exclude attribute of the @SpringBootApplication annotation in Spring Boot is used to exclude specific configurations from being applied during the application's startup and auto-configuration process.
 
-By default, @SpringBootApplication performs component scanning and applies auto-configuration based on the classpath and dependencies. However, there might be scenarios where you want to exclude certain configurations from being processed.
-
-The exclude attribute allows you to specify one or more configuration classes that should be excluded. These classes will not be considered for auto-configuration and will not contribute to the application context.
-
-Here's an example of how to use the exclude attribute:
-
-```
-@SpringBootApplication(exclude = SomeConfiguration.class)
-public class YourApplication {
-    // Application code
-}
-```
-
-In this example, SomeConfiguration is a class annotated with @Configuration or related annotations that you want to exclude. By specifying SomeConfiguration.class in the exclude attribute, you instruct Spring Boot to skip the auto-configuration and component scanning related to that specific configuration class.
-
-You can also specify multiple classes by providing an array of class references to the exclude attribute:
-
-```
-@SpringBootApplication(exclude = {SomeConfiguration.class, AnotherConfiguration.class})
-public class YourApplication {
-    // Application code
-}
-```
-
-In this case, both SomeConfiguration and AnotherConfiguration will be excluded from the auto-configuration process.
-
-Using the exclude attribute gives you fine-grained control over which configurations are applied during the startup of your Spring Boot application. It allows you to override or exclude specific configurations that might conflict with each other or are not needed for your application's requirements.
-</details>
-<details><summary>
-
-## How can external configuration be done in Spring Boot?
-</summary>
 In Spring Boot, external configuration can be done by utilizing properties files, YAML files, environment variables, command-line arguments, and other externalized configuration sources. Here's a brief overview of how you can perform external configuration:
 
 **1. Properties File:** Create a file named application.properties or application.yml in your project's src/main/resources directory. Define key-value pairs in the file, where the keys represent the configuration properties and the values specify their corresponding values.
@@ -685,19 +554,23 @@ java -jar app.jar --spring.config.additional-location=/etc/app/
 ```
 
 </details>
+
 <details><summary>
 
-## What is Spring Actuator?
+## [Easy] What is Spring Actuator?
 </summary>
-Spring Actuator is a module in the Spring Boot framework that provides production-ready features and monitoring capabilities for your applications. It offers various endpoints and metrics that enable you to monitor, manage, and interact with your Spring Boot application during runtime.
 
-With Spring Actuator, you can easily gain insights into your application's health, metrics, configuration, logging, and more. It exposes HTTP endpoints that can be accessed to retrieve information about your application's internals. Some commonly used Actuator endpoints include /actuator/health, /actuator/info, /actuator/metrics, and /actuator/env.
+**Spring Boot Actuator** (`spring-boot-starter-actuator`) adds production-ready features to a Boot app through HTTP (or JMX) endpoints under `/actuator`:
 
-Actuator endpoints provide valuable information such as health status, system metrics, request mappings, configuration properties, and environment details. They also allow you to perform operations like shutdown, restart, and more, depending on your configuration.
+- **`health`** – application health, with groups for Kubernetes **liveness** and **readiness** probes, and indicators for the DB, Redis, Kafka, disk space, etc.
+- **`metrics`** and **`prometheus`** – application and JVM metrics collected with **Micrometer** (Actuator's metrics facade), exportable to Prometheus, Datadog, CloudWatch and others.
+- **`info`** – build/git/app info.
+- **`loggers`** – view and change log levels at runtime.
+- **`env`**, **`configprops`**, **`beans`**, **`mappings`**, **`conditions`** – inspect configuration and wiring (sensitive; don't expose publicly).
+- **`threaddump`**, **`heapdump`** – diagnostics.
+- **`shutdown`** – graceful shutdown (disabled by default).
 
-Additionally, Spring Actuator integrates with other monitoring and management systems, such as Prometheus, Micrometer, and JMX, allowing you to export metrics and interact with these systems easily.
-
-By including the Actuator dependency and configuring the desired endpoints, you can enhance the manageability and observability of your Spring Boot applications, making them well-suited for production deployments.
+By default only `health` is exposed over HTTP. Expose others explicitly with `management.endpoints.web.exposure.include`, and protect them with Spring Security or a separate management port.
 
 **Example:**
 
@@ -719,58 +592,188 @@ curl localhost:8080/actuator/metrics/jvm.memory.used
 ```
 
 </details>
+
 <details><summary>
 
-## How can the Actuator be accessed in Spring Boot?
+## [Easy] How can the Actuator be accessed in Spring Boot?
 </summary>
 
-In a Spring Boot application, the Actuator endpoints can be accessed via HTTP requests. The endpoints provide various information and management capabilities for your application. Here's how you can access the Actuator endpoints:
+1. Add `spring-boot-starter-actuator`.
+2. Call the endpoints under `/actuator` on the app's port (or on `management.server.port` if you set a separate one), e.g. `GET http://localhost:8080/actuator/health`.
+3. **Exposure:** by default only `/actuator/health` is exposed over HTTP. Expose more explicitly:
 
-1. Start your Spring Boot application.
-
-2. Open a web browser or use a tool like cURL or Postman to make HTTP requests to the Actuator endpoints. The base URL for Actuator endpoints is typically http://localhost:8080/actuator, assuming your application is running on the default port 8080.
-
-For example, you can access the health endpoint by navigating to http://localhost:8080/actuator/health. This endpoint provides information about the health of your application.
-
-Similarly, you can access other Actuator endpoints like /info, /metrics, /env, /loggers, and more by appending the desired endpoint path to the base Actuator URL.
-
-3. Depending on the configuration of your Actuator endpoints, you may need to provide authentication credentials or have the necessary permissions to access certain endpoints. This can be configured in your application's security settings.
-
-4. Actuator endpoints can also be customized and exposed selectively based on your needs. You can configure which endpoints are enabled, secured, or exposed with specific roles. This is typically done through configuration properties in your application's application.properties or application.yml file.
-
-For example, to enable all Actuator endpoints, you can add the following property to your configuration file:
-
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  server:
+    port: 9090          # optional: separate management port, not public
 ```
-management.endpoints.web.exposure.include=*
-```
 
-This configuration will expose all Actuator endpoints when accessed via HTTP.
+4. **Secure** them: `env`, `configprops`, `heapdump` and `loggers` reveal or change sensitive state. Restrict them with Spring Security roles or keep the management port internal. Avoid `include: "*"` in production.
 
-By accessing the Actuator endpoints, you can retrieve information about your application's health, metrics, configuration, environment, and more. Additionally, depending on the Actuator configuration, you may be able to perform certain management operations like shutting down the application, restarting, or changing log levels.
-
-Note that while Actuator provides valuable insights and management capabilities, it's important to secure and restrict access to these endpoints in production environments to prevent unauthorized access or sensitive information exposure.
 </details>
+
 <details><summary>
 
-## How can you create custom endpoints in Spring Boot Actuator?
+## [Easy] Explain Spring Boot DevTools.
 </summary>
-To create custom endpoints in Spring Boot Actuator, you can define your own @RestController or @Controller classes with specific mappings. Here's a summary of the steps involved:
 
-1. Create a new class and annotate it with @RestController or @Controller to make it a Spring MVC controller.
+`spring-boot-devtools` improves the **local development** loop:
 
-2. Define a method in the controller class and annotate it with @RequestMapping or other appropriate annotations to specify the endpoint URL and HTTP method.
+- **Automatic restart:** when compiled classes change, the app restarts quickly using two class loaders (one for unchanging library JARs, one for your code).
+- **LiveReload:** triggers a browser refresh when resources change (needs a LiveReload browser extension).
+- **Development-friendly defaults:** template caching disabled, more detailed web error logging.
+- **Remote support** (optional) for updating a remotely running app during development.
 
-3. Implement the logic inside the method to handle the request and return the desired response. You have the flexibility to provide any information or perform any operations based on your application's requirements.
+DevTools is **automatically disabled** when the app runs from a fully packaged JAR (`java -jar`), and should be declared `optional`/`developmentOnly` so it never ships to production.
 
-4. Optionally, you can leverage Spring's dependency injection and include other Spring components in your custom endpoint class if needed.
+**Example:**
 
-5. If necessary, apply additional annotations like @ResponseBody to indicate that the method's return value should be serialized and sent as the response body.
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-devtools</artifactId>
+  <scope>runtime</scope>
+  <optional>true</optional>   <!-- not packaged into the production JAR -->
+</dependency>
+```
 
-6. Restart your Spring Boot application for the new custom endpoint to be registered and available.
+Gives automatic restart on classpath changes, LiveReload, and dev-friendly defaults (template caching off).
 
-Once the application restarts, you can access your custom endpoint using the defined URL and HTTP method. For example, if you have a custom endpoint with a mapping of /custom, you can access it by making an HTTP request to http://localhost:8080/custom.
+</details>
 
-By creating custom endpoints in Spring Boot Actuator, you can extend the monitoring and management capabilities of your application beyond the default Actuator endpoints. This allows you to expose additional information, perform custom operations, or integrate with other systems as needed.
+<details><summary>
+
+## [Medium] What is the purpose of @ConditionalOnMissingBean annotation?
+</summary>
+
+The purpose of the **@ConditionalOnMissingBean** annotation is to conditionally enable a bean definition based on the absence of a specific bean in the Spring application context. If the specified bean does not exist, the annotated bean definition will be created and added to the context. However, if the specified bean already exists, the annotated bean definition will not be created.
+
+In short, **@ConditionalOnMissingBean** allows conditional bean creation based on the absence of a specific bean.
+
+**Example:**
+
+```java
+@Configuration
+class ClockConfig {
+    @Bean
+    @ConditionalOnMissingBean         // only created if the app didn't define its own Clock
+    Clock clock() { return Clock.systemUTC(); }
+}
+
+// In a test config, defining your own Clock bean makes the default back off:
+@TestConfiguration
+class FixedClock { @Bean Clock clock() { return Clock.fixed(Instant.parse("2026-01-01T00:00:00Z"), ZoneOffset.UTC); } }
+```
+
+</details>
+
+<details><summary>
+
+## [Medium] What happens when a web application is run using Spring Boot?
+</summary>
+
+When a web application is run using Spring Boot, several key steps are executed to initialize and start the application. Here's an overview of what happens:
+
+**1. Application Startup:** The Spring Boot application starts by executing the main method in the designated main class, typically annotated with **@SpringBootApplication**. This class serves as the entry point for the application.
+
+**2. Auto-configuration:** Spring Boot's auto-configuration feature analyzes the classpath and dependencies to automatically configure the application. It detects the presence of various libraries and frameworks and applies sensible defaults and configurations based on conventions.
+
+**3. Embedded Server Initialization:** If the application includes an embedded server (such as Tomcat or Jetty), it is initialized and started. The embedded server provides the runtime environment for the application to handle incoming HTTP requests and serve responses.
+
+**4. Component Scanning:** Spring Boot scans the application's packages and sub-packages to identify components such as controllers, services, repositories, and other Spring-managed beans. It uses component scanning annotations like **@Component**, **@RestController**, **@Service**, etc., to detect and register these components in the application context.
+
+**5. Bean Creation and Dependency Injection:** Spring Boot creates instances of the detected beans and manages their lifecycle. It performs dependency injection, injecting dependencies into beans based on their configurations and annotations (e.g., @Autowired).
+
+**6. Request Mapping and Handling:** Spring Boot maps incoming HTTP requests to the appropriate controllers and methods based on annotations like **@RequestMapping**, **@GetMapping**, **@PostMapping**, etc. The controllers process the requests, execute business logic, interact with services and repositories, and prepare the response.
+
+**7. View Resolution (if applicable):** If the application involves rendering views, Spring Boot resolves the views based on the configured view resolver. It processes templates, combines data from the model, and generates the final HTML, JSON, or other view formats.
+
+**8. Error Handling and Exception Resolution:** Spring Boot handles exceptions and errors that occur during request processing. It maps exceptions to appropriate error codes and formats error responses to provide meaningful feedback to clients.
+
+**9. Application Lifecycle Management:** Spring Boot manages the lifecycle of the application, including initialization, configuration updates, graceful shutdown, and other management operations. It provides features like actuator endpoints for health checks, metrics, and monitoring.
+
+**10. Application Execution:** With all the components initialized and the server running, the Spring Boot application is ready to handle incoming requests. It listens for HTTP requests on the configured port and executes the appropriate controllers to process and respond to the requests.
+
+In summary, when a web application is run using Spring Boot, the framework initializes and configures the application, starts an embedded server, detects and registers components, handles incoming requests, processes business logic, and manages the application's lifecycle. Spring Boot provides a streamlined and opinionated approach to web application development, allowing developers to focus on writing business logic rather than managing low-level configurations.
+
+**Example:**
+
+```java
+SpringApplication.run(App.class, args);
+// 1. Create the environment (properties, profiles, env vars)
+// 2. Create the ApplicationContext and run component scanning
+// 3. Apply auto-configurations whose conditions match
+// 4. Create singleton beans, inject dependencies, run @PostConstruct
+// 5. Start embedded Tomcat, register DispatcherServlet
+// 6. Run CommandLineRunner/ApplicationRunner beans, publish ApplicationReadyEvent
+```
+
+</details>
+
+<details><summary>
+
+## [Medium] Can Spring Boot be used for applications not built using the Spring framework?
+</summary>
+
+**Not really.** Spring Boot is built **on top of** the Spring Framework: auto-configuration, starters, externalised configuration, the embedded server lifecycle and Actuator all work by creating and configuring a Spring `ApplicationContext`. A Spring Boot application is always a Spring application.
+
+What's possible:
+- You can bring **existing non-Spring code** (plain Java libraries, legacy classes) into a Boot app by exposing them as beans with `@Bean` methods.
+- A few Boot artifacts can be used on their own, such as the Spring Boot **Maven/Gradle plugins** (to build executable JARs or container images) or its dependency-version BOM.
+
+But to use auto-configuration, Actuator or `@ConfigurationProperties`, the application itself must run on Spring.
+
+</details>
+
+<details><summary>
+
+## [Medium] What does the exclude attribute of the @SpringBootApplication do?
+</summary>
+
+`exclude` turns off specific **auto-configuration classes** so Boot doesn't apply them, even if their conditions are met. It is the same as `@EnableAutoConfiguration(exclude = ...)`.
+
+```java
+@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, KafkaAutoConfiguration.class })
+public class App { }
+```
+
+```yaml
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+```
+
+Typical reasons: you have a JDBC driver on the classpath but don't want a `DataSource` yet, you configure something yourself in a special way, or an auto-configuration conflicts with your setup. Use `excludeName` with a string when the class isn't on the classpath.
+
+`exclude` works **only for auto-configuration classes**. Passing your own `@Configuration` class fails at startup ("The following classes could not be excluded because they are not auto-configuration classes"); to skip your own components, use `@ComponentScan(excludeFilters = ...)`, profiles or `@Conditional...` annotations.
+
+</details>
+
+<details><summary>
+
+## [Medium] How can you create custom endpoints in Spring Boot Actuator?
+</summary>
+
+Create a bean annotated with **`@Endpoint(id = "...")`** and add operation methods:
+
+- **`@ReadOperation`** → HTTP `GET`
+- **`@WriteOperation`** → HTTP `POST`
+- **`@DeleteOperation`** → HTTP `DELETE`
+
+The endpoint appears at `/actuator/{id}`, respects the same exposure and security settings as built-in endpoints, and works over both HTTP and JMX. Use `@WebEndpoint` for HTTP-only or `@JmxEndpoint` for JMX-only endpoints, and `@Selector` on a parameter to take part of the path (`/actuator/features/{name}`).
+
+Then expose it: `management.endpoints.web.exposure.include=health,features`.
+
+To add information to existing endpoints instead of creating a new one, implement a **`HealthIndicator`** (custom health checks) or an **`InfoContributor`** (extra `/info` data). A plain `@RestController` would just be a normal API endpoint, outside Actuator's exposure and security model.
 
 **Example:**
 
@@ -793,25 +796,5 @@ class KafkaHealth implements HealthIndicator {
     public Health health() { return kafkaReachable() ? Health.up().build() : Health.down().withDetail("broker", "unreachable").build(); }
 }
 ```
-
-</details>
-<details><summary>
-
-## Explain Spring Boot DevTools.
-</summary>
-Spring Boot DevTools is a module that provides developer-centric tools and features to enhance the development experience with Spring Boot applications. It includes automatic application restart, live reload of static resources, and improved development-time error reporting. DevTools monitors the classpath for changes and triggers an automatic restart of the application, reducing the need for manual restarts during development. It also enables live reloading of static resources like HTML, CSS, and JavaScript, allowing developers to see changes without refreshing the browser. Additionally, DevTools provides detailed error information and stack traces, making it easier to debug and diagnose issues during development.
-
-**Example:**
-
-```xml
-<dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-devtools</artifactId>
-  <scope>runtime</scope>
-  <optional>true</optional>   <!-- not packaged into the production JAR -->
-</dependency>
-```
-
-Gives automatic restart on classpath changes, LiveReload, and dev-friendly defaults (template caching off).
 
 </details>

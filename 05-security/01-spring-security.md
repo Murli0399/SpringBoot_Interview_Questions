@@ -2,8 +2,9 @@
 
 <details><summary>
 
-## What is Spring Security?
+## [Easy] What is Spring Security?
 </summary>
+
 Spring Security is a powerful framework that provides authentication, authorization, and other security features for Java applications. It is built on top of the Spring Framework and offers comprehensive security services to ensure the protection of web and enterprise applications.
 
 In short, Spring Security:
@@ -26,10 +27,9 @@ Spring Security is highly customizable and extensible. It allows you to plug in 
 By using Spring Security, developers can focus on application logic while delegating the complex security aspects to the framework. It provides a robust foundation for securing applications against common security threats and offers flexibility to adapt to various security requirements.
 </details>
 
-
 <details><summary>
 
-## What is the difference between authentication and authorization?
+## [Easy] What is the difference between authentication and authorization?
 </summary>
 
 - **Authentication:** *who are you?* Verifying identity (password, JWT, OAuth2 login). Failure → **401 Unauthorized**.
@@ -40,7 +40,23 @@ In Spring Security, authentication produces an `Authentication` object stored in
 
 <details><summary>
 
-## How does the Spring Security filter chain work?
+## [Easy] How do you store passwords securely?
+</summary>
+
+Never store plain text or fast hashes (MD5/SHA-256). Use an adaptive, salted algorithm: **BCrypt** (default), Argon2 or SCrypt.
+
+```java
+PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder(); // {bcrypt}...
+String hash = encoder.encode("s3cret");
+boolean ok = encoder.matches("s3cret", hash);
+```
+
+The salt is stored inside the hash; the work factor makes brute force slow. Add rate limiting/lockout on login endpoints.
+</details>
+
+<details><summary>
+
+## [Medium] How does the Spring Security filter chain work?
 </summary>
 
 Spring registers one servlet filter (`DelegatingFilterProxy` → `FilterChainProxy`) that runs an ordered `SecurityFilterChain` of filters, e.g.:
@@ -75,7 +91,7 @@ public class SecurityConfig {
 
 <details><summary>
 
-## How does JWT authentication work? Show the filter.
+## [Medium] How does JWT authentication work? Show the filter.
 </summary>
 
 1. User logs in with credentials → server verifies → returns a **signed** JWT (header.payload.signature) with claims such as `sub`, `roles`, `tenantId`, `exp`.
@@ -116,18 +132,7 @@ Alternatively use Spring's built-in resource server: `http.oauth2ResourceServer(
 
 <details><summary>
 
-## How do you handle JWT expiry, logout and revocation?
-</summary>
-
-- Keep **access tokens short-lived** (5–15 min) and issue a **refresh token** (longer-lived, stored securely, rotated on every use).
-- JWTs are stateless, so true logout needs state: store a **denylist** of revoked token IDs (`jti`) in Redis with TTL = remaining token life, or keep sessions in Redis and put only a session ID in the token.
-- Never put secrets or PII in the payload: it's only Base64-encoded, not encrypted.
-- Sign with RS256 (private/public key pair) when other services must verify tokens without being able to issue them.
-</details>
-
-<details><summary>
-
-## Session-based vs token-based authentication?
+## [Medium] Session-based vs token-based authentication?
 </summary>
 
 | | Session (cookie) | Token (JWT) |
@@ -143,24 +148,7 @@ Hybrid is common: JWT access token + Redis-backed session/refresh state for revo
 
 <details><summary>
 
-## Explain OAuth2 and the Authorization Code flow with PKCE.
-</summary>
-
-OAuth2 lets an app access resources **on behalf of a user** without seeing their password. Roles: resource owner (user), client (your app), authorization server (Google, Keycloak, Okta), resource server (your API).
-
-**Authorization Code + PKCE** (for browser/mobile apps):
-1. Client creates a random `code_verifier` and sends its hash (`code_challenge`) with the login redirect.
-2. User logs in at the authorization server and consents.
-3. Server redirects back with a short-lived **authorization code**.
-4. Client exchanges code + original `code_verifier` for tokens. The server checks the hash matches, so a stolen code is useless.
-5. Client calls APIs with the access token.
-
-Other grants: **Client Credentials** (service-to-service, no user), Refresh Token. Implicit and password grants are deprecated. **OpenID Connect** adds an ID token on top of OAuth2 for login (identity).
-</details>
-
-<details><summary>
-
-## How do you implement role-based access control (RBAC)?
+## [Medium] How do you implement role-based access control (RBAC)?
 </summary>
 
 URL-level rules in the filter chain, plus method-level rules for business logic:
@@ -181,7 +169,7 @@ Model: `User` → many `Role`s → many `Permission`s. Check **permissions** in 
 
 <details><summary>
 
-## What is CSRF and when can you disable protection?
+## [Medium] What is CSRF and when can you disable protection?
 </summary>
 
 Cross-Site Request Forgery: a malicious site makes the user's browser send a request to your site, and the browser automatically attaches the user's cookies. Spring Security blocks state-changing requests without a valid CSRF token.
@@ -191,23 +179,35 @@ You may disable it for **stateless APIs authenticated by a header token** (no co
 
 <details><summary>
 
-## How do you store passwords securely?
+## [Hard] How do you handle JWT expiry, logout and revocation?
 </summary>
 
-Never store plain text or fast hashes (MD5/SHA-256). Use an adaptive, salted algorithm: **BCrypt** (default), Argon2 or SCrypt.
-
-```java
-PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder(); // {bcrypt}...
-String hash = encoder.encode("s3cret");
-boolean ok = encoder.matches("s3cret", hash);
-```
-
-The salt is stored inside the hash; the work factor makes brute force slow. Add rate limiting/lockout on login endpoints.
+- Keep **access tokens short-lived** (5–15 min) and issue a **refresh token** (longer-lived, stored securely, rotated on every use).
+- JWTs are stateless, so true logout needs state: store a **denylist** of revoked token IDs (`jti`) in Redis with TTL = remaining token life, or keep sessions in Redis and put only a session ID in the token.
+- Never put secrets or PII in the payload: it's only Base64-encoded, not encrypted.
+- Sign with RS256 (private/public key pair) when other services must verify tokens without being able to issue them.
 </details>
 
 <details><summary>
 
-## How do you secure service-to-service calls?
+## [Hard] Explain OAuth2 and the Authorization Code flow with PKCE.
+</summary>
+
+OAuth2 lets an app access resources **on behalf of a user** without seeing their password. Roles: resource owner (user), client (your app), authorization server (Google, Keycloak, Okta), resource server (your API).
+
+**Authorization Code + PKCE** (for browser/mobile apps):
+1. Client creates a random `code_verifier` and sends its hash (`code_challenge`) with the login redirect.
+2. User logs in at the authorization server and consents.
+3. Server redirects back with a short-lived **authorization code**.
+4. Client exchanges code + original `code_verifier` for tokens. The server checks the hash matches, so a stolen code is useless.
+5. Client calls APIs with the access token.
+
+Other grants: **Client Credentials** (service-to-service, no user), Refresh Token. Implicit and password grants are deprecated. **OpenID Connect** adds an ID token on top of OAuth2 for login (identity).
+</details>
+
+<details><summary>
+
+## [Hard] How do you secure service-to-service calls?
 </summary>
 
 - **OAuth2 Client Credentials:** each service gets its own client ID/secret and requests short-lived tokens with limited scopes.

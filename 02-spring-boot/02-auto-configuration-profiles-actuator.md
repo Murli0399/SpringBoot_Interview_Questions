@@ -2,32 +2,7 @@
 
 <details><summary>
 
-## How does Spring Boot auto-configuration work?
-</summary>
-
-1. `@SpringBootApplication` includes `@EnableAutoConfiguration`.
-2. Boot reads the list of auto-configuration classes from `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` in each starter JAR (Boot 2.7+; earlier `spring.factories`).
-3. Each auto-config class is guarded by **conditions**, so it only applies when it makes sense:
-
-```java
-@AutoConfiguration
-@ConditionalOnClass(DataSource.class)              // JDBC on the classpath?
-@ConditionalOnProperty(prefix = "spring.datasource", name = "url")
-public class MyDataSourceAutoConfiguration {
-    @Bean
-    @ConditionalOnMissingBean                       // back off if the user defined one
-    public DataSource dataSource(DataSourceProperties props) {
-        return props.initializeDataSourceBuilder().build();
-    }
-}
-```
-
-Debug which configs applied with `--debug` (conditions evaluation report) or the `/actuator/conditions` endpoint. Exclude one with `@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)`.
-</details>
-
-<details><summary>
-
-## What are Spring profiles and how do you use them?
+## [Easy] What are Spring profiles and how do you use them?
 </summary>
 
 Profiles group configuration and beans per environment.
@@ -56,7 +31,7 @@ Activate with `SPRING_PROFILES_ACTIVE=prod`, `--spring.profiles.active=prod`, or
 
 <details><summary>
 
-## What is the order of precedence for configuration properties?
+## [Medium] What is the order of precedence for configuration properties?
 </summary>
 
 Highest wins (simplified):
@@ -73,7 +48,7 @@ In Kubernetes, values usually come from ConfigMaps/Secrets as environment variab
 
 <details><summary>
 
-## @Value vs @ConfigurationProperties?
+## [Medium] @Value vs @ConfigurationProperties?
 </summary>
 
 `@ConfigurationProperties` binds a group of properties to a typed, validated object. Prefer it over scattered `@Value`.
@@ -105,20 +80,7 @@ public class App {}
 
 <details><summary>
 
-## How do you write a custom auto-configuration or starter?
-</summary>
-
-1. Create a module with an `@AutoConfiguration` class using `@ConditionalOn...` annotations and `@ConditionalOnMissingBean` on every bean so users can override.
-2. Bind settings with `@ConfigurationProperties`.
-3. Register it in `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`.
-4. Publish as `yourlib-spring-boot-starter`.
-
-Use case: a shared company library for tenant context, logging format or auth across many microservices.
-</details>
-
-<details><summary>
-
-## Which Actuator endpoints matter in production and how do you secure them?
+## [Medium] Which Actuator endpoints matter in production and how do you secure them?
 </summary>
 
 - `/actuator/health` (with `liveness` and `readiness` groups for Kubernetes probes)
@@ -143,7 +105,7 @@ Expose only what you need, serve it on a separate management port if possible, a
 
 <details><summary>
 
-## How do you add custom metrics with Micrometer?
+## [Medium] How do you add custom metrics with Micrometer?
 </summary>
 
 ```java
@@ -169,7 +131,7 @@ Prometheus scrapes `/actuator/prometheus`; Grafana dashboards and alerts are bui
 
 <details><summary>
 
-## How do you do structured logging and tracing in Spring Boot?
+## [Medium] How do you do structured logging and tracing in Spring Boot?
 </summary>
 
 - Use SLF4J with parameterised messages: `log.info("Processed call {} in {} ms", callId, ms);`
@@ -180,7 +142,7 @@ Prometheus scrapes `/actuator/prometheus`; Grafana dashboards and alerts are bui
 
 <details><summary>
 
-## How do you shut down a Spring Boot app gracefully in Kubernetes?
+## [Medium] How do you shut down a Spring Boot app gracefully in Kubernetes?
 </summary>
 
 ```yaml
@@ -196,7 +158,45 @@ On SIGTERM, Boot stops accepting new requests, finishes in-flight ones, then clo
 
 <details><summary>
 
-## How do you make a Spring Boot app start faster or use less memory?
+## [Hard] How does Spring Boot auto-configuration work?
+</summary>
+
+1. `@SpringBootApplication` includes `@EnableAutoConfiguration`.
+2. Boot reads the list of auto-configuration classes from `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` in each starter JAR (Boot 2.7+; earlier `spring.factories`).
+3. Each auto-config class is guarded by **conditions**, so it only applies when it makes sense:
+
+```java
+@AutoConfiguration
+@ConditionalOnClass(DataSource.class)              // JDBC on the classpath?
+@ConditionalOnProperty(prefix = "spring.datasource", name = "url")
+public class MyDataSourceAutoConfiguration {
+    @Bean
+    @ConditionalOnMissingBean                       // back off if the user defined one
+    public DataSource dataSource(DataSourceProperties props) {
+        return props.initializeDataSourceBuilder().build();
+    }
+}
+```
+
+Debug which configs applied with `--debug` (conditions evaluation report) or the `/actuator/conditions` endpoint. Exclude one with `@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)`.
+</details>
+
+<details><summary>
+
+## [Hard] How do you write a custom auto-configuration or starter?
+</summary>
+
+1. Create a module with an `@AutoConfiguration` class using `@ConditionalOn...` annotations and `@ConditionalOnMissingBean` on every bean so users can override.
+2. Bind settings with `@ConfigurationProperties`.
+3. Register it in `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`.
+4. Publish as `yourlib-spring-boot-starter`.
+
+Use case: a shared company library for tenant context, logging format or auth across many microservices.
+</details>
+
+<details><summary>
+
+## [Hard] How do you make a Spring Boot app start faster or use less memory?
 </summary>
 
 - Lazy initialisation (`spring.main.lazy-initialization=true`) for dev; careful in prod (errors appear on first request).

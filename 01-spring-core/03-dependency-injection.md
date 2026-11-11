@@ -1,6 +1,8 @@
+# Dependency injection
+
 <details><summary>
 
-## What is dependency injection?
+## [Easy] What is dependency injection?
 </summary>
 
 Dependency Injection (DI) is a design pattern and a software development technique commonly used in object-oriented programming to achieve the separation of concerns, increase modularity, and improve testability and maintainability of code.
@@ -23,9 +25,10 @@ public class InvoiceService {
 ```
 
 </details>
+
 <details><summary>
 
-## How is dependency injection related to inversion of control?
+## [Easy] How is dependency injection related to inversion of control?
 </summary>
 
 Dependency Injection (DI) and Inversion of Control (IoC) are related concepts in software design and architecture, and they are often used together. They both aim to improve the modularity, flexibility, and testability of software systems, but they address different aspects of achieving these goals.
@@ -65,109 +68,39 @@ class A {
 ```
 
 </details>
+
 <details><summary>
 
-## What are the types of dependency injection?
+## [Easy] What are the types of dependency injection?
 </summary>
 
-Dependency Injection (DI) is a design pattern used in software development to achieve Inversion of Control (IoC) by injecting dependencies into an object rather than having the object create its dependencies. There are several types of DI, including:
+Spring supports three ways to inject dependencies:
 
-1. Constructor Injection:
+1. **Constructor injection** (recommended) – dependencies are constructor parameters. Objects are complete and immutable after creation, required dependencies are obvious, and classes are easy to test with `new`.
+2. **Setter injection** – the container calls setter methods after construction. Good for optional dependencies or values that may be reconfigured.
+3. **Field injection** – `@Autowired` directly on a field. Short, but hides dependencies, prevents `final` fields, and needs reflection or Spring to test. Avoid in production code.
 
-- In constructor injection, dependencies are injected through the constructor of a class.
-- It's considered one of the most common and recommended forms of dependency injection because it ensures that an object is in a valid state when it's created.
+```java
+@Service
+class OrderService {
+	private final OrderRepository repo;                 // 1. constructor injection
+	private Notifier notifier;                          // 2. setter injection (optional)
+	@Autowired private Clock clock;                     // 3. field injection (avoid)
 
-Example (in Java):
+	OrderService(OrderRepository repo) { this.repo = repo; }
 
-```
-public class ExampleService {
-    private final Dependency dependency;
-
-    public ExampleService(Dependency dependency) {
-        this.dependency = dependency;
-    }
-
-    // ...
+	@Autowired(required = false)
+	void setNotifier(Notifier notifier) { this.notifier = notifier; }
 }
 ```
 
-2. Setter Injection:
+Spring also has **method (lookup) injection** – `@Lookup` – for getting a fresh prototype bean from inside a singleton, and you can inject `ObjectProvider<T>` for lazy or optional access. (The "interface injection" style from older DI literature isn't supported by Spring.)
 
-- In setter injection, dependencies are injected through setter methods of a class.
-- This approach is useful when you have optional dependencies or when you need to change dependencies at runtime.
-
-Example (in Java):
-
-```
-public class ExampleService {
-    private Dependency dependency;
-
-    public void setDependency(Dependency dependency) {
-        this.dependency = dependency;
-    }
-
-    // ...
-}
-```
-
-3. Method Injection:
-
-- In method injection, dependencies are injected directly into methods that need them.
-- This approach is useful when you have methods that require specific dependencies, but the class itself doesn't depend on them.
-
-Example (in Python):
-
-```
-class ExampleService:
-    def do_something(self, dependency):
-        # Use the injected dependency here
-        pass
-```
-
-4. Interface-based Injection:
-
-- In this approach, an interface defines the contract for accessing dependencies, and concrete implementations provide the actual dependencies.
-- It's often used in languages like Java and C#.
-
-Example (in Java):
-
-```
-public interface DependencyProvider {
-    Dependency getDependency();
-}
-
-public class ExampleService {
-    private final DependencyProvider dependencyProvider;
-
-    public ExampleService(DependencyProvider dependencyProvider) {
-        this.dependencyProvider = dependencyProvider;
-    }
-
-    public void doSomething() {
-        Dependency dependency = dependencyProvider.getDependency();
-        // Use the dependency here
-    }
-}
-```
-
-5. Parameter Injection:
-
-- In parameter injection, dependencies are injected as method parameters when calling a method.
-- This is commonly used in functional programming languages and when working with frameworks like Spring (in Java).
-
-Example (in Scala):
-
-```
-def doSomething(dependency: Dependency): Unit = {
-    // Use the injected dependency here
-}
-```
-
-The choice of which type of dependency injection to use depends on the specific needs of your application and the programming language or framework you are working with. Constructor injection is often recommended as a default choice due to its clarity and ability to ensure that objects are properly initialized.
 </details>
+
 <details><summary>
 
-## What is constructor injection?
+## [Easy] What is constructor injection?
 </summary>
 
 Constructor injection is a form of dependency injection (DI) in software development. It's a design pattern where a class's dependencies (i.e., other objects or services that it relies on) are provided to it through its constructor when the class is instantiated. This allows for the inversion of control, where the responsibility of managing dependencies is shifted from the class itself to an external component (typically a DI container or framework).
@@ -195,9 +128,10 @@ public class PaymentService {
 ```
 
 </details>
+
 <details><summary>
 
-## How does setter injection work?
+## [Easy] How does setter injection work?
 </summary>
 
 Setter injection is a form of dependency injection (DI) in software development. It's a design pattern where a class's dependencies (i.e., other objects or services that it relies on) are provided through setter methods rather than through the constructor. This allows for the inversion of control, where the responsibility of managing dependencies is shifted from the class itself to an external component (typically a DI container or framework).
@@ -225,55 +159,10 @@ public class ReportService {
 ```
 
 </details>
+
 <details><summary>
 
-## Explain setter injection for objects and literal values.
-</summary>
-
-1. Setter Injection for Objects:
-
-When using setter injection for objects, you provide a setter method in the class that allows external components (typically a DI container or framework) to inject instances of other classes or dependencies. These injected objects can be used by the class to perform various tasks.
-
-2. Setter Injection for Literal Values:
-
-Setter injection for literal values involves providing setter methods to inject constant values, such as strings, numbers, or configuration parameters, into a class. This is often used for runtime configuration.
-
-3. Usage:
-
-In both cases, after creating an instance of the class, you call the appropriate setter method to provide the required objects or values. This allows for flexibility in configuring the class for different use cases without modifying its constructor.
-</details>
-<details><summary>
-
-## Explain the injection of Java Collection types.
-</summary>
-
-Injecting Java Collection types involves declaring a field for the collection in a class, providing the collection through a setter or constructor, and using it in the class. This is often done in DI frameworks like Spring, allowing flexibility in managing and passing groups of objects as dependencies.
-
-**Example:**
-
-```java
-interface Validator { void validate(Order o); }
-@Component @Order(1) class StockValidator implements Validator { ... }
-@Component @Order(2) class FraudValidator implements Validator { ... }
-
-@Service
-class OrderService {
-    private final List<Validator> validators;          // all Validator beans, in @Order order
-    private final Map<String, Validator> byName;       // bean name -> bean
-
-    OrderService(List<Validator> validators, Map<String, Validator> byName) {
-        this.validators = validators;
-        this.byName = byName;
-    }
-
-    void place(Order o) { validators.forEach(v -> v.validate(o)); }
-}
-```
-
-</details>
-<details><summary>
-
-## What is the difference between constructor and setter injection?
+## [Easy] What is the difference between constructor and setter injection?
 </summary>
 
 1. Constructor Injection:
@@ -308,12 +197,79 @@ class A {
 ```
 
 </details>
+
 <details><summary>
 
-## Which dependency injection approach is better?
+## [Medium] Explain setter injection for objects and literal values.
 </summary>
 
-There is no universally "better" dependency injection approach between constructor injection and setter injection. The choice depends on the specific requirements of your application. Constructor injection is suitable for mandatory dependencies and enforces immutability, while setter injection offers flexibility for optional or changeable dependencies. Use the approach that best fits your context and design goals.
+With setter injection, the container creates the bean (no-arg constructor) and then calls setters:
+
+- **Objects:** the setter receives another bean, e.g. `setRepository(OrderRepository repo)`; Spring finds the matching bean by type (and name/qualifier if needed).
+- **Literal values:** the setter receives a configuration value, injected with `@Value("${app.page-size:20}")` or, in XML, `<property name="pageSize" value="20"/>`. Spring converts the text to the parameter type (int, boolean, Duration, etc.).
+
+```java
+@Component
+public class ReportGenerator {
+	private ReportRepository repository;
+	private int pageSize;
+
+	@Autowired
+	public void setRepository(ReportRepository repository) { this.repository = repository; }   // object
+
+	@Value("${reports.page-size:20}")
+	public void setPageSize(int pageSize) { this.pageSize = pageSize; }                        // literal
+}
+```
+
+For groups of settings, prefer `@ConfigurationProperties` over many `@Value` setters.
+
+</details>
+
+<details><summary>
+
+## [Medium] Explain the injection of Java Collection types.
+</summary>
+
+Injecting Java Collection types involves declaring a field for the collection in a class, providing the collection through a setter or constructor, and using it in the class. This is often done in DI frameworks like Spring, allowing flexibility in managing and passing groups of objects as dependencies.
+
+**Example:**
+
+```java
+interface Validator { void validate(Order o); }
+@Component @Order(1) class StockValidator implements Validator { ... }
+@Component @Order(2) class FraudValidator implements Validator { ... }
+
+@Service
+class OrderService {
+    private final List<Validator> validators;          // all Validator beans, in @Order order
+    private final Map<String, Validator> byName;       // bean name -> bean
+
+    OrderService(List<Validator> validators, Map<String, Validator> byName) {
+        this.validators = validators;
+        this.byName = byName;
+    }
+
+    void place(Order o) { validators.forEach(v -> v.validate(o)); }
+}
+```
+
+</details>
+
+<details><summary>
+
+## [Medium] Which dependency injection approach is better?
+</summary>
+
+For mandatory dependencies, **constructor injection** is the better default, and it's what the Spring team recommends:
+
+- Dependencies are explicit and can be `final` (immutable, thread-safe after construction).
+- The object can't exist in a half-initialised state.
+- Easy to unit test: `new OrderService(mockRepo)` without Spring.
+- Too many constructor parameters is a visible signal that the class does too much.
+- Constructor injection reveals circular dependencies at startup instead of hiding them.
+
+Use **setter injection** only for genuinely optional or reconfigurable dependencies. Avoid **field injection** outside of tests. With a single constructor, `@Autowired` isn't even needed (Spring 4.3+), and Lombok's `@RequiredArgsConstructor` can generate it.
 
 **Example:**
 
@@ -333,12 +289,55 @@ class Bad {
 ```
 
 </details>
+
 <details><summary>
 
-## What is method injection?
+## [Medium] What is a circular dependency and how should it be resolved?
 </summary>
 
-Method injection is a form of dependency injection (DI) in software development, where dependencies are provided to a class or method through method parameters instead of constructor parameters or setters. In other words, the class or method receives its required dependencies directly when a particular method is called. This approach allows for more fine-grained control over dependency injection, as dependencies can be injected selectively for specific operations or methods.
+A **circular dependency** happens when bean A needs bean B and bean B needs bean A (directly or through a chain: A → B → C → A). With constructor injection, Spring can't create either one first, so startup fails with `BeanCurrentlyInCreationException`. Since **Spring Boot 2.6, circular references are forbidden by default**, even with field/setter injection.
+
+How to resolve it (best first):
+1. **Redesign.** A cycle usually means responsibilities are mixed. Move the shared logic into a new third bean that both depend on, or merge the two if they are really one concept.
+2. **Use events** instead of a direct call back (A publishes an event, B listens).
+3. **Break the cycle lazily:** inject `@Lazy B b` or `ObjectProvider<B>` in A, so a proxy is injected and B is resolved on first use.
+4. **Setter injection** on one side (works only if circular references are re-enabled).
+5. Last resort: `spring.main.allow-circular-references=true`, which hides the design problem.
+
+**Example:**
+
+```java
+@Service class A { A(B b) {} }
+@Service class B { B(A a) {} }
+// Startup fails: "The dependencies of some of the beans in the application context form a cycle"
+// (Spring Boot 2.6+ forbids cycles by default)
+
+// Best fix: redesign - extract the shared logic into a third bean C used by both
+@Service class C { }
+@Service class A2 { A2(C c) {} }
+@Service class B2 { B2(C c) {} }
+
+// Quick workaround (use sparingly): break the cycle with @Lazy
+@Service class A3 { A3(@Lazy B3 b) {} }
+```
+
+</details>
+
+<details><summary>
+
+## [Hard] What is method injection?
+</summary>
+
+In Spring, **method injection** usually means **lookup method injection**: Spring overrides (via CGLIB) a method in your bean so that every call returns a bean from the container. It solves the problem of a **singleton bean that needs a new prototype bean each time** – normal injection would give the singleton only one prototype instance, once, at creation.
+
+You mark the method with `@Lookup` (or `<lookup-method>` in XML); Spring generates its body.
+
+Alternatives that are often simpler:
+- Inject `ObjectProvider<MyPrototype>` and call `getObject()` each time.
+- Inject `Provider<MyPrototype>` (`jakarta.inject`).
+- Use a scoped proxy: `@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)`.
+
+(Passing a dependency as a parameter to an ordinary method is sometimes also called "method injection" in general DI literature, but in Spring interviews they mean `@Lookup`.)
 
 **Example:**
 
@@ -358,39 +357,6 @@ abstract class ReportService {           // singleton needing a fresh prototype 
     protected abstract ReportBuilder newBuilder();
 }
 // Alternative: inject ObjectProvider<ReportBuilder> and call getObject()
-```
-
-</details>
-<details><summary>
-
-## What is a circular dependency and how should it be resolved?
-</summary>
-
-A circular dependency is a relationship between two or more modules that depend on each other to function properly. For example, if Project A depends on something in Project B, and Project B depends on something in Project A, then you can't compile Project A until you compile Project B.
-
-Here are some strategies for resolving circular dependencies:
-
-- Move small pieces of code from one project to the other.
-- Move code that both libraries depend on into a new shared library.
-- Combine project A and project B into one library.
-
-Circular dependencies should be avoided where possible, but you can't always do so.
-
-**Example:**
-
-```java
-@Service class A { A(B b) {} }
-@Service class B { B(A a) {} }
-// Startup fails: "The dependencies of some of the beans in the application context form a cycle"
-// (Spring Boot 2.6+ forbids cycles by default)
-
-// Best fix: redesign - extract the shared logic into a third bean C used by both
-@Service class C { }
-@Service class A2 { A2(C c) {} }
-@Service class B2 { B2(C c) {} }
-
-// Quick workaround (use sparingly): break the cycle with @Lazy
-@Service class A3 { A3(@Lazy B3 b) {} }
 ```
 
 </details>

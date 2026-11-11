@@ -1,7 +1,10 @@
+# IoC container
+
 <details><summary>
 
-## What is Inversion of Control (IoC)?
+## [Easy] What is Inversion of Control (IoC)?
 </summary>
+
 Inversion of Control (IoC) is a design principle in software development where the control of object creation and dependency injection is shifted from the application itself to an external framework or container. In IoC, the flow of control is inverted, meaning that instead of the application is responsible for creating and managing its dependencies, the responsibility is delegated to an IoC container. 
 
 IoC promotes loose coupling between components and allows for better modularity and testability. By delegating the creation and management of dependencies to the IoC container, the application becomes more flexible and modular, as components can be easily replaced or modified without affecting the overall structure.
@@ -23,10 +26,12 @@ class ReportService2 {
 ```
 
 </details>
+
 <details><summary>
 
-## What are the advantages of Inversion of Control?
+## [Easy] What are the advantages of Inversion of Control?
 </summary>
+
 The advantages of Inversion of Control (IoC) include:
 
 **1. Loose coupling:** IoC promotes loose coupling between components by decoupling the creation and management of dependencies from the components themselves. This allows for better modularity and makes it easier to replace or modify individual components without affecting the entire system.
@@ -55,10 +60,12 @@ ReportService2 service = new ReportService2(fakeRepo);
 ```
 
 </details>
+
 <details><summary>
 
-## What is the responsibility of an IoC container?
+## [Easy] What is the responsibility of an IoC container?
 </summary>
+
 The responsibility of an Inversion of Control (IoC) container is to manage the creation, configuration, and lifecycle of objects or components within an application. The IoC container acts as a central hub that handles the dependency injection and controls the flow of object instantiation and wiring.
 
 The main responsibilities of an IoC container are as follows:
@@ -87,36 +94,24 @@ OrderService svc = ctx.getBean(OrderService.class);
 ```
 
 </details>
+
 <details><summary>
 
-## Describe the two types of IoC container.
+## [Medium] Describe the two types of IoC container.
 </summary>
-There are two main types of IoC containers:
 
-### 1. Bean Factory:
+### 1. `BeanFactory`
+- The basic container interface (`org.springframework.beans.factory`).
+- Creates beans **lazily**, when `getBean()` is first called.
+- Supports dependency injection and basic lifecycle callbacks.
+- Does **not** automatically register `BeanPostProcessor`s / `BeanFactoryPostProcessor`s, publish events, resolve messages (i18n) or integrate AOP auto-proxying unless you wire these up manually.
 
-- The Bean Factory is a simple IoC container that provides basic dependency injection capabilities.
-- It is the foundation of more advanced IoC containers like the ApplicationContext in the Spring framework.
-- The Bean Factory is typically configured using XML-based configuration files, where dependencies and object definitions are declared.
-- It supports lazy initialization of beans, allowing objects to be created and initialized only when they are actually requested.
-- Bean Factory provides basic dependency injection features like constructor injection and setter injection.
-- However, it lacks some advanced features such as AOP integration, event handling, and advanced lifecycle management.
-
-### 2. Application Context:
-
-- The Application Context is an advanced IoC container provided by frameworks like Spring.
-- It extends the functionality of the Bean Factory with additional features and capabilities.
-- The Application Context is typically configured using XML-based or annotation-based configuration.
-- It supports all the features of the Bean Factory and provides many additional functionalities:
- - **Enhanced dependency injection:** Apart from constructor and setter injection, it supports autowiring, where dependencies are automatically resolved based on their types.
- - **Advanced lifecycle management:** It supports hooks for initialization and destruction of beans, allowing for custom logic to be executed at specific lifecycle stages.
- - **AOP integration:** It seamlessly integrates with AOP frameworks, enabling the application of cross-cutting concerns to components.
- - **Internationalization and localization support:** It provides mechanisms for handling messages, labels, and localized resources.
- - **Event handling:** It supports an event-driven programming model, allowing components to publish and listen to application events.
- - **Resource management:** It handles the management of resources like database connections, transactions, and caching.
- - **Integration with other frameworks:** The Application Context can integrate with various other frameworks and libraries, providing seamless integration and additional features.
-
-In summary, the Bean Factory is a basic IoC container that provides fundamental dependency injection capabilities, while the Application Context is a more advanced IoC container with enhanced features, lifecycle management, AOP integration, and support for various other application-related functionalities.
+### 2. `ApplicationContext`
+- Extends `BeanFactory` and is what every real application uses.
+- **Eagerly creates singleton beans at startup**, so configuration errors appear immediately.
+- **Automatically detects and registers** `BeanPostProcessor`s and `BeanFactoryPostProcessor`s, which is what makes `@Autowired`, `@PostConstruct`, `@Transactional` proxies and `@Value` placeholders work.
+- **Event publishing** (`ApplicationEventPublisher`), **i18n** (`MessageSource`), **resource loading** (`ResourceLoader`), and environment/profile support.
+- Implementations: `AnnotationConfigApplicationContext`, `ClassPathXmlApplicationContext`, and web variants such as `AnnotationConfigServletWebServerApplicationContext` used by Spring Boot.
 
 **Example:**
 
@@ -129,49 +124,24 @@ ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class)
 ```
 
 </details>
+
 <details><summary>
 
-## What is the difference between BeanFactory and ApplicationContext?
+## [Medium] What is the difference between BeanFactory and ApplicationContext?
 </summary>
-The main differences between BeanFactory and ApplicationContext in the Spring Framework are as follows:
 
-### 1. Configuration Loading:
+| | `BeanFactory` | `ApplicationContext` |
+|---|---|---|
+| Singleton creation | Lazy (on first `getBean`) | **Eager** at startup (unless `@Lazy`) |
+| `BeanPostProcessor` / `BeanFactoryPostProcessor` registration | Manual | **Automatic** |
+| Annotation processing (`@Autowired`, `@PostConstruct`, `@Value`) | Only if processors are registered manually | Built in |
+| AOP auto-proxying (`@Transactional`, `@Async`) | Manual | Automatic |
+| Event publishing | **Not supported** | `ApplicationEventPublisher` |
+| Internationalization | No | `MessageSource` |
+| Resource loading / Environment & profiles | Basic | Full `ResourceLoader`, `Environment` |
+| Typical use | Very constrained environments, framework internals | Every normal Spring and Spring Boot application |
 
-- **BeanFactory:** The BeanFactory typically loads bean configurations lazily, on-demand, when a specific bean is requested. It provides a basic IoC container with lazy initialization.
-
-- **ApplicationContext:** The ApplicationContext eagerly loads and initializes bean configurations during startup. It performs upfront validation and configuration processing. It provides an advanced IoC container with eager initialization.
-
-### 2. Resource Handling:
-
-- **BeanFactory:** The BeanFactory has basic resource handling capabilities. It can load resources like XML bean configuration files from various locations, such as the classpath or file system.
-
-- **ApplicationContext:** The ApplicationContext extends the resource handling capabilities of the BeanFactory. It provides enhanced resource management, supporting internationalization (i18n), localization (l10n), and resource bundling.
-
-### 3. Bean Lifecycle Management:
-
-- **BeanFactory:** The BeanFactory supports basic bean lifecycle management, including instantiation, dependency injection, and destruction. It allows for custom lifecycle callbacks.
-
-- **ApplicationContext:** The ApplicationContext provides advanced bean lifecycle management. It supports additional lifecycle callbacks, such as bean initialization and destruction methods, and allows for the registration of custom lifecycle processors.
-
-### 4. AOP (Aspect-Oriented Programming) Support:
-
-- **BeanFactory:** The BeanFactory has limited or no built-in support for AOP. It requires additional configuration and integration with an AOP framework to apply cross-cutting concerns.
-
-- **ApplicationContext:** The ApplicationContext seamlessly integrates with Spring's AOP framework. It allows for the declarative application of AOP aspects to components without additional configuration.
-
-### 5. Event Handling:
-
-- **BeanFactory:** The BeanFactory has basic support for event publishing and handling. It allows components to publish events, but the event handling needs to be manually implemented.
-
-- **ApplicationContext:** The ApplicationContext provides advanced event-handling capabilities. It allows components to publish events and provides mechanisms for event listeners to respond to these events.
-
-### Performance:
-
-- **BeanFactory:** The lazy loading approach of BeanFactory can lead to slightly better startup performance as it initializes beans only when requested.
-
-- **ApplicationContext:** The eager loading approach of ApplicationContext may result in slightly slower startup performance as it preloads and initializes beans upfront. However, the performance difference is typically negligible in most applications.
-
-In summary, BeanFactory is a basic IoC container with lazy initialization and limited features, while ApplicationContext is an advanced IoC container that extends the capabilities of BeanFactory. ApplicationContext provides features such as eager initialization, resource handling, advanced bean lifecycle management, AOP integration, and event handling. The choice between BeanFactory and ApplicationContext depends on the specific needs and requirements of the application. In general, ApplicationContext is recommended for most applications due to its richer feature set and enhanced capabilities.
+Startup is slightly faster with lazy creation, but `ApplicationContext` catches configuration errors at startup instead of at the first request, which is why it's always preferred.
 
 **Example:**
 
@@ -184,41 +154,23 @@ Resource r = ctx.getResource("classpath:data.json");   // resource loading
 ```
 
 </details>
+
 <details><summary>
 
-## How is ApplicationContext configured in Spring?
+## [Medium] How is ApplicationContext configured in Spring?
 </summary>
 
-The ApplicationContext can be configured in Spring in a number of ways, including:
-- **XML-based configuration:**
+Spring reads **bean definitions** (configuration metadata) from one or more sources:
 
-This is the most common way of configuring the ApplicationContext. In this approach, the bean definitions are specified in an XML file. The XML file can be loaded using the ClassPathXmlApplicationContext or FileSystemXmlApplicationContext class.
+1. **Java configuration** (most common today): `@Configuration` classes with `@Bean` methods, loaded by `AnnotationConfigApplicationContext`.
+2. **Annotations + component scanning:** `@Component`, `@Service`, `@Repository`, `@Controller` classes discovered by `@ComponentScan`.
+3. **XML configuration** (legacy): `<bean>` definitions loaded by `ClassPathXmlApplicationContext` or `FileSystemXmlApplicationContext`; can be combined with Java config via `@ImportResource`.
+4. **Programmatic registration:** `GenericApplicationContext.registerBean(...)` or functional bean registration.
+5. **Groovy bean definitions** (rare).
 
-- **Annotation-based configuration:**
+**Property values** come from `application.properties`/`yml`, environment variables and other `PropertySource`s, resolved into `${...}` placeholders by `PropertySourcesPlaceholderConfigurer` (the older `PropertyPlaceholderConfigurer` is deprecated). This supplies values, not bean definitions.
 
-In this approach, the bean definitions are specified using annotations. The annotations can be used on classes, methods, and fields. The AnnotationConfigApplicationContext class can be used to load the annotations.
-
-- **Java-based configuration:**
-
-In this approach, the bean definitions are specified in Java code. The JavaConfigApplicationContext class can be used to load the Java code.
-
-In addition to these three approaches, the ApplicationContext can also be configured using a number of other methods, such as:
-- **Property-based configuration:**
-
-In this approach, the bean definitions are specified using properties files. The PropertyPlaceholderConfigurer class can be used to load the properties files.
-
-- **Programmatic configuration:**
-
-In this approach, the bean definitions are specified programmatically. The ConfigurableApplicationContext class can be used to programmatically configure the ApplicationContext.
-
-The best way to configure the ApplicationContext depends on the specific needs of the application. For example, if the application is a simple one, then XML-based configuration may be the best option. However, if the application is more complex, then annotation-based or Java-based configuration may be a better option.
-
-Here are some additional tips for configuring the ApplicationContext:
-- Use consistent naming for your bean definitions. This will make it easier to manage your beans.
-- Use comments to document your bean definitions. This will make it easier for other developers to understand your code.
-- Use the @Bean annotation to configure beans that are used frequently. This will make your code more concise.
-- Use the @Scope annotation to specify the scope of your beans. This will help to improve the performance of your application.
-- Use the @Lazy annotation to specify that a bean should not be instantiated until it is first requested. This will help to improve the performance of your application.
+In **Spring Boot**, `SpringApplication.run(App.class, args)` creates the right context type automatically, scans from the main class's package, and applies auto-configuration.
 
 **Example:**
 
@@ -235,29 +187,38 @@ ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class)
 ```
 
 </details>
+
 <details><summary>
 
-## What is WebApplicationContext?
+## [Medium] What is WebApplicationContext?
 </summary>
 
-WebApplicationContext is a configuration file for web applications in Spring MVC. It's an extension of the ApplicationContext interface. WebApplicationContext is used to tell Spring MVC how to manage web-related components, such as controllers, view resolvers, and locale resolvers.
+`WebApplicationContext` is an `ApplicationContext` interface for web applications. It adds access to the `ServletContext` and supports web scopes (`request`, `session`, `application`).
 
-WebApplicationContext is web-aware, meaning it has Servlet Context information. It's read-only while the application is running, but may be reloaded if the implementation supports this.
+In classic (non-Boot) Spring MVC there were often two contexts:
+- A **root WebApplicationContext**, created by `ContextLoaderListener` (configured in `web.xml`), holding shared middle-tier beans: services, repositories, data sources.
+- A **child WebApplicationContext per `DispatcherServlet`**, holding web beans: controllers, view resolvers, handler mappings. The child can see the root's beans, not the other way round.
 
-In a single web application, there can be multiple WebApplicationContext. Each DispatcherServlet is associated with a single WebApplicationContext.
+In **Spring Boot** there is normally a **single** context (e.g. `AnnotationConfigServletWebServerApplicationContext`) that also starts the embedded server. You can get the web context in a servlet with `WebApplicationContextUtils.getWebApplicationContext(servletContext)`.
 
-ApplicationContext is used to inject all the middle-tier beans (Services, DAOs). These beans are instantiated using the “ContextLoaderListener” class configured in the web.
 </details>
+
 <details><summary>
 
-## What happens if the context is not closed?
+## [Medium] What happens if the context is not closed?
 </summary>
 
-It's important to close a context properly so that different lifecycle methods can run. This allows the application to release resources and clean up.
+Closing an `ApplicationContext` destroys its singleton beans: Spring calls `@PreDestroy` / `DisposableBean.destroy()` / custom destroy methods, and closes resources such as connection pools, thread pools, Kafka consumers and schedulers.
 
-If a context is not closed, a refresh can be triggered multiple times. This is possible if the chosen ApplicationContext supports "hot" refreshes. You can also trigger the event manually by calling the refresh() method on the ConfigurableApplicationContext interface.
+If the context is **not** closed (in a standalone app you create yourself):
+- Destroy callbacks don't run, so connections, files and threads may not be released cleanly.
+- Non-daemon threads (executor pools, schedulers, consumers) can keep the JVM running after `main` ends.
+- In-flight work may be cut off instead of finishing gracefully.
 
-For web applications, the context will be closed automatically. When the web container wants to stop the application, the ContextLoadListener will receive the event from the servlet.
+How to make sure it's closed:
+- Use try-with-resources: `try (var ctx = new AnnotationConfigApplicationContext(AppConfig.class)) { ... }`.
+- Call `ctx.registerShutdownHook()` so it closes on JVM shutdown (Spring Boot does this automatically).
+- In servlet-container deployments, `ContextLoaderListener` closes the context when the web application stops.
 
 **Example:**
 

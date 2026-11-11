@@ -1,6 +1,8 @@
+# Spring MVC and Maven
+
 <details><summary>
   
-## Explain Spring MVC.
+## [Easy] Explain Spring MVC.
 </summary>
 
 Spring MVC, which stands for Spring Model-View-Controller, is a popular and widely used framework for building web applications in the Java programming language. It is a part of the broader Spring Framework and provides a comprehensive solution for developing web applications in a structured and maintainable way. Spring MVC follows the Model-View-Controller architectural pattern, which separates an application into three interconnected components:
@@ -46,18 +48,22 @@ public class ProductPageController {
 ```
 
 </details>
+
 <details><summary>
 
-## What is maven?
+## [Easy] What is maven?
 </summary>
 
-Maven is an open-source build tool that helps developers build, publish, and deploy projects. It was developed by the Apache Software Foundation and is written in Java. Maven is used to create projects in other languages, such as C#, Scala, and Ruby. 
+**Apache Maven** is a build and dependency-management tool, mostly used for Java (and other JVM languages such as Kotlin and Scala).
 
-Maven uses a standard directory layout and a default build lifecycle to help development teams automate the project's build infrastructure. It allows developers to create projects, dependencies, and documentation using Project Object Model (POM) and plugins. 
+- **Declarative build:** you describe the project in `pom.xml`; Maven knows how to compile, test, package and deploy it.
+- **Convention over configuration:** standard layout (`src/main/java`, `src/test/java`, `target/`), so most projects need little configuration.
+- **Dependency management:** declares libraries by coordinates (`groupId:artifactId:version`), downloads them and their transitive dependencies from Maven Central into `~/.m2`, and resolves version conflicts ("nearest wins").
+- **Build lifecycle:** `validate → compile → test → package → verify → install → deploy`; running a phase runs all phases before it.
+- **Plugins** do the actual work (compiler, Surefire for tests, `spring-boot-maven-plugin`).
+- **Multi-module projects** and **profiles** for different environments.
 
-Maven was originally developed to simplify the build process for the Jakarta Turbine Project. It is now widely used to manage project dependencies and the entire lifecycle of any project. 
-
-The word "Maven" comes from the Yiddish language and means "gatherer of knowledge".
+The **Maven Wrapper** (`./mvnw`) pins the Maven version per project. Gradle is the main alternative. The name "maven" comes from Yiddish, meaning an "accumulator of knowledge".
 
 **Example:**
 

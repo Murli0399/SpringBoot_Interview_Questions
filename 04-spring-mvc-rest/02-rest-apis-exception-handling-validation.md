@@ -2,7 +2,7 @@
 
 <details><summary>
 
-## What is the difference between @Controller and @RestController?
+## [Easy] What is the difference between @Controller and @RestController?
 </summary>
 
 `@RestController` = `@Controller` + `@ResponseBody` on every method. Return values are written straight to the response body (JSON via Jackson) instead of being treated as a view name.
@@ -39,22 +39,7 @@ public class CompanyController {
 
 <details><summary>
 
-## What is the flow of a request through Spring MVC?
-</summary>
-
-1. Request hits the servlet **filters** (security, logging).
-2. **DispatcherServlet** (front controller) receives it.
-3. **HandlerMapping** finds the controller method from URL + HTTP method.
-4. **HandlerInterceptors** `preHandle` run.
-5. **HandlerAdapter** resolves arguments (`@PathVariable`, `@RequestBody` via `HttpMessageConverter`, validation) and invokes the method.
-6. Return value is converted to JSON by an `HttpMessageConverter` (`@RestController`), or a **ViewResolver** renders a view (`@Controller`).
-7. Exceptions go to **HandlerExceptionResolvers** (`@ControllerAdvice`).
-8. Interceptors' `postHandle`/`afterCompletion` run, response goes back through filters.
-</details>
-
-<details><summary>
-
-## What is the difference between @PathVariable, @RequestParam, @RequestBody and @RequestHeader?
+## [Easy] What is the difference between @PathVariable, @RequestParam, @RequestBody and @RequestHeader?
 </summary>
 
 ```java
@@ -71,7 +56,78 @@ public OrderDto create(@RequestBody CreateOrderRequest body) { ... } // JSON bod
 
 <details><summary>
 
-## How do you handle exceptions globally in Spring Boot?
+## [Easy] How do you validate request data?
+</summary>
+
+Add `spring-boot-starter-validation`, annotate the DTO with Jakarta Bean Validation constraints, and put `@Valid` on the parameter. Failures throw `MethodArgumentNotValidException` (400).
+
+```java
+public record CreateCompanyRequest(
+    @NotBlank @Size(max = 200) String name,
+    @NotNull Sector sector,
+    @Pattern(regexp = "^https?://.+") String website,
+    @PositiveOrZero Long fundingUsd,
+    @Email String contactEmail) {}
+
+@PostMapping
+public CompanyDto create(@Valid @RequestBody CreateCompanyRequest req) { ... }
+```
+
+- Validate path/query params by adding `@Validated` on the controller class: `@GetMapping("/{id}") get(@PathVariable @Min(1) Long id)`.
+- Custom rule: create an annotation with `@Constraint(validatedBy = ...)` and a `ConstraintValidator`.
+- Validation groups (`groups = OnCreate.class`) apply different rules for create vs update.
+</details>
+
+<details><summary>
+
+## [Easy] What is the difference between PUT and PATCH? Which HTTP methods are idempotent?
+</summary>
+
+- **PUT** replaces the whole resource with the body; sending it twice leaves the same state → idempotent.
+- **PATCH** changes only given fields; can be idempotent (`{"status":"ACTIVE"}`) or not (`{"op":"increment"}`).
+- Idempotent: GET, PUT, DELETE, HEAD, OPTIONS. Not idempotent: POST (and PATCH by default).
+- Safe (no state change): GET, HEAD, OPTIONS.
+</details>
+
+<details><summary>
+
+## [Easy] How do you enable CORS in Spring Boot?
+</summary>
+
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**")
+                .allowedOrigins("https://app.example.com")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowCredentials(true);
+    }
+}
+```
+
+With Spring Security, also call `http.cors(Customizer.withDefaults())` so the security filter chain doesn't block preflight `OPTIONS` requests. Or use `@CrossOrigin` on a controller.
+</details>
+
+<details><summary>
+
+## [Medium] What is the flow of a request through Spring MVC?
+</summary>
+
+1. Request hits the servlet **filters** (security, logging).
+2. **DispatcherServlet** (front controller) receives it.
+3. **HandlerMapping** finds the controller method from URL + HTTP method.
+4. **HandlerInterceptors** `preHandle` run.
+5. **HandlerAdapter** resolves arguments (`@PathVariable`, `@RequestBody` via `HttpMessageConverter`, validation) and invokes the method.
+6. Return value is converted to JSON by an `HttpMessageConverter` (`@RestController`), or a **ViewResolver** renders a view (`@Controller`).
+7. Exceptions go to **HandlerExceptionResolvers** (`@ControllerAdvice`).
+8. Interceptors' `postHandle`/`afterCompletion` run, response goes back through filters.
+</details>
+
+<details><summary>
+
+## [Medium] How do you handle exceptions globally in Spring Boot?
 </summary>
 
 Use `@RestControllerAdvice` with `@ExceptionHandler` methods. Return a consistent error body; Spring 6 / Boot 3 provides the RFC 7807 `ProblemDetail` type.
@@ -118,31 +174,7 @@ Response for a missing company:
 
 <details><summary>
 
-## How do you validate request data?
-</summary>
-
-Add `spring-boot-starter-validation`, annotate the DTO with Jakarta Bean Validation constraints, and put `@Valid` on the parameter. Failures throw `MethodArgumentNotValidException` (400).
-
-```java
-public record CreateCompanyRequest(
-    @NotBlank @Size(max = 200) String name,
-    @NotNull Sector sector,
-    @Pattern(regexp = "^https?://.+") String website,
-    @PositiveOrZero Long fundingUsd,
-    @Email String contactEmail) {}
-
-@PostMapping
-public CompanyDto create(@Valid @RequestBody CreateCompanyRequest req) { ... }
-```
-
-- Validate path/query params by adding `@Validated` on the controller class: `@GetMapping("/{id}") get(@PathVariable @Min(1) Long id)`.
-- Custom rule: create an annotation with `@Constraint(validatedBy = ...)` and a `ConstraintValidator`.
-- Validation groups (`groups = OnCreate.class`) apply different rules for create vs update.
-</details>
-
-<details><summary>
-
-## What are good REST API design practices?
+## [Medium] What are good REST API design practices?
 </summary>
 
 - **Nouns, plural, hierarchical:** `GET /companies/42/funding-rounds`, not `/getFundingRounds?id=42`.
@@ -157,42 +189,7 @@ public CompanyDto create(@Valid @RequestBody CreateCompanyRequest req) { ... }
 
 <details><summary>
 
-## What is the difference between PUT and PATCH? Which HTTP methods are idempotent?
-</summary>
-
-- **PUT** replaces the whole resource with the body; sending it twice leaves the same state → idempotent.
-- **PATCH** changes only given fields; can be idempotent (`{"status":"ACTIVE"}`) or not (`{"op":"increment"}`).
-- Idempotent: GET, PUT, DELETE, HEAD, OPTIONS. Not idempotent: POST (and PATCH by default).
-- Safe (no state change): GET, HEAD, OPTIONS.
-</details>
-
-<details><summary>
-
-## How do you make a POST API idempotent?
-</summary>
-
-The client sends an `Idempotency-Key` header. The server stores key → response; repeats return the stored response instead of creating a duplicate.
-
-```java
-@PostMapping("/payments")
-public ResponseEntity<PaymentDto> pay(@RequestHeader("Idempotency-Key") String key,
-                                      @Valid @RequestBody PaymentRequest req) {
-    return idempotencyStore.find(key)                       // Redis or DB table with unique key
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> {
-            PaymentDto result = paymentService.charge(req);
-            idempotencyStore.save(key, result, Duration.ofHours(24));
-            return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        });
-}
-```
-
-For concurrent duplicates, reserve the key atomically first (Redis `SET key PENDING NX EX 86400` or a unique DB constraint).
-</details>
-
-<details><summary>
-
-## What is the difference between a Filter and a HandlerInterceptor?
+## [Medium] What is the difference between a Filter and a HandlerInterceptor?
 </summary>
 
 | | Filter | HandlerInterceptor |
@@ -218,10 +215,10 @@ public class RequestIdFilter extends OncePerRequestFilter {
 
 <details><summary>
 
-## RestTemplate vs WebClient vs RestClient vs Feign?
+## [Medium] RestTemplate vs WebClient vs RestClient vs Feign?
 </summary>
 
-- **RestTemplate:** synchronous, in maintenance mode.
+- **RestTemplate:** synchronous, in maintenance mode; Spring Framework 7 plans to deprecate it in 7.1 and remove it in 8, so use RestClient for new code.
 - **WebClient:** non-blocking, reactive; also usable blocking with `.block()`.
 - **RestClient** (Spring 6.1 / Boot 3.2): modern synchronous fluent API; recommended over RestTemplate.
 - **OpenFeign:** declarative interface-based clients, popular in Spring Cloud microservices.
@@ -238,21 +235,24 @@ Always configure connect/read timeouts; the defaults can wait forever.
 
 <details><summary>
 
-## How do you enable CORS in Spring Boot?
+## [Hard] How do you make a POST API idempotent?
 </summary>
 
+The client sends an `Idempotency-Key` header. The server stores key → response; repeats return the stored response instead of creating a duplicate.
+
 ```java
-@Configuration
-public class WebConfig implements WebMvcConfigurer {
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("https://app.example.com")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowCredentials(true);
-    }
+@PostMapping("/payments")
+public ResponseEntity<PaymentDto> pay(@RequestHeader("Idempotency-Key") String key,
+                                      @Valid @RequestBody PaymentRequest req) {
+    return idempotencyStore.find(key)                       // Redis or DB table with unique key
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> {
+            PaymentDto result = paymentService.charge(req);
+            idempotencyStore.save(key, result, Duration.ofHours(24));
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        });
 }
 ```
 
-With Spring Security, also call `http.cors(Customizer.withDefaults())` so the security filter chain doesn't block preflight `OPTIONS` requests. Or use `@CrossOrigin` on a controller.
+For concurrent duplicates, reserve the key atomically first (Redis `SET key PENDING NX EX 86400` or a unique DB constraint).
 </details>

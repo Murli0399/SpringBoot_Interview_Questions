@@ -2,7 +2,87 @@
 
 <details><summary>
 
-## What is the N+1 query problem and how do you fix it?
+## [Medium] What is the difference between LAZY and EAGER fetching?
+</summary>
+
+- **LAZY:** association loaded on first access (via a proxy). Default for `@OneToMany` and `@ManyToMany`.
+- **EAGER:** loaded immediately. Default for `@ManyToOne` and `@OneToOne`.
+
+Best practice: make everything LAZY (`@ManyToOne(fetch = FetchType.LAZY)`) and fetch what each use case needs with `JOIN FETCH` or entity graphs. EAGER everywhere causes huge joins and hidden N+1s.
+
+`LazyInitializationException`: accessing a lazy association after the transaction/session closed (e.g. in a controller). Fix by fetching it inside the service transaction or returning a DTO; don't rely on `open-in-view` (set `spring.jpa.open-in-view=false`).
+</details>
+
+<details><summary>
+
+## [Medium] How do you paginate efficiently with Spring Data JPA?
+</summary>
+
+```java
+Page<Company> page = repo.findBySector("fintech", PageRequest.of(0, 20, Sort.by("createdAt").descending()));
+page.getContent(); page.getTotalElements(); page.getTotalPages();
+```
+
+- `Page` runs an extra `COUNT` query; use `Slice<T>` when you only need "has next".
+- Deep pages with `OFFSET` get slow (DB still scans skipped rows). Use **keyset (cursor) pagination**:
+
+```java
+@Query("select c from Company c where c.id > :lastId order by c.id")
+List<Company> nextPage(@Param("lastId") Long lastId, Pageable limit);   // PageRequest.of(0, 20)
+```
+</details>
+
+<details><summary>
+
+## [Medium] What is the difference between save(), saveAndFlush() and saveAll()? How do you do bulk inserts?
+</summary>
+
+- `save()`: persists or merges; SQL is sent at flush/commit.
+- `saveAndFlush()`: also flushes immediately (useful to catch constraint errors early).
+- `saveAll()`: loops over `save()`.
+
+For real bulk inserts enable JDBC batching:
+
+```properties
+spring.jpa.properties.hibernate.jdbc.batch_size=50
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true
+```
+
+`GenerationType.IDENTITY` (MySQL auto-increment) **disables insert batching** in Hibernate; use `SEQUENCE` where possible, or `JdbcTemplate.batchUpdate` for very large loads.
+</details>
+
+<details><summary>
+
+## [Medium] What are entity states in JPA (persistence context)?
+</summary>
+
+- **Transient:** `new Company()`; not tracked.
+- **Managed:** loaded or saved within an open persistence context; changes are **auto-detected (dirty checking)** and flushed at commit, no `save()` needed.
+- **Detached:** was managed, but the context closed; changes aren't tracked (`merge()` reattaches).
+- **Removed:** scheduled for deletion.
+
+```java
+@Transactional
+public void rename(Long id, String name) {
+    Company c = repo.findById(id).orElseThrow();
+    c.setName(name);     // UPDATE issued at commit via dirty checking
+}
+```
+</details>
+
+<details><summary>
+
+## [Medium] What is the first-level and second-level cache in Hibernate?
+</summary>
+
+- **First-level cache:** the persistence context itself; per transaction/session, always on. Loading the same id twice in one transaction hits the DB once.
+- **Second-level cache:** shared across sessions (Ehcache, Caffeine, Redis via JCache); opt-in per entity with `@Cacheable`. Good for read-mostly reference data; risky for frequently updated data or multiple app instances without a distributed cache.
+</details>
+
+<details><summary>
+
+## [Hard] What is the N+1 query problem and how do you fix it?
 </summary>
 
 Loading N parent entities and then lazily touching a child collection fires 1 query for the parents + N queries for the children.
@@ -44,20 +124,7 @@ Detect it by enabling SQL logging in tests or counting statements (Hibernate sta
 
 <details><summary>
 
-## What is the difference between LAZY and EAGER fetching?
-</summary>
-
-- **LAZY:** association loaded on first access (via a proxy). Default for `@OneToMany` and `@ManyToMany`.
-- **EAGER:** loaded immediately. Default for `@ManyToOne` and `@OneToOne`.
-
-Best practice: make everything LAZY (`@ManyToOne(fetch = FetchType.LAZY)`) and fetch what each use case needs with `JOIN FETCH` or entity graphs. EAGER everywhere causes huge joins and hidden N+1s.
-
-`LazyInitializationException`: accessing a lazy association after the transaction/session closed (e.g. in a controller). Fix by fetching it inside the service transaction or returning a DTO; don't rely on `open-in-view` (set `spring.jpa.open-in-view=false`).
-</details>
-
-<details><summary>
-
-## Explain transaction propagation levels.
+## [Hard] Explain transaction propagation levels.
 </summary>
 
 Propagation decides what happens when a `@Transactional` method calls another.
@@ -90,7 +157,7 @@ class AuditService {
 
 <details><summary>
 
-## Explain isolation levels in @Transactional.
+## [Hard] Explain isolation levels in @Transactional.
 </summary>
 
 `@Transactional(isolation = Isolation.READ_COMMITTED)` sets the DB isolation level for that transaction.
@@ -107,7 +174,7 @@ Higher isolation = more locking and lower throughput. `Isolation.DEFAULT` uses t
 
 <details><summary>
 
-## When does @Transactional not work?
+## [Hard] When does @Transactional not work?
 </summary>
 
 Spring applies `@Transactional` through a **proxy**, so it is skipped when the call doesn't go through the proxy:
@@ -135,7 +202,7 @@ public class ReportService {
 
 <details><summary>
 
-## What is optimistic vs pessimistic locking in JPA?
+## [Hard] What is optimistic vs pessimistic locking in JPA?
 </summary>
 
 **Optimistic:** add a `@Version` column. The update includes `WHERE version = ?`; if another transaction changed the row first, Hibernate throws `ObjectOptimisticLockingFailureException`, which you retry or report as 409 Conflict. Best for low contention.
@@ -156,71 +223,4 @@ class Wallet {
 @Query("select w from Wallet w where w.id = :id")
 Optional<Wallet> findForUpdate(@Param("id") Long id);
 ```
-</details>
-
-<details><summary>
-
-## How do you paginate efficiently with Spring Data JPA?
-</summary>
-
-```java
-Page<Company> page = repo.findBySector("fintech", PageRequest.of(0, 20, Sort.by("createdAt").descending()));
-page.getContent(); page.getTotalElements(); page.getTotalPages();
-```
-
-- `Page` runs an extra `COUNT` query; use `Slice<T>` when you only need "has next".
-- Deep pages with `OFFSET` get slow (DB still scans skipped rows). Use **keyset (cursor) pagination**:
-
-```java
-@Query("select c from Company c where c.id > :lastId order by c.id")
-List<Company> nextPage(@Param("lastId") Long lastId, Pageable limit);   // PageRequest.of(0, 20)
-```
-</details>
-
-<details><summary>
-
-## What is the difference between save(), saveAndFlush() and saveAll()? How do you do bulk inserts?
-</summary>
-
-- `save()`: persists or merges; SQL is sent at flush/commit.
-- `saveAndFlush()`: also flushes immediately (useful to catch constraint errors early).
-- `saveAll()`: loops over `save()`.
-
-For real bulk inserts enable JDBC batching:
-
-```properties
-spring.jpa.properties.hibernate.jdbc.batch_size=50
-spring.jpa.properties.hibernate.order_inserts=true
-spring.jpa.properties.hibernate.order_updates=true
-```
-
-`GenerationType.IDENTITY` (MySQL auto-increment) **disables insert batching** in Hibernate; use `SEQUENCE` where possible, or `JdbcTemplate.batchUpdate` for very large loads.
-</details>
-
-<details><summary>
-
-## What are entity states in JPA (persistence context)?
-</summary>
-
-- **Transient:** `new Company()`; not tracked.
-- **Managed:** loaded or saved within an open persistence context; changes are **auto-detected (dirty checking)** and flushed at commit, no `save()` needed.
-- **Detached:** was managed, but the context closed; changes aren't tracked (`merge()` reattaches).
-- **Removed:** scheduled for deletion.
-
-```java
-@Transactional
-public void rename(Long id, String name) {
-    Company c = repo.findById(id).orElseThrow();
-    c.setName(name);     // UPDATE issued at commit via dirty checking
-}
-```
-</details>
-
-<details><summary>
-
-## What is the first-level and second-level cache in Hibernate?
-</summary>
-
-- **First-level cache:** the persistence context itself; per transaction/session, always on. Loading the same id twice in one transaction hits the DB once.
-- **Second-level cache:** shared across sessions (Ehcache, Caffeine, Redis via JCache); opt-in per entity with `@Cacheable`. Good for read-mostly reference data; risky for frequently updated data or multiple app instances without a distributed cache.
 </details>

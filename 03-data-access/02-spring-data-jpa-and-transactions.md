@@ -1,6 +1,8 @@
+# Spring Data JPA and transactions
+
 <details><summary>
 
-## What is Spring Data?
+## [Easy] What is Spring Data?
 </summary>
 
 Spring Data is a family of projects that simplifies the use of data access technologies in Spring applications. It includes projects for working with relational databases (Spring Data JPA, Spring Data JDBC, and Spring Data R2DBC), NoSQL databases (Spring Data MongoDB, Spring Data Cassandra, and Spring Data Neo4j), and cloud-based data services (Spring Data AWS, Spring Data Azure, and Spring Data GCP).
@@ -35,18 +37,19 @@ interface UserRepository extends JpaRepository<User, Long> {
 ```
 
 </details>
+
 <details><summary>
 
-## What is JPA?
+## [Easy] What is JPA?
 </summary>
 
-The Java Persistence API (JPA) is a Java specification that allows developers to manage data between Java objects and relational databases. JPA acts as a bridge between object-oriented domain models and relational database systems. It was first released in 2006.
+The **Java Persistence API** – now **Jakarta Persistence** (`jakarta.persistence`, since Jakarta EE 9) – is a **specification** for object-relational mapping in Java. It defines:
+- How to map classes to tables with annotations: `@Entity`, `@Table`, `@Id`, `@Column`, `@OneToMany`, `@ManyToOne`, …
+- The **`EntityManager`** API to persist, find, merge and remove entities, and the **persistence context** that tracks them.
+- **JPQL** (an object-oriented query language) and the **Criteria API**.
+- Transaction integration and entity lifecycle callbacks.
 
-JPA is an object-relational mapping (ORM) framework. It allows developers to work directly with objects instead of using SQL statements. JPA provides a platform for developers to construct database-driven Java programs using object-oriented semantics.
-
-JPA was defined as part of the EJB 3.0 specification. It replaced the EJB 2 CMP Entity Beans specification.
-
-JPA is a specification and doesn't perform any operations by itself. To use JPA, you need to configure a datastore connector to connect to your chosen database. You also need to include and configure a JPA provider, which is a framework such as Hibernate or EclipseLink.
+JPA is only a set of interfaces and rules; it needs a **provider** that implements it, such as **Hibernate** (the default in Spring Boot) or EclipseLink. JPA 1.0 arrived in 2006 as part of EJB 3.0, replacing EJB 2 entity beans. Spring Boot 4 uses Jakarta Persistence 3.2.
 
 **Example:**
 
@@ -66,58 +69,41 @@ Order o = entityManager.find(Order.class, 1L);   // JPA API; Hibernate is the im
 ```
 
 </details>
+
 <details><summary>
 
-## What is the difference between JPA and Spring Data JPA?
+## [Easy] What is the difference between JPA and Spring Data JPA?
 </summary>
 
-JPA (Java Persistence API) is a Java standard for managing relational data in Java EE applications. It provides an abstraction layer over relational databases, allowing developers to access data without having to worry about the underlying database implementation.
+They are different layers that work together:
 
-Spring Data JPA is an open-source Java library that provides a simplified API for using JPA. It provides a number of features that make it easier to use JPA, including:
-- Automatic repository creation
-- Support for paging and sorting
-- Query creation
-- Entity validation
-- Transaction management
+| | JPA (Jakarta Persistence) | Spring Data JPA |
+|---|---|---|
+| What it is | A **specification** for ORM | A Spring library built **on top of** JPA |
+| Implemented by | Hibernate, EclipseLink | Spring (it still needs a JPA provider underneath) |
+| Main API | `EntityManager`, JPQL, Criteria API | Repository **interfaces** (`JpaRepository`) whose implementations Spring generates |
+| Queries | You write JPQL/Criteria code | Derived from method names (`findByEmail`), or `@Query`, Specifications, Query by Example |
+| Paging/sorting | `setFirstResult`/`setMaxResults`, `ORDER BY` | `Pageable`, `Page`, `Sort` built in |
+| Transactions | `EntityTransaction` or JTA | Uses Spring's `@Transactional` (repository methods are transactional by default) |
+| Boilerplate | Write DAO classes yourself | Mostly none – declare an interface |
 
-Spring Data JPA can be used with any JPA implementation, including Hibernate and EclipseLink.
+Spring Data JPA doesn't replace JPA; it removes the repetitive DAO code. You still need to understand JPA concepts (persistence context, fetching, transactions) to use it well.
 
-The main difference between JPA and Spring Data JPA is that Spring Data JPA provides a simplified API for using JPA. This makes it easier to develop applications that use JPA, especially for developers who are not familiar with JPA.
-
-Here is a table that summarizes the key differences between JPA and Spring Data JPA:
-
-|Feature|JPA|Spring Data JPA|
-|-------|---|---------------|
-|Abstraction layer|Provides an abstraction layer over relational databases|Provides a simplified API for using JPA|
-|Repository creation|Does not automatically create repositories|Automatically creates repositories|
-|Paging and sorting support|Does not support paging and sorting|Supports paging and sorting|
-|Query creation|Does not support query creation|Supports query creation|
-|Entity validation|Does not support entity validation|Supports entity validation|
-|Transaction management|Does not support transaction management|Supports transaction management|
-
-Overall, Spring Data JPA is a more powerful and user-friendly alternative to JPA. It provides a number of features that make it easier to develop applications that use JPA.
 </details>
+
 <details><summary>
 
-## What is the difference between CrudRepository and JpaRepository?
+## [Easy] What is the difference between CrudRepository and JpaRepository?
 </summary>
 
-CrudRepository and JpaRepository are both interfaces in the Spring Data JPA library. CrudRepository provides CRUD (Create, Read, Update, Delete) operations on a repository, while JpaRepository provides additional methods for working with JPA (Java Persistence API) persistence contexts.
+| | `CrudRepository<T, ID>` | `JpaRepository<T, ID>` |
+|---|---|---|
+| Module | Spring Data Commons (works with any store) | Spring Data JPA only |
+| Methods | `save`, `saveAll`, `findById`, `existsById`, `findAll`, `count`, `delete…` | Everything in `ListCrudRepository` + `ListPagingAndSortingRepository` + `QueryByExampleExecutor`, plus `flush`, `saveAndFlush`, `saveAllAndFlush`, `deleteAllInBatch`, `getReferenceById` |
+| Return types | `Iterable<T>` | `List<T>` |
+| Paging & sorting | No (since Spring Data 3, `PagingAndSortingRepository` no longer extends `CrudRepository`) | Yes |
 
-The main differences between CrudRepository and JpaRepository are:
-
-- JpaRepository extends CrudRepository.
-This means that any method that is available on CrudRepository is also available on JpaRepository.
-
-When should you use CrudRepository?
-
-You should use CrudRepository if you only need to perform basic CRUD operations on a repository. For example, you might use CrudRepository to save, retrieve, update, or delete JPA entities.
-
-When should you use JpaRepository?
-
-You should use JpaRepository if you need to perform more advanced operations on a repository, such as pagination, sorting, flushing the persistence context, or deleting records in a batch. For example, you might use JpaRepository to paginate the results of a query, flush the persistence context, or delete multiple JPA entities in a single operation.
-
-In general, you should use the most specific interface that meets your needs. If you only need to perform basic CRUD operations, use CrudRepository. If you need to perform more advanced operations, use JpaRepository.
+Use `CrudRepository` (or `ListCrudRepository`) for simple CRUD or when you want to stay store-agnostic. Use `JpaRepository` in JPA projects when you need paging, sorting, batch deletes or flush control – in practice most JPA projects just use `JpaRepository`.
 
 **Example:**
 
@@ -129,16 +115,15 @@ Page<User> page = userRepo.findAll(PageRequest.of(0, 20, Sort.by("createdAt").de
 ```
 
 </details>
+
 <details><summary>
 
-## Which No SQL databases does Spring support?
+## [Easy] Which No SQL databases does Spring support?
 </summary>
 
-Spring Data supports several NoSQL databases, including:
+Through **Spring Data** modules: **MongoDB** (document), **Redis** (key-value), **Elasticsearch** (search), **Cassandra** (wide-column), **Neo4j** (graph), **Couchbase**, **Apache Geode / VMware GemFire**, and **LDAP**, plus community modules (e.g. DynamoDB, Azure Cosmos DB, Google Cloud Spanner/Firestore through Spring Cloud GCP/Azure).
 
-MongoDB, Neo4j, Redis, Gemfire, Solr, Elasticsearch, Cassandra, Couchbase, LDAP.
-
-NoSQL databases are a classification of database systems that do not support the SQL standard. They can be document databases, key-value databases, wide-column stores, or graph databases. MongoDB is a popular document-based database that is designed to handle unstructured and semi-structured data.
+Spring Data Solr has been discontinued. Each module offers repository interfaces, templates (`MongoTemplate`, `RedisTemplate`, `ElasticsearchOperations`), and mapping annotations, and most also have reactive variants.
 
 **Example:**
 
@@ -153,22 +138,21 @@ record CompanyDoc(@Id String id, String name, String sector, int foundedYear) {}
 ```
 
 </details>
+
 <details><summary>
 
-## Which ORMs are supported by Spring?
+## [Easy] Which ORMs are supported by Spring?
 </summary>
 
-Spring supports most popular Object Relational Mapping (ORM) frameworks, including:
-- Hibernate
-- JDO (Java Data Objects)
-- iBATIS
-- JPA (Java Persistence API)
-- Oracle Toplink
-- OJB
+Spring's ORM integration (`spring-orm`) today focuses on **JPA (Jakarta Persistence)** and **Hibernate**:
 
-Spring provides an API to easily integrate Spring with these frameworks.
+- **Hibernate ORM** – the default JPA provider in Spring Boot, also usable through its native API.
+- **EclipseLink** – another JPA provider.
+- **MyBatis** – a SQL mapper (not a full ORM), integrated through the separate `mybatis-spring` project.
+- **jOOQ** – a type-safe SQL DSL with Spring Boot auto-configuration.
+- **Spring Data JDBC / R2DBC** – lightweight object mapping from the Spring Data family.
 
-Using the Spring Framework to create ORM DAOs can make testing easier.
+Older integrations – iBATIS, JDO, Oracle TopLink, Apache OJB – have been **removed** from Spring over the years and shouldn't be mentioned as current options.
 
 **Example:**
 
@@ -180,23 +164,23 @@ JdbcClient jdbcClient(DataSource ds) { return JdbcClient.create(ds); }   // ligh
 ```
 
 </details>
+
 <details><summary>
 
-## What is Hibernate?
+## [Easy] What is Hibernate?
 </summary>
 
-Hibernate is a Java framework that helps developers create applications that interact with databases. It's an open-source, lightweight, Object-Relational Mapping (ORM) tool. Hibernate maps Java classes to database tables and Java data types to SQL data types. It also provides data query and recovery facilities.
+**Hibernate ORM** is the most widely used **JPA implementation** and the default persistence provider in Spring Boot. It maps Java classes to tables and Java types to SQL types, then generates the SQL for you.
 
-Hibernate has several advantages:
-- Increased performance
-- Database independence
-- Auto DDL operations
+Key features:
+- **Implements JPA** (`EntityManager`, JPQL) and adds its own features (HQL extensions, filters, multi-tenancy, `@NaturalId`, batch fetching).
+- **Persistence context (first-level cache)** with **dirty checking:** modified managed entities are updated automatically at commit.
+- **Lazy loading** of associations through proxies.
+- **Second-level and query caches** (optional, e.g. with Caffeine/Ehcache/JCache).
+- **Database independence** through dialects (MySQL, PostgreSQL, Oracle, …).
+- **Schema generation** (`hibernate.hbm2ddl.auto` / `spring.jpa.hibernate.ddl-auto`) – handy for development; use Flyway/Liquibase migrations in production.
 
-Hibernate provides an abstraction layer, so developers don't have to worry about implementations. Hibernate does the implementations internally, such as:
-- Establishing a connection with the database
-- Writing query to perform CRUD operations
-
-Hibernate implements the specifications of JPA (Java Persistence API) for data persistence.
+Performance depends on using it well: avoid N+1 queries, fetch what each use case needs, enable JDBC batching. Spring Boot 4 ships with Hibernate 7.
 
 **Example:**
 
@@ -220,35 +204,53 @@ public void rename(Long id, String name) {
 ```
 
 </details>
+
 <details><summary>
 
-## What are the different types of transaction management supported by Spring?
+## [Easy] What are some benefits of using Spring Transactions?
 </summary>
 
-Spring supports two types of transaction management: declarative and programmatic.
-- **Declarative transaction management**
+- **One programming model** for every transaction API: JDBC, JPA/Hibernate, JTA, R2DBC, and even Kafka transactions – switch by changing the `PlatformTransactionManager` bean, not your code.
+- **Declarative transactions** with `@Transactional`, keeping business code clean.
+- **A simpler programmatic API** (`TransactionTemplate`) than raw JTA or JDBC calls.
+- **Integration with Spring's data access** – `JdbcTemplate`, Spring Data repositories and `EntityManager` automatically join the current transaction.
+- **Fine-grained control** – propagation, isolation, timeouts, read-only hints and rollback rules.
+- **Transaction-aware events** – `@TransactionalEventListener` runs code only after commit.
+- **Testability** – `@Transactional` tests roll back automatically after each test.
 
-is the recommended approach, as it is simpler and easier to use. With declarative transaction management, the programmer annotates methods with the @Transactional annotation to indicate that they should be executed in a transaction. Spring will automatically manage the transaction, ensuring that it is started, committed, or rolled back as needed.
+The reliability benefit comes from atomicity: either all changes in a transaction are committed, or none are.
 
-- **Programmatic transaction management**
+**Example:**
 
-allows the programmer to explicitly manage transactions. This is typically used in more complex cases where the programmer needs more control over the transaction. Spring provides a number of classes for programmatic transaction management, including the TransactionTemplate and the PlatformTransactionManager.
+```java
+// Same annotation works with JPA, JDBC or JTA - only the transaction manager bean changes
+@Transactional
+public void placeOrder(Order o) {
+    orderRepo.save(o);          // JPA
+    jdbc.update("UPDATE stock SET qty = qty - 1 WHERE sku = ?", o.sku());   // JdbcTemplate joins the same transaction
+}
+```
 
-In addition to these two types of transaction management, Spring also provides a number of features for managing transactions, such as:
+</details>
 
-- **Transaction rollback-only**
+<details><summary>
 
-allows the programmer to mark a transaction as rollback-only. This means that the transaction will always be rolled back, even if there are no exceptions.
+## [Medium] What are the different types of transaction management supported by Spring?
+</summary>
 
-- **Transaction propagation**
+Spring supports two styles over one abstraction (`PlatformTransactionManager`, e.g. `JpaTransactionManager`, `DataSourceTransactionManager`, `JtaTransactionManager`):
 
-allows the programmer to control how transactions are propagated across method calls. For example, a programmer can specify that transactions should be propagated to all method calls in the same class, or that they should be propagated to all method calls in the same transaction.
+**1. Declarative** (recommended for most code) – annotate methods/classes with `@Transactional`; Spring's AOP proxy begins, commits or rolls back the transaction.
 
-- **Transaction isolation**
+**2. Programmatic** – control boundaries in code with `TransactionTemplate` (or directly with `PlatformTransactionManager`). Useful for fine-grained boundaries inside one method, e.g. committing each batch of a long job separately.
 
-allows the programmer to control how transactions are isolated from each other. For example, a programmer can specify that transactions should be isolated from dirty reads, or that they should be isolated from dirty writes.
+Key settings available in both:
+- **Propagation** – what happens when a transactional method calls another: `REQUIRED` (join or start, default), `REQUIRES_NEW` (suspend and start an independent one), `NESTED` (savepoint), `MANDATORY`, `SUPPORTS`, `NOT_SUPPORTED`, `NEVER`.
+- **Isolation** – how concurrent transactions see each other's changes: `READ_UNCOMMITTED`, `READ_COMMITTED`, `REPEATABLE_READ`, `SERIALIZABLE`, or `DEFAULT` (use the database's default). These prevent dirty reads, non-repeatable reads and phantom reads to different degrees.
+- **Rollback rules**, **timeout**, **read-only**.
+- **Rollback-only:** `TransactionStatus.setRollbackOnly()` (or `TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()`) marks the current transaction to roll back without throwing.
 
-By using Spring's transaction management features, developers can easily create robust and efficient applications.
+See `03-jpa-performance-and-transactions.md` for propagation and isolation in detail.
 
 **Example:**
 
@@ -267,21 +269,28 @@ transactionTemplate.execute(status -> {
 ```
 
 </details>
+
 <details><summary>
 
-## Which transaction management type is preferred in Spring?
+## [Medium] Which transaction management type is preferred in Spring?
 </summary>
 
-Declarative transaction management is preferred in Spring. It is simpler to use and more maintainable than programmatic transaction management. With declarative transaction management, developers can annotate their code with @Transactional to specify that it should be executed within a transaction. Spring will then automatically manage the transaction, including starting, committing, or rolling it back. This frees developers from having to worry about the details of transaction management, allowing them to focus on their business logic.
+**Declarative** (`@Transactional`) is preferred for most application code:
+- Business logic stays free of transaction plumbing.
+- Consistent behaviour, configured in one place (propagation, isolation, rollback rules).
+- Less error-prone than manual commit/rollback.
 
-Programmatic transaction management is still available in Spring, but it is discouraged for new code. It is more complex to use and more difficult to maintain than declarative transaction management. Additionally, programmatic transaction management can lead to errors if it is not used correctly.
+**Programmatic** (`TransactionTemplate`) is still a valid tool, not something to avoid. Use it when you need:
+- Several separate transactions inside one method (e.g. commit every 500 records of a batch job).
+- A transaction around only part of a method, keeping slow work (remote API calls) outside it.
+- Transactions in code that isn't called through a Spring proxy.
 
-Here are some of the advantages of declarative transaction management over programmatic transaction management:
-- It is simpler to use. Developers do not need to worry about the details of transaction management.
-- It is more maintainable. Changes to the transaction management configuration can be made without having to modify the code.
-- It is more reliable. Spring automatically manages the transaction, reducing the risk of errors.
-
-If you are developing a new Spring application, you should use declarative transaction management. It is simpler, more maintainable, and more reliable than programmatic transaction management.
+```java
+transactionTemplate.executeWithoutResult(status -> {
+	orderRepository.save(order);
+	if (!inventory.reserve(order)) status.setRollbackOnly();
+});
+```
 
 **Example:**
 
@@ -297,87 +306,31 @@ public class AccountService {
 ```
 
 </details>
+
 <details><summary>
 
-## What are some benefits of using Spring Transactions?
+## [Medium] What happens when the @Transactional annotation is used on a method?
 </summary>
 
-## Benefits of Using Spring Transactions
+Spring wraps the bean in an **AOP proxy**. When a caller invokes the method **through the proxy**, Spring:
 
-Spring Transactions provides a comprehensive abstraction for transaction management that delivers the following benefits:
+1. Asks the `PlatformTransactionManager` to **begin** a transaction, or **join** an existing one, according to the propagation setting.
+2. Binds the transaction's connection/`EntityManager` to the current thread, so repositories and templates use it.
+3. Calls your method.
+4. **Commits** if the method returns normally.
+5. **Rolls back** if it throws a **`RuntimeException` or `Error`**. By default, **checked exceptions do NOT trigger a rollback** – the transaction commits. Change this with `rollbackFor = Exception.class`.
 
-### A consistent programming model across different transaction APIs
+Attributes and their **defaults**:
 
-, such as Java Transaction API (JTA), JDBC, Hibernate, and the Java Persistence API (JPA). This allows developers to write code once and have it benefit from different transaction management strategies in different environments.
+| Attribute | Default |
+|---|---|
+| `propagation` | `REQUIRED` |
+| `isolation` | **`DEFAULT`** – uses the database's own default (e.g. REPEATABLE READ in MySQL InnoDB, READ COMMITTED in PostgreSQL) |
+| `timeout` | `-1` (none, or the transaction manager's default) |
+| `readOnly` | `false` |
+| `rollbackFor` / `noRollbackFor` | Roll back on unchecked exceptions and errors only |
 
-### Support for declarative transaction management.
-
-This allows developers to specify the transactional behavior of a method using XML or annotations, rather than having to manually manage transactions using low-level APIs.
-
-### A simpler API for programmatic transaction management
-
-than complex transaction APIs, such as JTA. This makes it easier for developers to integrate Spring Transactions with existing codebases.
-
-### Excellent integration with Spring's data access abstractions.
-
-This allows developers to use Spring Transactions with a variety of data access technologies, such as JDBC, Hibernate, and JPA.
-
-Overall, Spring Transactions is a powerful and flexible transaction management framework that can help developers write more robust and efficient code.
-
-Here are some additional benefits of using Spring Transactions:
-
-### Improved performance.
-
-Spring Transactions can improve the performance of your applications by managing transactions automatically. This can free up developers to focus on other tasks, such as writing business logic.
-
-### Increased reliability.
-
-Spring Transactions can help to make your applications more reliable by ensuring that all database operations are performed atomically. This helps to prevent data corruption and other errors.
-
-### Enhanced security.
-
-Spring Transactions can help to enhance the security of your applications by providing a consistent way to manage transactions. This can help to protect your data from unauthorized access.
-
-If you are looking for a powerful and flexible transaction management framework, Spring Transactions is a great option. It can help you to improve the performance, reliability, and security of your applications.
-
-**Example:**
-
-```java
-// Same annotation works with JPA, JDBC or JTA - only the transaction manager bean changes
-@Transactional
-public void placeOrder(Order o) {
-    orderRepo.save(o);          // JPA
-    jdbc.update("UPDATE stock SET qty = qty - 1 WHERE sku = ?", o.sku());   // JdbcTemplate joins the same transaction
-}
-```
-
-</details>
-<details><summary>
-
-## What happens when the @Transactional annotation is used on a method?
-</summary>
-
-When the @Transactional annotation is used on a method, it specifies that the method should be executed within a database transaction. This means that all changes to the database made by the method will be either committed or rolled back as a single unit.
-
-The @Transactional annotation has a number of attributes that can be used to customize how the transaction is managed. These attributes include:
-
-- propagation: Specifies the propagation behavior of the transaction. This determines how the transaction is affected if it is called from within another transaction.
-
-- isolation: Specifies the isolation level of the transaction. This determines how the transaction is isolated from other transactions.
-
-- timeout: Specifies the timeout for the transaction. This determines how long the transaction is allowed to run before it is rolled back.
-
-- readOnly: Specifies whether the transaction is read-only. This determines whether the transaction is allowed to make changes to the database.
-
-- rollbackFor: Specifies a list of exceptions that should cause the transaction to be rolled back.
-
-The default values for all of these attributes are:
-
-propagation: REQUIRED, isolation: READ_COMMITTED, timeout: -1 (no timeout, readOnly: false, rollbackFor: Exception.
-
-The @Transactional annotation can be used on interfaces, classes, and methods. When it is used on an interface or class, it applies to all methods in the interface or class. When it is used on a method, it applies only to that method.
-
-The @Transactional annotation is a powerful tool that can be used to ensure that changes to the database are made in a consistent and reliable manner.
+Where to put it: on **public methods of concrete classes** (usually services), or on the class to apply it to all public methods. It doesn't apply to self-invocation (`this.method()`), private methods, or objects not created by Spring – see `03-jpa-performance-and-transactions.md`.
 
 **Example:**
 
@@ -396,26 +349,22 @@ try {
 ```
 
 </details>
+
 <details><summary>
 
-## What is the difference between JdbcTemplate and JPA?
+## [Medium] What is the difference between JdbcTemplate and JPA?
 </summary>
 
-JdbcTemplate and JPA are two different ways of interacting with databases from Java.
+| | `JdbcTemplate` | JPA (Hibernate) |
+|---|---|---|
+| Approach | SQL-first: you write SQL and map rows | Object-first: you map entities; SQL is generated |
+| Abstraction | Low (thin layer over JDBC) | High (ORM with persistence context) |
+| Control over SQL | Full – any database feature | Less direct; JPQL/Criteria, native queries when needed |
+| Boilerplate for CRUD | More (write each query and mapper) | Less (repositories, cascading, dirty checking) |
+| Relationships | Handled manually with joins | Mapped with `@OneToMany`, `@ManyToOne`, lazy loading |
+| Performance predictability | High – exactly the SQL you wrote | Depends on usage; N+1 queries and over-fetching are common pitfalls |
+| Learning curve | **Gentle** – know SQL, you're done | **Steeper** – persistence context, fetching strategies, entity states |
 
-JdbcTemplate is a low-level API that allows you to execute SQL statements directly. This gives you a lot of flexibility, but it also means that you have to write more code and handle more details yourself.
+Many applications use both: JPA for typical domain CRUD, `JdbcTemplate`/`JdbcClient` for reporting queries, bulk operations and performance-critical SQL.
 
-JPA is a higher-level API that provides an object-relational mapping (ORM) layer. This means that you can interact with your database using Java objects instead of SQL statements. JPA also provides a number of features that can make your life easier, such as entity state management and transaction management.
-
-Here is a table that summarizes the key differences between JdbcTemplate and JPA:
-
-|Feature|JdbcTemplate|JPA|
-|-------|------------|---|
-|Abstraction level|Low|High|
-|Flexibility|High|Low|
-|Boilerplate code|High|Low|
-|Features|Few|Many|
-|Learning curve|Steep|Gradual|
-
-In general, JdbcTemplate is a good choice if you need a lot of flexibility and control over your database access. JPA is a good choice if you want to make your code easier to write and maintain.
 </details>

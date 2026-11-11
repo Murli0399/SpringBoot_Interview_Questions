@@ -2,7 +2,7 @@
 
 <details><summary>
 
-## What is the difference between unit tests, slice tests and integration tests in Spring Boot?
+## [Easy] What is the difference between unit tests, slice tests and integration tests in Spring Boot?
 </summary>
 
 - **Unit tests:** plain JUnit 5 + Mockito, no Spring context. Fastest; test business logic.
@@ -14,7 +14,7 @@ Aim for many unit tests, fewer slice tests, and a small number of end-to-end int
 
 <details><summary>
 
-## Write a unit test with Mockito.
+## [Easy] Write a unit test with Mockito.
 </summary>
 
 ```java
@@ -46,7 +46,17 @@ class CompanyServiceTest {
 
 <details><summary>
 
-## How do you test a REST controller with @WebMvcTest?
+## [Easy] @Mock vs @MockBean (@MockitoBean) vs @Spy?
+</summary>
+
+- `@Mock` (Mockito): a mock in a plain unit test; no Spring involved.
+- `@MockBean` / `@MockitoBean` (Spring): replaces a bean **inside the Spring context** with a mock. Each different set of mock beans creates a new context, which slows test suites.
+- `@Spy`: wraps a real object; real methods run unless stubbed.
+</details>
+
+<details><summary>
+
+## [Medium] How do you test a REST controller with @WebMvcTest?
 </summary>
 
 ```java
@@ -78,7 +88,7 @@ class CompanyControllerTest {
 
 <details><summary>
 
-## How do you test repositories and use Testcontainers?
+## [Medium] How do you test repositories and use Testcontainers?
 </summary>
 
 ```java
@@ -106,17 +116,7 @@ Testing against the real database catches dialect-specific SQL, index and constr
 
 <details><summary>
 
-## @Mock vs @MockBean (@MockitoBean) vs @Spy?
-</summary>
-
-- `@Mock` (Mockito): a mock in a plain unit test; no Spring involved.
-- `@MockBean` / `@MockitoBean` (Spring): replaces a bean **inside the Spring context** with a mock. Each different set of mock beans creates a new context, which slows test suites.
-- `@Spy`: wraps a real object; real methods run unless stubbed.
-</details>
-
-<details><summary>
-
-## How do you test Kafka consumers?
+## [Hard] How do you test Kafka consumers?
 </summary>
 
 Use `@EmbeddedKafka` (spring-kafka-test) or a Kafka Testcontainer; publish a message and assert the side effect with Awaitility, since consumption is asynchronous.
