@@ -250,7 +250,7 @@ Key settings available in both:
 - **Rollback rules**, **timeout**, **read-only**.
 - **Rollback-only:** `TransactionStatus.setRollbackOnly()` (or `TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()`) marks the current transaction to roll back without throwing.
 
-See `03-jpa-performance-and-transactions.md` for propagation and isolation in detail.
+See `04-jpa-performance-and-transactions.md` for propagation and isolation in detail.
 
 **Example:**
 
@@ -330,7 +330,7 @@ Attributes and their **defaults**:
 | `readOnly` | `false` |
 | `rollbackFor` / `noRollbackFor` | Roll back on unchecked exceptions and errors only |
 
-Where to put it: on **public methods of concrete classes** (usually services), or on the class to apply it to all public methods. It doesn't apply to self-invocation (`this.method()`), private methods, or objects not created by Spring – see `03-jpa-performance-and-transactions.md`.
+Where to put it: on **public methods of concrete classes** (usually services), or on the class to apply it to all public methods. It doesn't apply to self-invocation (`this.method()`), private methods, or objects not created by Spring – see `04-jpa-performance-and-transactions.md`.
 
 **Example:**
 
@@ -345,7 +345,7 @@ try {
     txManager.rollback(tx);                                     // checked exceptions commit by default!
     throw e;
 }
-// See 03-jpa-performance-and-transactions.md for propagation and when @Transactional is ignored.
+// See 04-jpa-performance-and-transactions.md for propagation and when @Transactional is ignored.
 ```
 
 </details>

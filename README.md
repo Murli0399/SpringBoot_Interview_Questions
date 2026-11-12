@@ -10,7 +10,7 @@ Companion repo for core Java, DSA and LLD: [Java_Interview_Question](https://git
 
 ## Difficulty levels
 
-Every question is tagged by difficulty, and within each file questions run from **Easy → Medium → Hard** (numbered DSA problems keep their order):
+Folders and the files inside them are numbered from basic to advanced, so read them in order. Every question is tagged by difficulty, and within each file questions run from **Easy → Medium → Hard** (numbered DSA problems keep their order):
 
 | Level | Meaning |
 |---|---|
@@ -270,22 +270,7 @@ Every question is tagged by difficulty, and within each file questions run from 
 
 </details>
 
-<details><summary><b><a href="03-data-access/03-jpa-performance-and-transactions.md">JPA performance and transactions</a></b> (10: 5 Medium · 5 Hard)</summary>
-
-- [Medium] What is the difference between LAZY and EAGER fetching?
-- [Medium] How do you paginate efficiently with Spring Data JPA?
-- [Medium] What is the difference between save(), saveAndFlush() and saveAll()? How do you do bulk inserts?
-- [Medium] What are entity states in JPA (persistence context)?
-- [Medium] What is the first-level and second-level cache in Hibernate?
-- [Hard] What is the N+1 query problem and how do you fix it?
-- [Hard] Explain transaction propagation levels.
-- [Hard] Explain isolation levels in @Transactional.
-- [Hard] When does @Transactional not work?
-- [Hard] What is optimistic vs pessimistic locking in JPA?
-
-</details>
-
-<details><summary><b><a href="03-data-access/04-jpa-mappings-and-queries.md">JPA mappings and queries</a></b> (10: 8 Medium · 2 Hard)</summary>
+<details><summary><b><a href="03-data-access/03-jpa-mappings-and-queries.md">JPA mappings and queries</a></b> (10: 8 Medium · 2 Hard)</summary>
 
 - [Medium] How do you map one-to-many and many-to-one relationships in JPA?
 - [Medium] What are cascade types and orphanRemoval?
@@ -297,6 +282,21 @@ Every question is tagged by difficulty, and within each file questions run from 
 - [Medium] How should you manage database schema changes in Spring Boot?
 - [Hard] How do you build dynamic search filters with Specifications?
 - [Hard] How should you implement equals() and hashCode() for JPA entities?
+
+</details>
+
+<details><summary><b><a href="03-data-access/04-jpa-performance-and-transactions.md">JPA performance and transactions</a></b> (10: 5 Medium · 5 Hard)</summary>
+
+- [Medium] What is the difference between LAZY and EAGER fetching?
+- [Medium] How do you paginate efficiently with Spring Data JPA?
+- [Medium] What is the difference between save(), saveAndFlush() and saveAll()? How do you do bulk inserts?
+- [Medium] What are entity states in JPA (persistence context)?
+- [Medium] What is the first-level and second-level cache in Hibernate?
+- [Hard] What is the N+1 query problem and how do you fix it?
+- [Hard] Explain transaction propagation levels.
+- [Hard] Explain isolation levels in @Transactional.
+- [Hard] When does @Transactional not work?
+- [Hard] What is optimistic vs pessimistic locking in JPA?
 
 </details>
 
